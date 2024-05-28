@@ -3,7 +3,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Group, X } from 'lucide-react';
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import Modal from "../modal/modal";
@@ -20,8 +19,11 @@ const Settings = ({ onClose }) => {
     const { id } = useParams();
     const location = useLocation();
     const [group, setGroup] = useState(null);
-    const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
+    // Default color if none is passed
+    const groupColor = location.state?.color || '#7c3aed'; 
 
+
+    //Get group details
     const getGroupApi = async () => {
         const res = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
             headers: {
