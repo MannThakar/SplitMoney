@@ -3,9 +3,10 @@ import { Outlet, Navigate } from 'react-router-dom'
 
 
 const PrivateRoute = () => {
-    const tok = localStorage.getItem('Token');
+    const token = localStorage.getItem('Token');
     return (
-        tok ? <Outlet /> : <Navigate to="/signup" />
+        //check the token if available then it move to the Outlet means "/" <- Home then /group screen or navigate to signup 
+        token ? <Outlet /> : <Navigate to="/signup" />
     )
 }
 

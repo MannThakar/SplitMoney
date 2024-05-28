@@ -15,7 +15,10 @@ const Account = () => {
     const [phone, setPhone] = useState(null)
     const [isEdit, setIsEdit] = useState(false);
     const [logout, setLogout] = useState(false);
+    const navigate = useNavigate();
     const { id } = useParams()
+
+    //This function is used to get the account details of user like name,email,phone
     const getAccountDetail = async () => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
@@ -37,10 +40,14 @@ const Account = () => {
     }
     useEffect(() => {
         getAccountDetail();
+        // If isEdit is true then it will call the useEffect the state is pass as props in accountmodal
+        // page and it is checking there if it is true then it will call getAccountDetail and changes is
+        // been shown
     }, [isEdit]);
 
 
-    const navigate = useNavigate();
+
+    //This function is use to clear all the token from localstorage
     const handleLogout = () => {
         const f = 'Token'
         if (f == 'Token') {
@@ -55,7 +62,6 @@ const Account = () => {
 
     return (
         <div className="bg-primaryColor h-svh flex flex-col">
-
             <div className='flex justify-between px-3'>
                 <button className="py-3 flex items-center gap-2 bg-primaryColor" onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
@@ -65,12 +71,18 @@ const Account = () => {
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
                 </button>
             </div>
+            {/*It will open the logoutmodal if user press of and confirm logout then it will call the
+                handleLogout() if user press on the cancel button then setLogout is (false) then
+                it will close the model.
+            */}
             {logout && (
                 <LogoutModal
                     onLogout={handleLogout}
                     onCancel={() => setLogout(false)}
                 />
             )}
+            {/* This will open the accountmodal  
+            */}
             {modal && (
                 <AccountModal
                     onClose={() => setModal(false)}
