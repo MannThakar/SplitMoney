@@ -16,12 +16,15 @@ const GroupInvite = () => {
             console.log("Access Token is Avaliable");
             navigate('/');
         }
-        else if(!accessToken){
+        else if (!accessToken) {
             localStorage.setItem('inviteToken', token);
             console.log("Access Token is Not Avaliable");
             navigate('/signin');
         }
-        
+        else {
+            navigate('/');
+        }
+
     }, [accessToken]);
 
     async function checkInvitation() {
@@ -49,7 +52,7 @@ const GroupInvite = () => {
         }
     }
 
-    
+
 
 
     return (
