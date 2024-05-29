@@ -1,7 +1,5 @@
 
 import { Outlet, Navigate } from 'react-router-dom'
-
-
 const PrivateRoute = () => {
     const tok = localStorage.getItem('Token');
     return (

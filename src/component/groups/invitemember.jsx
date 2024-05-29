@@ -4,17 +4,28 @@ import { useNavigate } from 'react-router-dom';
 import SplashScreen from '../utils/splashscreen';
 import axios from 'axios';
 const GroupInvite = () => {
-
     const navigate = useNavigate();
-
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get('token');
+    const accessToken = localStorage.getItem('Token');
 
 
     useEffect(() => {
-        checkInvitation();
-    }, [])
-    // const token = localStorage.getItem('Invite Token');
+        if (accessToken) {
+            checkInvitation();
+            console.log("Access Token is Avaliable");
+            navigate('/');
+        }
+        else if (!accessToken) {
+            localStorage.setItem('inviteToken', token);
+            console.log("Access Token is Not Avaliable");
+            navigate('/signin');
+        }
+        else {
+            navigate('/');
+        }
+
+    }, [accessToken]);
 
     async function checkInvitation() {
         try {
@@ -28,18 +39,21 @@ const GroupInvite = () => {
                     }
                 }
             );
-
-
             if (response.status == 200) {
-                localStorage.setItem('Invite Token', token);
-                
+                alert('You have successfully joined the group');
+                navigate('/');
             }
+            else
+                alert('Invalid Token');
         } catch (error) {
             console.error('Error:', error);
             alert(error.response.data.message);
-            navigate('/signup');
+            navigate('/');
         }
     }
+
+
+
 
     return (
         <>
