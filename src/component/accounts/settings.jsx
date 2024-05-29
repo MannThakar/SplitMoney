@@ -7,20 +7,21 @@ import { Group, X } from 'lucide-react';
 import { useNavigate, useParams, useLocation,Link} from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import Modal from "../modal/modal";
-import { toast } from 'react-toastify'
+import { toast, Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import UpdateModal from "../modal/updatemodal";
-import { ArrowLeft, Pencil, Users, Trash } from 'lucide-react';
+import { ArrowLeft, Pencil, Users, Trash, Plus } from 'lucide-react';
 
 const Settings = ({ onClose }) => {
     const [modal, setModal] = useState(false);
     const [modals, setModals] = useState(false);
     const [update, setUpdate] = useState(false);
+    const [group, setGroup] = useState(null);
+    const [member, setMember] = useState([]);
     const navigate = useNavigate();
     const { id } = useParams();
     const location = useLocation();
-    const [group, setGroup] = useState(null);
-    const [member, setMember] = useState([]);
+   
     const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
 
     const getGroupApi = async () => {
@@ -45,6 +46,7 @@ const Settings = ({ onClose }) => {
         }
     };
 
+
     useEffect(() => {
         getGroupApi();
         viewMember();
@@ -68,10 +70,9 @@ const Settings = ({ onClose }) => {
                     }
                 );
                 if (res.status === 200) {
-                    toast.success(res.data.message)
                     navigate('/'); // Redirect to home after deletion
                 } else {
-                    toast.error(res.data.message);
+                    toast.error(res);
                 }
                 console.log(res);
 
@@ -103,6 +104,7 @@ const Settings = ({ onClose }) => {
                 </div>
 
                 {/* Group member detail add people in group and email */}
+
                 <div className='my-2'>
                     <span className="font-satoshi text-lg text-white ">Group members</span>
                     <div className='space-y-5 my-2'>

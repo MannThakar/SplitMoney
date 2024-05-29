@@ -9,7 +9,12 @@ import LogoutModal from '../modal/logoutmodal';
 import SplashScreen from '../utils/splashscreen';
 
 const Account = () => {
+    //function to check if the path is active
     const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
+
+    //get the id from the url
+    const { id } = useParams()
+
     const [modal, setModal] = useState(false);
     const [name, setName] = useState(null)
     const [email, setEmail] = useState(null)
@@ -17,7 +22,7 @@ const Account = () => {
     const [isEdit, setIsEdit] = useState(false);
     const [logout, setLogout] = useState(false);
     const navigate = useNavigate();
-    const { id } = useParams()
+  
 
     //This function is used to get the account details of user like name,email,phone
     const getAccountDetail = async () => {
@@ -39,6 +44,8 @@ const Account = () => {
             console.log('Error fething data:', error)
         }
     }
+
+    //To call function on page load
     useEffect(() => {
         getAccountDetail();
         // If isEdit is true then it will call the useEffect the state is pass as props in accountmodal
@@ -120,6 +127,8 @@ const Account = () => {
             )}
                 
             {modal && <AccountModal onClose={() => setModal(false)} id={id} isEdit={isEdit} setIsEdit={setIsEdit} />}
+            
+            {/* Footer */}
             <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>

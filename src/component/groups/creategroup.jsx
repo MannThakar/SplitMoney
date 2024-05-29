@@ -10,6 +10,7 @@ import { ReceiptText } from 'lucide-react';
 const CreateGroup = () => {
     const navigate = useNavigate();
 
+    // Validation Schema using Yup
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .matches(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces')
@@ -19,6 +20,9 @@ const CreateGroup = () => {
             .required('Description is required'),
     });
 
+
+
+    
     const HandleSubmit = async ({ name, description }, { setSubmitting }) => {
         const type = 'group_expenses';
         if (type === 'group_expenses') {
@@ -34,7 +38,6 @@ const CreateGroup = () => {
                     },
 
                 })
-                console.log(response);
                 if (response.status === 200) {
                     toast.success('Group Created')
                     const data = {
@@ -42,7 +45,6 @@ const CreateGroup = () => {
                         name: response.data.name,
                         info: response.data.description,
                     };
-                    setTimeout(() => navigate('/'), 5000);
                     navigate('/', { state: data });
 
                 }

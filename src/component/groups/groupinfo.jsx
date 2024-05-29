@@ -17,7 +17,7 @@ const GroupInfo = () => {
 
   const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  const [update, setUpdate] = useState(false);
+  
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
@@ -77,8 +77,8 @@ const GroupInfo = () => {
           style={{ backgroundColor: groupColor }}
         ></div>
         <div>
-          <h1 className="font-satoshi text-lg text-white">{group?.name}</h1>
-          <h2 className="font-satoshi text-sm text-white">{group?.description}</h2>
+          <h1 className=" text-lg text-white">{group?.name}</h1>
+          <h2 className=" text-sm text-white">{group?.description}</h2>
         </div>
       </div>
 
@@ -88,6 +88,7 @@ const GroupInfo = () => {
           const month = date.toLocaleString('default', { month: 'short' });
           const year = date.getFullYear();
           const day = date.getDate();
+          console.log(expense)
 
           return (
             <>
@@ -99,7 +100,6 @@ const GroupInfo = () => {
                     </div>
                   </div>
              
-
                     <div className="flex justify-between items-center">
                         <div className="p-2 rounded-lg">
                           <div>
@@ -119,7 +119,7 @@ const GroupInfo = () => {
       </div>
 
       <Link to={`/group/${id}/addexpense`}>
-        <button className='fixed bottom-20 right-5 text-black w-40 font-satoshi bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
+        <button className='fixed bottom-20 right-5 text-black w-40  bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
           <ReceiptText className='text-black' />Add expense
         </button>
       </Link>
@@ -127,15 +127,15 @@ const GroupInfo = () => {
       <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
           <UsersRound className={`size-5 ${isActive('/')}`} />
-          <span className={`flex justify-start text-base font-satoshi ${isActive('/')}`}>Groups</span>
+          <span className={`flex justify-start text-base  ${isActive('/')}`}>Groups</span>
         </button>
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
           <UserRound className={`size-5 ${isActive('/friends')}`} />
-          <span className={`flex justify-start text-base font-satoshi ${isActive('/friends')}`}>Friends</span>
+          <span className={`flex justify-start text-base  ${isActive('/friends')}`}>Friends</span>
         </button>
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
           <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-          <span className={`flex justify-start text-base font-satoshi ${isActive('/accounts')}`}>Account</span>
+          <span className={`flex justify-start text-base  ${isActive('/accounts')}`}>Account</span>
         </button>
       </div>
       {modals && <GroupExpenseUpdate onClose={() => setModals(false)} expense={selectedExpense} />}

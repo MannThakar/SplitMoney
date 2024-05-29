@@ -16,6 +16,7 @@ import Settings from "./component/accounts/settings";
 import InviteMember from "./component/groups/invitemember";
 import PublicRoute from "./component/auth/publicroute";
 import PageNotFound  from "./component/pages/pagenotfound"
+import GroupInvite from "./component/groups/invitemember"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchGroup from "./component/groups/searchgroup";
@@ -54,7 +55,7 @@ function App() {
           />
           <Route path="/*" element={<PageNotFound />} />
           <Route path='/group-invite/:token' element={<InviteMember />}></Route>
-
+          <Route path='/group-invite' element={<GroupInvite />}></Route>
           {/* Private Route */}
           <Route element={<PrivateRoute />}>
             <Route path="*" element={<Navigate to="/" />}></Route>
@@ -68,9 +69,9 @@ function App() {
             </Route>
             {/* <Route path="/groupinfo/:id" element={<GroupInfo />} /> */}
             <Route path="/creategroup" element={<CreateGroup />} />
-            <Route path="/" element={<Home />}></Route>
             <Route path="/accounts" element={<Account />} />
             <Route path="/invite-member/:token" element={<InviteMember />}></Route>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/friends" element={<Friends />} />
           </Route>
         </Route>
