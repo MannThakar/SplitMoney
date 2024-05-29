@@ -1,19 +1,31 @@
-
-// import axios from 'axios';
+/* eslint-disable no-unused-vars */
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import VerifyLoaderComponent from '../utils/verifyloadercomponent'
+import SplashScreen from '../utils/splashscreen';
 import axios from 'axios';
 const GroupInvite = () => {
-    const { token } = useParams()
     const navigate = useNavigate();
-    console.log(token)
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get('token');
+    const accessToken = localStorage.getItem('Token');
+
 
     useEffect(() => {
-        checkInvitation();
-    }, [])
-    // const token = localStorage.getItem('Invite Token');
+        if (accessToken) {
+            checkInvitation();
+            console.log("Access Token is Avaliable");
+            navigate('/');
+        }
+        else if (!accessToken) {
+            localStorage.setItem('inviteToken', token);
+            console.log("Access Token is Not Avaliable");
+            navigate('/signin');
+        }
+        else {
+            navigate('/');
+        }
+
+    }, [accessToken]);
 
     async function checkInvitation() {
         try {
@@ -27,28 +39,25 @@ const GroupInvite = () => {
                     }
                 }
             );
-
-
-            if (response.status === 400) {
-                localStorage.setItem('member-token', token)
-                navigate('/signup');
-            } else if (response.status === 200) {
-                console.log(response)
-
-                /* console.log('Invitation sent successfully'); */
-            } else {
-                console.log('Error while sending invitation');
+            if (response.status == 200) {
+                alert('You have successfully joined the group');
+                navigate('/');
             }
-
-
+            else
+                alert('Invalid Token');
         } catch (error) {
-            /* console.error('Error:', error); */
+            console.error('Error:', error);
+            alert(error.response.data.message);
+            navigate('/');
         }
     }
 
+
+
+
     return (
         <>
-            < VerifyLoaderComponent />
+            <SplashScreen />
         </>
     )
 }

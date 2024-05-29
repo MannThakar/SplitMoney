@@ -8,14 +8,21 @@ import { toast } from 'react-toastify';
 import LogoutModal from '../modal/logoutmodal';
 
 const Account = () => {
+    //function to check if the path is active
     const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
+
+    //get the id from the url
+    const { id } = useParams()
+
     const [modal, setModal] = useState(false);
     const [name, setName] = useState(null)
     const [email, setEmail] = useState(null)
     const [phone, setPhone] = useState(null)
     const [isEdit, setIsEdit] = useState(false);
     const [logout, setLogout] = useState(false);
-    const { id } = useParams()
+
+
+    //Api call and the function to get the account details
     const getAccountDetail = async () => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
@@ -35,27 +42,24 @@ const Account = () => {
             console.log('Error fething data:', error)
         }
     }
+
+    //To call function on page load
     useEffect(() => {
         getAccountDetail();
     }, [isEdit]);
 
 
     const navigate = useNavigate();
+
+    //Logout function
     const handleLogout = () => {
-        const f = 'Token'
-        if (f == 'Token') {
-            localStorage.removeItem('Token');
-        }
-        else {
-            localStorage.removeItem('Token')
-        }
+        localStorage.removeItem('Token');
         navigate('/signin');
     };
 
 
     return (
         <div className="bg-primaryColor h-svh flex flex-col">
-
             <div className='flex justify-between px-3'>
                 <button className="py-3 flex items-center gap-2 bg-primaryColor" onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
@@ -65,12 +69,17 @@ const Account = () => {
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
                 </button>
             </div>
+
+            {/* Logout modal for */}
             {logout && (
                 <LogoutModal
                     onLogout={handleLogout}
                     onCancel={() => setLogout(false)}
                 />
             )}
+
+
+            {/* Account modal */}
             {modal && (
                 <AccountModal
                     onClose={() => setModal(false)}
@@ -83,7 +92,6 @@ const Account = () => {
             <div className="px-4 flex flex-col items-center md:items-start">
                 <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
                 <hr className="w-full" />
-
                 <div className='flex gap-6 py-5 items-center w-full'>
                     {getAccountDetail ? (
                         <>
@@ -108,14 +116,20 @@ const Account = () => {
                     )}
 
                 </div>
-                <div className="w-2/4 flex justify-start w-full">
+
+
+                <div className="flex justify-start w-full">
                     <button
                         className="bg-white font-bold hover:bg-red-700  text-black py-3 px-6 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
                         onClick={() => setLogout(true)}>Logout
                     </button>
                 </div>
             </div>
+
+            {/* Conditional Rendering */}
             {modal && <AccountModal onClose={() => setModal(false)} id={id} isEdit={isEdit} setIsEdit={setIsEdit} />}
+            
+            {/* Footer */}
             <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>

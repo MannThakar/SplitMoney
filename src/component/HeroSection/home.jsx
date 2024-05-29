@@ -1,33 +1,3 @@
-
-
-
-//   useEffect(() => {
-//     // const token = localStorage.getItem('member-token');
-//     // console.log(token)
-//     // if (token) {
-//     //   viewGroup();
-//     // } else {
-//     //   navigate('/signup')
-//     // }
-//     viewGroup()
-//   }, []);
-
-//   // async function detailGroup() {
-//   //   const members = null;
-//   //   try {
-//   //     const response = await axios.get(`${import.meta.env.VITE_API}/groups/?includes=members`, {
-
-//   //     })
-//   //     console.log(response)
-//   //   } catch (error) {
-//   //     console.log(error)
-//   //   }
-//   // }
-//   // useEffect(() => {
-//   //   detailGroup()
-//   // }, [])
-
-
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
@@ -35,13 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useParams, useLocation } from "react-router-dom";
 import { Users } from 'lucide-react'
-import Navigations from "../pages/navigation";
-import { UsersRound, } from 'lucide-react';
 import { UserRound } from 'lucide-react';
 import { CircleUserRound } from 'lucide-react';
-import { FaPlane, FaRunning, FaHeart, FaMusic } from 'react-icons/fa';
+import { CiViewList } from "react-icons/ci";
 
 
 
@@ -49,7 +16,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [res, setRes] = useState([]);
   const colors = ["#7c3aed", "#0891b2", "#16a34a", "#ea580c"];
-  const icons = [<FaPlane />, <FaRunning />, <FaHeart />, <FaMusic />];
+  const icons = [<CiViewList />,<CiViewList />];
 
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
@@ -110,7 +77,7 @@ const Home = () => {
                     className="flex w-14 h-14 rounded-xl items-center justify-center"
                     style={{ backgroundColor: e.color }}
                   >
-                    <span className="text-2xl text-white">{icons[index % icons.length]}</span>
+                    <span className="text-5xl text-white">{icons[index % icons.length]}</span>
                   </div>
                   <h2 className="text-lg font-semibold text-white">{e.name}</h2>
                 </div>

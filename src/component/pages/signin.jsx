@@ -39,7 +39,7 @@ const SignIn = () => {
           phone_no,
           type,
         };
-        setTimeout(() => navigate('/otp', { state: data }), 1000);
+        navigate('/otp', { state: data })
       }
       if (response.data.original === 'User does not exist') {
         toast.error('Please signup first');

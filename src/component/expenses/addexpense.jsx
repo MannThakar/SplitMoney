@@ -9,20 +9,26 @@ import { ArrowLeft, FilePenLine, IndianRupee, Calendar } from 'lucide-react';
 import { toast } from 'react-toastify'
 
 const AddExpense = () => {
-    console.log("Current Path:", location.pathname);
     const navigate = useNavigate();
-    const { id } = useParams();  // Retrieve group_id from URL parameters
-    console.log(id)
-    const group_id = id;
-    console.log(group_id)
-    const payer_user_id = 2; // Assuming payer_user_id is stored in localStorage
 
+    // Retrieve group_id from URL parameters
+    const { id } = useParams();
+    const group_id = id;
+
+    // Assuming payer_user_id is stored in localStorage
+    const payer_user_id = 2;
+
+
+
+    // Form validation schema using Yup
     const validationSchema = Yup.object().shape({
         description: Yup.string().required('Description is required'),
         amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
         date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
     });
 
+
+    // Group expense submission function (Work in progress)
     const handleSubmit = async ({ description, amount, date }, { setSubmitting }) => {
         const type = 'EQUALLY';
         try {
@@ -43,7 +49,6 @@ const AddExpense = () => {
             } else {
                 toast.error(message.data.message)
             }
-
             setSubmitting(false);
             navigate(-1);
         } catch (error) {
@@ -61,6 +66,7 @@ const AddExpense = () => {
             </div>
             <h2 className="text-3xl my-5 font-satoshi text-center text-white">Add Expense</h2>
             <hr className='bg-white' />
+
             <Formik
                 initialValues={{ description: '', amount: '', date: '' }}
                 validationSchema={validationSchema}

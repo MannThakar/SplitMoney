@@ -56,6 +56,10 @@ function Otp() {
   const handleOtp = async () => {
     setLoading(true);
     const otp = codes.join("");
+
+
+
+
     try {
       if (type === 'verification') {
         const response = await axios.post(`${import.meta.env.VITE_API}/signup`, {
@@ -67,6 +71,14 @@ function Otp() {
           }
         });
         if (response.status === 200) {
+          if (localStorage.getItem('inviteToken')) {
+            localStorage.removeItem('inviteToken');
+            storeToken(data.token_data);
+            
+            navigate('/invite-member');
+          }
+
+
           let data = {
             token_data: response.data.token,
           };
@@ -98,7 +110,9 @@ function Otp() {
     } catch (error) {
       toast.error(error.response.data.message);
     }
-    setLoading(false);
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
