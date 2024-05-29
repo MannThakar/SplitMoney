@@ -5,16 +5,17 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { Pencil, ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText, Trash2 } from 'lucide-react';
+import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText} from 'lucide-react';
 import GroupExpenseUpdate from "../modal/groupexpenseupdate";
 
 const GroupInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-  const [group, setGroup] = useState(null);
   const [modals, setModals] = useState(false);
-  const [expenses, setExpenses] = useState([]);
+      const [expenses, setExpenses] = useState([]);
+
+  const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
   
 
@@ -53,29 +54,6 @@ const GroupInfo = () => {
     }
   }, [id]);
 
-  const deleteExpense = useCallback(async (expenseId) => {
-    try {
-      const response = await axios.delete(`${import.meta.env.VITE_API}/expenses/${expenseId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("Token")}`,
-        },
-      });
-      if (response.status === 200) {
-        setExpenses(expenses.filter(expense => expense.id !== expenseId));
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        toast.error(`Unauthorized: ${error.response.data.message}`);
-        console.log(`Error 401: ${error.response.data.message}`);
-      } else {
-        toast.error('An error occurred while deleting the expense.');
-        console.log(error);
-      }
-    }
-  }, [expenses]);
 
   useEffect(() => {
     getGroupApi();
@@ -85,8 +63,7 @@ const GroupInfo = () => {
   return (
     <div className='h-screen bg-primaryColor flex flex-col'>
       <div className="flex w-full justify-between px-3 pt-3">
-        <button className='flex items-center flex-row-reverse gap-2' onClick={() => navigate(-1)}>
-          <h2 className='text-white text-base '>back</h2>
+        <button  onClick={() => navigate(-1)}>
           <ArrowLeft className='text-white' />
         </button>
         <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
@@ -114,31 +91,29 @@ const GroupInfo = () => {
           console.log(expense)
 
           return (
-            <div key={expense.id} className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
-              <div className="flex justify-between items-center mb-2">
-                <div className="bg-stone-600 p-3 rounded-lg">
-                  <span className="text-white  text-lg">{expense.description}</span>
-                </div>
-              </div>
-            {/*   <button onClick={() => { setSelectedExpense(expense); setModals(true); }}>
-                  <Pencil className="text-white hover:text-textColor" />
-                </button> */}
-
-              <div className="flex justify-between items-center">
-                <div className="p-2 rounded-lg">
-                  <div>
-                    <span className="font-bold font-mono text-lg text-white"> {day}-{month}-{year}</span>
+            <>
+            <Link Link to={`/group/${id}/expense`} state={{color:groupColor}}  >
+              <div  key={expense.id} className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="bg-stone-600 p-3 rounded-lg">
+                      <span className="text-white font-satoshi text-lg">{expense.description}</span>
+                    </div>
                   </div>
+             
+                    <div className="flex justify-between items-center">
+                        <div className="p-2 rounded-lg">
+                          <div>
+                            <span className="font-bold font-mono text-lg text-white"> {day}-{month}-{year}</span>
+                          </div>
+                        </div>
+                        <div className=" p-2 rounded-lg">
+                          <span className=" text-white font-satoshi text-base">You paid</span>
+                          <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount}</span>
+                        </div>
+                    </div>
                 </div>
-                <div className=" p-2 rounded-lg">
-                  <span className=" text-white text-base">{expense.id} paid</span>
-                  <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount}</span>
-                </div>
-                <button className='flex items-center' onClick={() => deleteExpense(expense.id)}>
-                  <Trash2 className="text-trashColor" />
-                </button>
-              </div>
-            </div>
+            </Link>
+              </>
           );
         })}
       </div>

@@ -15,9 +15,13 @@ import AddExpense from "./component/expenses/addexpense";
 import Settings from "./component/accounts/settings";
 import InviteMember from "./component/groups/invitemember";
 import PublicRoute from "./component/auth/publicroute";
+import PageNotFound  from "./component/pages/pagenotfound"
 import GroupInvite from "./component/groups/invitemember"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SearchGroup from "./component/groups/searchgroup";
+import GroupExpense from "./component/groups/groupexpense";
+import AdjustAmount from './component/expenses/adjustamount';
 
 function App() {
   return (
@@ -49,19 +53,21 @@ function App() {
               </PublicRoute>
             }
           />
-          {/* <Route path="*" element={<PageNotFound />} /> */}
+          <Route path="/*" element={<PageNotFound />} />
+          <Route path='/group-invite/:token' element={<InviteMember />}></Route>
           <Route path='/group-invite' element={<GroupInvite />}></Route>
-          
-
           {/* Private Route */}
           <Route element={<PrivateRoute />}>
             <Route path="*" element={<Navigate to="/" />}></Route>
             <Route path="/group">
               <Route path=":id" element={<GroupInfo />} />
+              <Route path=":id/expense" element={<GroupExpense/>}></Route>
               <Route path=":id/settings" element={<Settings />} />
               <Route path=":id/addexpense" element={<AddExpense />} />
+              <Route path=":id/addexpense/adjustamount" element={ <AdjustAmount/>}></Route>
+              <Route path=":id/settings/addpeople" element={<SearchGroup/>}></Route>
             </Route>
-            <Route path="/groupinfo/:id" element={<GroupInfo />} />
+            {/* <Route path="/groupinfo/:id" element={<GroupInfo />} /> */}
             <Route path="/creategroup" element={<CreateGroup />} />
             <Route path="/accounts" element={<Account />} />
             <Route path="/invite-member/:token" element={<InviteMember />}></Route>
