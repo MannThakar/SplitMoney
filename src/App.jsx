@@ -15,6 +15,7 @@ import AddExpense from "./component/expenses/addexpense";
 import Settings from "./component/accounts/settings";
 import InviteMember from "./component/groups/invitemember";
 import PublicRoute from "./component/auth/publicroute";
+import GroupInvite from "./component/groups/invitemember"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -49,7 +50,8 @@ function App() {
             }
           />
           {/* <Route path="*" element={<PageNotFound />} /> */}
-          <Route path='/group-invite/:token' element={<InviteMember />}></Route>
+          <Route path='/group-invite' element={<GroupInvite />}></Route>
+          
 
           {/* Private Route */}
           <Route element={<PrivateRoute />}>
@@ -61,9 +63,9 @@ function App() {
             </Route>
             <Route path="/groupinfo/:id" element={<GroupInfo />} />
             <Route path="/creategroup" element={<CreateGroup />} />
-            <Route path="/" element={<Home />}></Route>
             <Route path="/accounts" element={<Account />} />
             <Route path="/invite-member/:token" element={<InviteMember />}></Route>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/friends" element={<Friends />} />
           </Route>
         </Route>

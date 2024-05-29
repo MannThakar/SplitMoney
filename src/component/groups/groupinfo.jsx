@@ -16,7 +16,7 @@ const GroupInfo = () => {
   const [modals, setModals] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  const [update, setUpdate] = useState(false);
+  
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed

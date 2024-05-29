@@ -22,7 +22,7 @@ const CreateGroup = () => {
 
 
 
-    //Create Group function 
+    
     const HandleSubmit = async ({ name, description }, { setSubmitting }) => {
         const type = 'group_expenses';
         if (type === 'group_expenses') {
