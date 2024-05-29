@@ -49,8 +49,7 @@ function App() {
             }
           />
           {/* <Route path="*" element={<PageNotFound />} /> */}
-          <Route path='/group-invite/:token' element={<InviteMember />}></Route>
-
+           <Route path='/group-invite' element={<GroupInvite />}></Route>
           {/* Private Route */}
           <Route element={<PrivateRoute />}>
             <Route path="*" element={<Navigate to="/" />}></Route>
