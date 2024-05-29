@@ -6,6 +6,7 @@ import AccountModal from '../modal/accountmodal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LogoutModal from '../modal/logoutmodal';
+import SplashScreen from '../utils/splashscreen';
 
 const Account = () => {
     //function to check if the path is active
@@ -20,9 +21,10 @@ const Account = () => {
     const [phone, setPhone] = useState(null)
     const [isEdit, setIsEdit] = useState(false);
     const [logout, setLogout] = useState(false);
+    const navigate = useNavigate();
+  
 
-
-    //Api call and the function to get the account details
+    //This function is used to get the account details of user like name,email,phone
     const getAccountDetail = async () => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
@@ -46,12 +48,14 @@ const Account = () => {
     //To call function on page load
     useEffect(() => {
         getAccountDetail();
+        // If isEdit is true then it will call the useEffect the state is pass as props in accountmodal
+        // page and it is checking there if it is true then it will call getAccountDetail and changes is
+        // been shown
     }, [isEdit]);
 
 
-    const navigate = useNavigate();
 
-    //Logout function
+    //This function is use to clear all the token from localstorage
     const handleLogout = () => {
         localStorage.removeItem('Token');
         navigate('/signin');
@@ -63,23 +67,24 @@ const Account = () => {
             <div className='flex justify-between px-3'>
                 <button className="py-3 flex items-center gap-2 bg-primaryColor" onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
-                    <h2 className="text-white text-base font-satoshi">back</h2>
+                    <h2 className="text-white text-lg font-satoshi">Account</h2>
                 </button>
                 <button className=''>
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
                 </button>
             </div>
-
-            {/* Logout modal for */}
+            {/*It will open the logoutmodal if user press of and confirm logout then it will call the
+                handleLogout() if user press on the cancel button then setLogout is (false) then
+                it will close the model.
+            */}
             {logout && (
                 <LogoutModal
                     onLogout={handleLogout}
                     onCancel={() => setLogout(false)}
                 />
             )}
-
-
-            {/* Account modal */}
+            {/* This will open the accountmodal and 
+            */}
             {modal && (
                 <AccountModal
                     onClose={() => setModal(false)}
@@ -88,13 +93,13 @@ const Account = () => {
                     setIsEdit={setIsEdit}
                 />
             )}
+            {getAccountDetail ? (
+                <div className="px-4 flex flex-col items-center md:items-start">
+                {/* <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
+                <hr className="w-full" /> */}
 
-            <div className="px-4 flex flex-col items-center md:items-start">
-                <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
-                <hr className="w-full" />
                 <div className='flex gap-6 py-5 items-center w-full'>
-                    {getAccountDetail ? (
-                        <>
+                   
                             <div className='flex flex-col gap-5'>
                                 <div className='flex gap-3'>
                                     <User className='text-white' />
@@ -108,25 +113,19 @@ const Account = () => {
                                     <Smartphone className='text-white' />
                                     <h2 className='text-sm font-mono font-bold text-white'>{phone}</h2>
                                 </div>
-
                             </div>
-                        </>
-                    ) : (
-                        <span className='text-white'>Loading....</span>
-                    )}
-
-                </div>
-
-
-                <div className="flex justify-start w-full">
+                            </div>
+                <div className="w-2/4 flex justify-start w-full">
                     <button
-                        className="bg-white font-bold hover:bg-red-700  text-black py-3 px-6 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
+                        className="bg-white font-bold hover:opacity-80 text-black py-3 px-6 rounded-full"
                         onClick={() => setLogout(true)}>Logout
                     </button>
                 </div>
             </div>
-
-            {/* Conditional Rendering */}
+            ): (
+                  <SplashScreen/>   
+            )}
+                
             {modal && <AccountModal onClose={() => setModal(false)} id={id} isEdit={isEdit} setIsEdit={setIsEdit} />}
             
             {/* Footer */}

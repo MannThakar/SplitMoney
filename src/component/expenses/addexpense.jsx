@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams,Link } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -47,7 +47,7 @@ const AddExpense = () => {
             if (response.status === 200) {
                 toast.success(response.data.message)
             } else {
-                toast.error(message.data.message)
+                toast.error(response.data.message)
             }
             setSubmitting(false);
             navigate(-1);
@@ -61,10 +61,9 @@ const AddExpense = () => {
             <div className="pt-3 items-center w-full">
                 <button className='flex gap-2'>
                     <ArrowLeft className="text-white" onClick={() => navigate(-1)} />
-                    <h2 className="text-white text-base font-satoshi">back</h2>
+                    <h2 className="text-white text-lg font-satoshi">Add Expense</h2>
                 </button>
             </div>
-            <h2 className="text-3xl my-5 font-satoshi text-center text-white">Add Expense</h2>
             <hr className='bg-white' />
 
             <Formik
@@ -74,11 +73,11 @@ const AddExpense = () => {
             >
                 {({ isSubmitting, handleChange, values }) => (
                     <Form className="w-full max-w-md">
-                        <div className="flex gap-3 justify-center items-center mb-3">
+                        <div className="flex gap-3 pt-3 justify-center items-center mb-3">
                             <FilePenLine className='text-white' />
                             <Field type="text" id="description" name="description" className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white" placeholder="Enter the description" value={values.description} onChange={handleChange} />
                         </div>
-                        <div className='flex justify-start pl-8'>
+                        <div className='flex justify-start md:pl-20 pl-8'>
                             <ErrorMessage name="description" component="div" className="text-sm text-red-500" />
                         </div>
 
@@ -86,7 +85,7 @@ const AddExpense = () => {
                             <IndianRupee className='text-white' />
                             <Field type="number" id="amount" name="amount" className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white" placeholder="0.00" value={values.amount} onChange={handleChange} />
                         </div>
-                        <div className='w-full flex justify-start pl-8'>
+                        <div className='w-full flex justify-start md:pl-20 pl-8'>
                             <ErrorMessage name="amount" component="div" className="text-sm text-red-500" />
                         </div>
 
@@ -94,7 +93,7 @@ const AddExpense = () => {
                             <Calendar className='text-white' />
                             <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white" value={values.date} onChange={handleChange} />
                         </div>
-                        <div className='w-full flex justify-start pl-8'>
+                        <div className='w-full flex justify-start md:pl-20 pl-8'>
                             <ErrorMessage name="date" component="div" className="text-sm text-red-500" />
                         </div>
 
@@ -107,8 +106,10 @@ const AddExpense = () => {
 
                 )}
             </Formik>
-            <div>
-                <span>Split</span>
+            <div className="mt-6">
+                <span className='text-xl text-white font-satoshi'>
+                    Paid by <button className="bg-white text-black rounded px-2">you</button> and split <Link to={`/group/${id}/addexpense/adjustamount`} onClick={() => navigate('/adjustamount')} className="bg-white text-black rounded px-2">equally</Link>
+                </span>
             </div>
         </div>
     );

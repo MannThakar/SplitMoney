@@ -59,11 +59,11 @@ const CreateGroup = () => {
         <div className="bg-primaryColor min-h-screen flex flex-col items-center">
             <div className="py-3 flex gap-2 px-2 w-full">
                 <button className='flex items-center flex-row-reverse gap-2' onClick={() => navigate(-1)}>
-                    <h2 className='text-white text-base font-satoshi'>back</h2>
+                    <h2 className='text-white text-lg font-satoshi'>Create a group</h2>
                     <ArrowLeft className='text-white' />
                 </button>
             </div>
-            <h1 className="font-santoshi text-white text-3xl flex justify-center items-center mb-4">Create a group</h1>
+            {/* <h1 className="font-santoshi text-white text-3xl flex justify-center items-center mb-4">Create a group</h1> */}
             <div className="w-full max-w-md px-4">
                 <Formik
                     initialValues={{ name: '', description: '' }}

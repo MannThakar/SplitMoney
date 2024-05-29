@@ -47,7 +47,9 @@ const SignIn = () => {
     } catch (error) {
       toast.error(error);
     }
-    setSubmitting(false);
+    finally {
+      setSubmitting(false);
+    }
   };
 
   return (

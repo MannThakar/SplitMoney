@@ -4,10 +4,13 @@ import { ArrowLeft, User, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UsersRound, UserRound, CircleUserRound } from 'lucide-react';
 import axios from 'axios';
+import SpinningLoader from '../../loader/spinningloader';
+import SplashScreen from '../utils/splashscreen'
 
 const Friends = () => {
     const [group, setGroup] = useState([]);
     const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -26,6 +29,7 @@ const Friends = () => {
 
     useEffect(() => {
         getGroupApi();
+        setTimeout(() => (setLoading(false)),3000)
     }, []);
 
     return (
@@ -33,14 +37,14 @@ const Friends = () => {
             <div className="py-3 px-2 flex gap-2 fixed w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-20">
                 <button className='flex gap-2'>
                     <ArrowLeft className="text-white" onClick={() => navigate(-1)} />
-                    <h2 className="text-white text-base font-satoshi">back</h2>
+                    <h2 className="text-white text-base font-satoshi">Friends List</h2>
                 </button>
             </div>
 
 
             <div className='p-4 pt-14'>
-                <div className='flex items-center justify-between'>
-                    <h2 className='text-white text-2xl font-satoshi'>Friends List</h2>
+                <div className='flex justify-end'>
+                    {/* <h2 className='text-white text-2xl font-satoshi'>Friends List</h2> */}
                     <h3 className='text-white text-sm font-satoshi'>Total Friends: <span className='text-textColor'>{group.length}</span></h3>
                 </div>
                 {group.length > 0 ? (
@@ -59,7 +63,7 @@ const Friends = () => {
                         ))}
                     </div>
                 ) : (
-                    <p className='text-white font-satoshi'>No friends found.</p>
+                    <SplashScreen/>
                 )}
             </div>
 

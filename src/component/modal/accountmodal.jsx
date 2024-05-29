@@ -14,9 +14,8 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
     const [phone, setPhone] = useState('');
     const [ids, setId] = useState('');
 
-    // const { id } = useParams();
-
-    // Account Owner Information
+    // This function shows the Account Owner Information and from the response the data is
+    // to the respected field like name,email,phone number
     async function viewAccountStatus() {
         try {
             const response = await axios.get(`${import.meta.env.VITE_API}/me`, {
@@ -37,8 +36,10 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
 
     useEffect(() => {
         viewAccountStatus();
+        //if isEdit is true then 
     }, [isEdit]);
 
+    //This function perform the account update functionality 
     async function accountUpdate(e) {
         e.preventDefault();
         try {
@@ -57,7 +58,11 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
                 }
             );
             onClose(false);
-            if (response.status === 200) {
+            if (response.status == 200) {
+                toast.success(response.data.message)
+                // setIsEdit is false in account page and in accountmodal it is pass as a props
+                // then !isEdit(means) not false then true then in useEffect the function is called and data is shown 
+                // of account page.
                 setIsEdit(!isEdit);
                 onClose();
                 console.log(response)
@@ -76,6 +81,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
         }
     }
 
+    //This function is called when current and target page is same then it will close the modal
     function closeModal(e) {
         if (modalRef.current === e.target) {
             onClose();

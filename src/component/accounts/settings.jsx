@@ -4,7 +4,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { Group, X } from 'lucide-react';
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation,Link} from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import Modal from "../modal/modal";
 import { toast, Toaster } from 'react-hot-toast';
@@ -21,7 +21,7 @@ const Settings = ({ onClose }) => {
     const navigate = useNavigate();
     const { id } = useParams();
     const location = useLocation();
-
+   
     const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
 
     const getGroupApi = async () => {
@@ -32,7 +32,6 @@ const Settings = ({ onClose }) => {
         });
         setGroup(res.data.name);
     };
-
     const viewMember = async () => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
@@ -88,30 +87,13 @@ const Settings = ({ onClose }) => {
 
     return (
         <div className="bg-primaryColor h-svh">
-
-            <Toaster
-                position='top-center'
-                toastOptions={{
-                    duration: 3000,
-                    style: {
-                        background: '#363636',
-                        color: '#fff',
-                    },
-                }}
-            />
-
             <div className='pt-3 pl-2'>
                 <button className='flex gap-2'>
                     <ArrowLeft className='text-white' onClick={() => navigate(-1)} />
-                    <h2 className='text-white text-base font-satoshi'>back</h2>
+                    <h2 className='text-white text-lg font-satoshi'>Group settings</h2>
                 </button>
             </div>
             <div className='px-4'>
-                <div className="py-2">
-                    <h4 className='font-santoshi font-semibold text-white text-2xl flex justify-center'>Group settings</h4>
-                </div>
-                <hr />
-
                 {/* Group name and edit functionality*/}
                 <div className='flex my-3 items-center justify-between'>
                     <div className='h-14 w-14 rounded-2xl' style={{ backgroundColor: groupColor }}> </div>
@@ -126,17 +108,16 @@ const Settings = ({ onClose }) => {
                 <div className='my-2'>
                     <span className="font-satoshi text-lg text-white ">Group members</span>
                     <div className='space-y-5 my-2'>
-                        <button className="flex gap-5 items-center" onClick={() => setModal(true)}>
+                        <Link to={`/group/${id}/settings/addpeople`} className="flex gap-5 items-center">
                             <div className="rounded-full h-10 w-10 p-2 bg-white">
-                                <Plus className='text-black' onClick={"/creategroup"} />
+                                <Users className='text-black' />
                             </div>
                             <div>
-                                <h3 className="font-satoshi text-white text-base">Add group members</h3>
+                                <h3 className="font-satoshi text-white text-base">Add people to group</h3>
                             </div>
-                        </button>
-
-
-                        {!member || member.length === 0 ? (
+                        </Link>
+                
+                            {!member || member.length === 0 ? (
                             <h1>Loader</h1>
                         ) : (
                             member.map((e, index) => (
