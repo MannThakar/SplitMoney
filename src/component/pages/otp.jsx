@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useAuth } from "../utils/auth";
 import { toast } from 'react-toastify'
 
-
 function Otp() {
   const [codes, setCodes] = useState(["", "", "", "", "", ""]);
   const codeInputs = useRef([]);
@@ -98,8 +97,12 @@ function Otp() {
     } catch (error) {
       toast.error(error.response.data.message);
     }
-    setLoading(false);
+    finally { 
+      setLoading(false);
+    }
   };
+
+  const isButtonDisabled = codes.some(code => code === "");
 
   return (
     <div className="bg-primaryColor h-svh flex flex-col items-center justify-center mx-auto p-4">
@@ -133,7 +136,7 @@ function Otp() {
               type="submit"
               className="text-lg font-bold bg-buttonColor rounded-full py-2 font-satoshi w-2/4 text-black"
               onClick={handleOtp}
-              disabled={loading}
+              disabled={loading || isButtonDisabled}
             >
               {loading ? 'Verifying...' : 'Verify'}
             </button>

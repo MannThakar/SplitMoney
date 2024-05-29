@@ -6,6 +6,7 @@ import AccountModal from '../modal/accountmodal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LogoutModal from '../modal/logoutmodal';
+import SplashScreen from '../utils/splashscreen';
 
 const Account = () => {
     const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
@@ -49,13 +50,7 @@ const Account = () => {
 
     //This function is use to clear all the token from localstorage
     const handleLogout = () => {
-        const f = 'Token'
-        if (f == 'Token') {
-            localStorage.removeItem('Token');
-        }
-        else {
-            localStorage.removeItem('Token')
-        }
+        localStorage.removeItem('Token');
         navigate('/signin');
     };
 
@@ -65,7 +60,7 @@ const Account = () => {
             <div className='flex justify-between px-3'>
                 <button className="py-3 flex items-center gap-2 bg-primaryColor" onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
-                    <h2 className="text-white text-base font-satoshi">back</h2>
+                    <h2 className="text-white text-lg font-satoshi">Account</h2>
                 </button>
                 <button className=''>
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
@@ -81,7 +76,7 @@ const Account = () => {
                     onCancel={() => setLogout(false)}
                 />
             )}
-            {/* This will open the accountmodal  
+            {/* This will open the accountmodal and 
             */}
             {modal && (
                 <AccountModal
@@ -91,14 +86,13 @@ const Account = () => {
                     setIsEdit={setIsEdit}
                 />
             )}
-
-            <div className="px-4 flex flex-col items-center md:items-start">
-                <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
-                <hr className="w-full" />
+            {getAccountDetail ? (
+                <div className="px-4 flex flex-col items-center md:items-start">
+                {/* <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
+                <hr className="w-full" /> */}
 
                 <div className='flex gap-6 py-5 items-center w-full'>
-                    {getAccountDetail ? (
-                        <>
+                   
                             <div className='flex flex-col gap-5'>
                                 <div className='flex gap-3'>
                                     <User className='text-white' />
@@ -112,21 +106,19 @@ const Account = () => {
                                     <Smartphone className='text-white' />
                                     <h2 className='text-sm font-mono font-bold text-white'>{phone}</h2>
                                 </div>
-
                             </div>
-                        </>
-                    ) : (
-                        <span className='text-white'>Loading....</span>
-                    )}
-
-                </div>
+                            </div>
                 <div className="w-2/4 flex justify-start w-full">
                     <button
-                        className="bg-white font-bold hover:bg-red-700  text-black py-3 px-6 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
+                        className="bg-white font-bold hover:opacity-80 text-black py-3 px-6 rounded-full"
                         onClick={() => setLogout(true)}>Logout
                     </button>
                 </div>
             </div>
+            ): (
+                  <SplashScreen/>   
+            )}
+                
             {modal && <AccountModal onClose={() => setModal(false)} id={id} isEdit={isEdit} setIsEdit={setIsEdit} />}
             <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
 

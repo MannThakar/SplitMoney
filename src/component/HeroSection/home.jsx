@@ -42,7 +42,7 @@ import { UsersRound, } from 'lucide-react';
 import { UserRound } from 'lucide-react';
 import { CircleUserRound } from 'lucide-react';
 import { FaPlane, FaRunning, FaHeart, FaMusic } from 'react-icons/fa';
-
+import SplashScreen from "../utils/splashscreen";
 
 
 const Home = () => {
@@ -118,9 +118,7 @@ const Home = () => {
             </div>
           ))
         ) : (
-          <div className="flex justify-center my-4">
-            <h3 className="font-satoshi text-lg text-white">No group available</h3>
-          </div>
+          <SplashScreen/>
         )}
       </div>
 

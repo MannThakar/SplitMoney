@@ -47,7 +47,7 @@ function SignUp() {
   const navigate = useNavigate();
   const type = 'verification';
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     const { name, email, phone_no } = values;
     try {
       const response = await axios.get(`${import.meta.env.VITE_API}/send-otp?phone_no=${phone_no}&type=${type}`, {
@@ -63,13 +63,15 @@ function SignUp() {
           phone_no,
           type,
         };
-        setTimeout(() => navigate('/otp', { state: data }), 2000);
+        navigate('/otp', { state: data });
       }
     } catch (error) {
       toast.error('Something went wrong');
       console.error('Error:', error);
+    } finally {
+      setSubmitting(false);
+      resetForm();
     }
-    setSubmitting(false);
   };
 
   return (
