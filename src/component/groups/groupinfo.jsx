@@ -13,7 +13,7 @@ const GroupInfo = () => {
   const location = useLocation();
   const { id } = useParams();
   const [modals, setModals] = useState(false);
-      const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState([]);
 
   const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
@@ -37,7 +37,6 @@ const GroupInfo = () => {
 
   const fetchExpenseDetails = useCallback(async () => {
     try {
-      console.log(`Fetching expense details for group ID: ${id}`);
       const res = await axios.get(`${import.meta.env.VITE_API}/expenses/?includes=user,userExpenses&group_id=${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -88,7 +87,6 @@ const GroupInfo = () => {
           const month = date.toLocaleString('default', { month: 'short' });
           const year = date.getFullYear();
           const day = date.getDate();
-          console.log(expense)
 
           return (
             <>
