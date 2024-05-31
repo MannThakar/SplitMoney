@@ -2,7 +2,9 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SplashScreen from '../utils/splashscreen';
+import { toast } from 'react-toastify';
 import axios from 'axios';
+
 const GroupInvite = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
@@ -16,14 +18,16 @@ const GroupInvite = () => {
             console.log("Access Token is Avaliable");
             navigate('/');
         }
-        else if (!accessToken) {
+        else {
+            localStorage.setItem('inviteToken', token);
+            checkInvitation();
+        }
+        /*  else if (!accessToken) {
+ 
             localStorage.setItem('inviteToken', token);
             console.log("Access Token is Not Avaliable");
-            navigate('/signin');
-        }
-        else {
-            navigate('/');
-        }
+             /* navigate('/signin'); */
+
 
     }, [accessToken]);
 
@@ -40,15 +44,22 @@ const GroupInvite = () => {
                 }
             );
             if (response.status == 200) {
-                alert('You have successfully joined the group');
-                navigate('/');
+                if (accessToken) {
+                    toast.success("successfully accepted the invitation");
+                    navigate('/');
+
+                }
+                else {
+                    toast.error("please login to accept the invitation")
+                    navigate('/signin')
+                }
             }
             else
                 alert('Invalid Token');
         } catch (error) {
             console.error('Error:', error);
-            alert(error.response.data.message);
-            navigate('/');
+            toast.error(error.response.data.message);
+            navigate('/signup');
         }
     }
 
