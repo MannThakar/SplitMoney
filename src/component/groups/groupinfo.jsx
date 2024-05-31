@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText} from 'lucide-react';
+import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText } from 'lucide-react';
 import GroupExpenseUpdate from "../modal/groupexpenseupdate";
 
 const GroupInfo = () => {
@@ -14,10 +14,9 @@ const GroupInfo = () => {
   const { id } = useParams();
   const [modals, setModals] = useState(false);
   const [expenses, setExpenses] = useState([]);
-
   const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  
+  const [userId, setUserId] = useState(null); // Add state for user ID
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
@@ -53,16 +52,35 @@ const GroupInfo = () => {
     }
   }, [id]);
 
-
   useEffect(() => {
     getGroupApi();
     fetchExpenseDetails();
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("Token")}`,
+          },
+        });
+        setUserId(res.data.id);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+    fetchUserId();
   }, [getGroupApi, fetchExpenseDetails]);
+
+  const getUserExpenses = (userId) => {
+    return expenses.map(expense => {
+      const userExpense = expense.user_expenses.find(ue => ue.user_id === userId);
+      return userExpense ? { expenseId: expense.id, ownedAmount: userExpense.owned_amount } : null;
+    }).filter(item => item !== null);
+  };
 
   return (
     <div className='h-screen bg-primaryColor flex flex-col'>
       <div className="flex w-full justify-between px-3 pt-3">
-        <button  onClick={() => navigate(-1)}>
+        <button onClick={() => navigate(-1)}>
           <ArrowLeft className='text-white' />
         </button>
         <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
@@ -76,48 +94,54 @@ const GroupInfo = () => {
           style={{ backgroundColor: groupColor }}
         ></div>
         <div>
-          <h1 className=" text-lg text-white">{group?.name}</h1>
-          <h2 className=" text-sm text-white">{group?.description}</h2>
+          <h1 className="text-lg text-white">{group?.name}</h1>
+          <h2 className="text-sm text-white">{group?.description}</h2>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-4 mb-20"> {/* Adjusted for spacing */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
         {expenses.map((expense) => {
           const date = new Date(expense.date);
           const month = date.toLocaleString('default', { month: 'short' });
           const year = date.getFullYear();
           const day = date.getDate();
 
+          const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
+          const ownedAmount = userExpense ? userExpense.owned_amount : 0;
+
+          // Find the user who paid the amount
+          const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
+
           return (
-            <>
-            <Link Link to={`/group/${id}/expense`} state={{color:groupColor}}  >
-              <div  key={expense.id} className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="bg-stone-600 p-3 rounded-lg">
-                      <span className="text-white font-satoshi text-lg">{expense.description}</span>
+            <Link key={expense.id} to={`/group/${id}/expense`} state={{ color: groupColor }}>
+              <div className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
+                <div className="flex gap-3 items-center mb-2">
+                  <div className="bg-stone-600 p-3 rounded-lg">
+                    <span className="text-white font-satoshi text-lg">{expense.description}</span>
+                  </div>
+                  <div className="p-2 rounded-lg">
+                    <span className="text-white font-satoshi text-base">{payer} paid</span>
+                    <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount.toFixed(2)}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="p-2 rounded-lg">
+                    <div>
+                      <span className="font-bold font-mono text-base text-white">{day}-{month}-{year}</span>
                     </div>
                   </div>
-             
-                    <div className="flex justify-between items-center">
-                        <div className="p-2 rounded-lg">
-                          <div>
-                            <span className="font-bold font-mono text-lg text-white"> {day}-{month}-{year}</span>
-                          </div>
-                        </div>
-                        <div className=" p-2 rounded-lg">
-                          <span className=" text-white font-satoshi text-base">You paid</span>
-                          <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount}</span>
-                        </div>
-                    </div>
+                  <div className="p-2 rounded-lg">
+                    <span className="font-bold font-mono text-base text-white">Owned: ₹{ownedAmount.toFixed(2)}</span>
+                  </div>
                 </div>
+              </div>
             </Link>
-              </>
           );
         })}
       </div>
 
       <Link to={`/group/${id}/addexpense`}>
-        <button className='fixed bottom-20 right-5 text-black w-40  bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
+        <button className='fixed bottom-20 right-5 text-black w-40 bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
           <ReceiptText className='text-black' />Add expense
         </button>
       </Link>
@@ -125,15 +149,15 @@ const GroupInfo = () => {
       <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
           <UsersRound className={`size-5 ${isActive('/')}`} />
-          <span className={`flex justify-start text-base  ${isActive('/')}`}>Groups</span>
+          <span className={`flex justify-start text-base ${isActive('/')}`}>Groups</span>
         </button>
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
           <UserRound className={`size-5 ${isActive('/friends')}`} />
-          <span className={`flex justify-start text-base  ${isActive('/friends')}`}>Friends</span>
+          <span className={`flex justify-start text-base ${isActive('/friends')}`}>Friends</span>
         </button>
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
           <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-          <span className={`flex justify-start text-base  ${isActive('/accounts')}`}>Account</span>
+          <span className={`flex justify-start text-base ${isActive('/accounts')}`}>Account</span>
         </button>
       </div>
       {modals && <GroupExpenseUpdate onClose={() => setModals(false)} expense={selectedExpense} />}

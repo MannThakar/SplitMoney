@@ -34,6 +34,9 @@ function Modal({ onClose }) {
                 toast.error(response.data.message);
             }
         } catch (error) {
+            if (error.response && error.response.status === 422) {
+                toast.error(error.response.data.message)
+            }
             console.error('Error:', error);
             toast.error('An error occurred. Please try again.');
         } finally {

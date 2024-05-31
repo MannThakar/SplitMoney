@@ -36,10 +36,8 @@ const SearchGroup = () => {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
-      const data = res.data.data || [];
-      setGroup(data); // Assuming the data you need is in res.data
-      setFilteredGroup(data); // Initially, display all users
-      
+      setGroup(res.data.data); // Assuming the data you need is in res.data
+      setFilteredGroup(res.data.data); // Initially, display all users
     } catch (error) {
       console.error("Error fetching data:", error);
     }

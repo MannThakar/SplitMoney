@@ -13,22 +13,19 @@ const AddExpense = () => {
   const { selectedMemberIDs } = location.state || { selectedMemberIDs: {} };
 
 
-
-
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Description is required'),
     amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
     date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
   });
 
-  const handleSubmit = async ({ description, amount, date }, { setSubmitting }) => {
+const handleSubmit = async ({ description, amount, date,user_expenses }, { setSubmitting }) => {
     const type = 'EQUALLY';
     const userExpenses = Object.keys(selectedMemberIDs).map(memberId => ({
       user_id: memberId,
       amount: amount / Object.keys(selectedMemberIDs).length,
     }));
     
-
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/expenses`, {
         amount,
@@ -36,7 +33,8 @@ const AddExpense = () => {
         type,
         group_id: id,
         date,
-        user_expenses: [selectedMemberIDs]
+        user_expenses:userExpenses, // pass userExpenses directly
+  
       }, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
@@ -45,15 +43,21 @@ const AddExpense = () => {
       });
       if (response.status === 200) {
         toast.success(response.data.message);
+        navigate('/')
       } else {
         toast.error(response.data.message);
       }
       setSubmitting(false);
-      navigate(-1);
+      
     } catch (error) {
-      console.log(error);
+    if (error.response && error.response.status === 500) {
+      toast.error(error.response.data.message);
+    } else {
+      toast.error('An error occurred while submitting the form');
     }
+  } 
   };
+
 
   return (
     <div className="bg-primaryColor h-screen px-3 flex flex-col items-center">
