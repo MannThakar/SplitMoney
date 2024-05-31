@@ -12,6 +12,7 @@ const AddExpense = () => {
   const location = useLocation();
   const { selectedMemberIDs } = location.state || { selectedMemberIDs: {} };
 
+
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Description is required'),
     amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
@@ -24,7 +25,7 @@ const handleSubmit = async ({ description, amount, date,user_expenses }, { setSu
       user_id: memberId,
       amount: amount / Object.keys(selectedMemberIDs).length,
     }));
-
+    
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/expenses`, {
         amount,
@@ -33,6 +34,7 @@ const handleSubmit = async ({ description, amount, date,user_expenses }, { setSu
         group_id: id,
         date,
         user_expenses:userExpenses, // pass userExpenses directly
+  
       }, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
@@ -95,7 +97,7 @@ const handleSubmit = async ({ description, amount, date,user_expenses }, { setSu
               <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white" value={values.date} onChange={handleChange} />
             </div>
             <div className='w-full flex justify-start md:pl-20 pl-8'>
-             
+
               <ErrorMessage name="date" component="div" className="text-sm text-red-500" />
             </div>
 

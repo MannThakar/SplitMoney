@@ -3,8 +3,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Group, X } from 'lucide-react';
-import { useNavigate, useParams, useLocation,Link} from "react-router-dom";
+
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import Modal from "../modal/modal";
 import { toast, Toaster } from 'react-hot-toast';
@@ -12,16 +12,22 @@ import axios from 'axios';
 import UpdateModal from "../modal/updatemodal";
 import { ArrowLeft, Pencil, Users, Trash, Plus } from 'lucide-react';
 
+
 const Settings = ({ onClose }) => {
+
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const location = useLocation();
+
+
+
     const [modal, setModal] = useState(false);
     const [modals, setModals] = useState(false);
     const [update, setUpdate] = useState(false);
     const [group, setGroup] = useState(null);
     const [member, setMember] = useState([]);
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const location = useLocation();
-   
+
+
     const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
 
     const getGroupApi = async () => {
@@ -108,48 +114,61 @@ const Settings = ({ onClose }) => {
                 <div className='my-2'>
                     <span className="font-satoshi text-lg text-white ">Group members</span>
                     <div className='space-y-5 my-2'>
-                        <Link to={`/group/${id}/settings/addpeople`} className="flex gap-5 items-center">
+                        {/*  <Link to={`/group/${id}/settings/addpeople`} >
                             <div className="rounded-full h-10 w-10 p-2 bg-white">
                                 <Users className='text-black' />
                             </div>
                             <div>
                                 <h3 className="font-satoshi text-white text-base">Add people to group</h3>
                             </div>
-                        </Link>
-                
-                            {!member || member.length === 0 ? (
-                            <h1>Loader</h1>
-                        ) : (
-                            member.map((e, index) => (
-                                <>
-                                    <button className="flex gap-5 items-center">
-                                        <div className="rounded-full h-10 w-10 p-2 bg-white">
-                                            <Users className='text-black' />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-satoshi text-white text-base">{e.name}</h3>
-                                        </div>
-                                    </button>
-                                </>
-                            ))
-                        )}
-                        <div>{modal && <Modal onClose={() => setModal(false)} />}</div>
-
-                        {modals && <UpdateModal onClose={() => setModals(false)} ids={id} setGroup={setGroup} />}
-
-                        <div>{update && <UpdateModal onClose={() => setUpdate(false)} setGroup={setGroup} />}</div>
+                        </Link> */}
 
 
-                        <button className="flex space-x-5 items-center" onClick={() => handleDelete(id)}>
-                            <div className='rounded-full h-10 w-10 p-2 bg-white flex justify-center'>
-                                <Trash className='text-red-600' />
+
+                        <div className="flex gap-5 items-center">
+                            <div className="rounded-full h-10 w-10 p-2 bg-white">
+                                <Users className='text-black' />
                             </div>
-                            <span className="font-satoshi text-white text-base">Delete group</span>
-                        </button>
+                            <div>
+                                <button className="font-satoshi text-white text-base" onClick={() => navigate(`/group/${id}/settings/addpeople`, { state: { id } })}>Add people to group</button>
+                        </div>
                     </div>
+
+
+
+                    {!member || member.length === 0 ? (
+                        <h1>Loader</h1>
+                    ) : (
+                        member.map((e, index) => (
+                            <>
+                                <button className="flex gap-5 items-center">
+                                    <div className="rounded-full h-10 w-10 p-2 bg-white">
+                                        <Users className='text-black' />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-satoshi text-white text-base">{e.name}</h3>
+                                    </div>
+                                </button>
+                            </>
+                        ))
+                    )}
+                    <div>{modal && <Modal onClose={() => setModal(false)} />}</div>
+
+                    {modals && <UpdateModal onClose={() => setModals(false)} ids={id} setGroup={setGroup} />}
+
+                    <div>{update && <UpdateModal onClose={() => setUpdate(false)} setGroup={setGroup} />}</div>
+
+
+                    <button className="flex space-x-5 items-center" onClick={() => handleDelete(id)}>
+                        <div className='rounded-full h-10 w-10 p-2 bg-white flex justify-center'>
+                            <Trash className='text-red-600' />
+                        </div>
+                        <span className="font-satoshi text-white text-base">Delete group</span>
+                    </button>
                 </div>
             </div>
         </div>
+        </div >
     )
 }
 export default Settings;

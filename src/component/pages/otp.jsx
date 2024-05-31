@@ -12,6 +12,7 @@ function Otp() {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(otps);
   const [loading, setLoading] = useState(false);
+  const inviteToken = localStorage.getItem('inviteToken');
 
   async function resendOtps() {
     const type = 'verification';
@@ -27,11 +28,11 @@ function Otp() {
       console.error('Error:', error);
     }
   }
-
   const { storeToken } = useAuth();
 
   useEffect(() => {
     codeInputs.current[0].focus();
+
   }, []);
 
   const handleChange = (index, e) => {
@@ -56,9 +57,6 @@ function Otp() {
     setLoading(true);
     const otp = codes.join("");
 
-
-
-
     try {
       if (type === 'verification') {
         const response = await axios.post(`${import.meta.env.VITE_API}/signup`, {
@@ -69,24 +67,27 @@ function Otp() {
             'X-Requested-With': 'XMLHttpRequest'
           }
         });
+
         if (response.status === 200) {
           if (localStorage.getItem('inviteToken')) {
-            localStorage.removeItem('inviteToken');
+            let data = {
+              token_data: response.data.token,
+            };
             storeToken(data.token_data);
-            
-            navigate('/invite-member');
+            navigate(`/group-invite?token=${inviteToken}`);
+            localStorage.removeItem('inviteToken');
+          } else {
+            let data = {
+              token_data: response.data.token,
+            };
+            storeToken(data.token_data);
+            toast.success(response.data.message);
+            navigate('/', { state: data });
           }
-
-
-          let data = {
-            token_data: response.data.token,
-          };
-          storeToken(data.token_data);
-          toast.success(response.data.message);
-          navigate('/', { state: data });
         } else {
           toast.error(response.data.message);
         }
+
       }
       if (type === "login") {
         const response = await axios.post(`${import.meta.env.VITE_API}/login`, {
@@ -113,6 +114,7 @@ function Otp() {
       setLoading(false);
     }
   };
+
 
   const isButtonDisabled = codes.some(code => code === "");
 
