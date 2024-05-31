@@ -5,8 +5,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import GroupExpenseUpdate from "../modal/groupexpenseupdate";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+
 
 const GroupExpense = () => {
   const navigate = useNavigate();
