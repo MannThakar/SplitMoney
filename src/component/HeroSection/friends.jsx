@@ -21,7 +21,8 @@ const Friends = () => {
                     Authorization: `Bearer ${localStorage.getItem("Token")}`,
                 },
             });
-            setGroup(res.data);  // Assuming the data you need is in res.data
+            console.log(res)
+            setGroup(res.data.data);  // Assuming the data you need is in res.data
         } catch (error) {
             console.error("Error fetching data:", error);
         }

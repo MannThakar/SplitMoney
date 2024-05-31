@@ -1,33 +1,61 @@
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check, User, IndianRupee } from 'lucide-react';
-import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft, User, IndianRupee } from 'lucide-react';
+import { useState, useEffect, useContext, useCallback } from 'react';
+import axios from 'axios';
+import { GroupContext } from '../auth/groupcontext';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
+const validationSchema = Yup.object().shape({
+  amounts: Yup.array().of(
+    Yup.number().required('Required').min(0, 'Amount must be greater than or equal to 0')
+  )
+});
+
 const AdjustAmount = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { setGroupId } = useContext(GroupContext);
+  const [members, setMembers] = useState([]);
+  const [selectedMemberIDs, setSelectedMemberIDs] = useState({});
   const [tab, setTab] = useState('equally');
 
-  const users = ['User1', 'User2', 'User3'];
-
-  const validationSchema = Yup.object({
-    amounts: Yup.array().of(
-      Yup.number().required('Required').positive('Must be positive').integer('Must be an integer')
-    ),
-  });
+  const viewMember = useCallback(async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+      const membersData = res.data.members;
+      setMembers(membersData);
+      setGroupId(id);
+    } catch (error) {
+      console.error("Group Members", error);
+    }
+  }, [id, setGroupId]);
+  
+  useEffect(() => {
+    viewMember();
+  }, [viewMember]);
+  
+  const handleCheckboxChange = (memberId) => {
+    setSelectedMemberIDs((prevSelectedMemberIDs) => ({
+      ...prevSelectedMemberIDs,
+      [memberId]: !prevSelectedMemberIDs[memberId],
+    }));
+  };
+  console.log(selectedMemberIDs);
 
   return (
     <div className="bg-primaryColor h-svh">
       <div className='pt-3 pl-2 flex justify-between'>
-        <button className='flex gap-2' onClick={() => navigate('/')}>
+        <button className='flex gap-2' onClick={() => navigate(-1)}>
           <ArrowLeft className='text-white' />
           <h2 className='text-white text-lg font-satoshi'>Adjust split</h2>
         </button>
-        <div>
-          <Check className='text-white mr-3' />
-        </div>
       </div>
-      
+
       <div className="flex justify-center gap-10 mt-4">
         <button className={`text-white text-xl ${tab === 'equally' ? 'font-bold' : ''}`} onClick={() => setTab('equally')}>Equally</button>
         <button className={`text-white text-xl ${tab === 'unequally' ? 'font-bold' : ''}`} onClick={() => setTab('unequally')}>Unequally</button>
@@ -35,20 +63,33 @@ const AdjustAmount = () => {
 
       {tab === 'equally' ? (
         <div className="mt-6 px-4">
-          {users.map((user) => (
-            <div key={user} className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <User className="text-white" />
-                <span className="text-white">{user}</span>
+          {!members || members.length === 0 ? (
+            <h1>Loader</h1>
+          ) : (
+            members.map((member) => (
+              <div key={member.id} className="flex items-center justify-between mb-4">
+                <button className="flex gap-5 items-center">
+                  <div className="">
+                    <User className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-satoshi text-white text-base">{member.name}</h3>
+                  </div>
+                </button>
+                <input
+                  type="checkbox"
+                  className="form-checkbox text-white"
+                  checked={!!selectedMemberIDs[member.id]}
+                  onChange={() => handleCheckboxChange(member.id)}
+                />
               </div>
-              <input type="checkbox" className="form-checkbox text-white" />
-            </div>
-          ))}
+            ))
+          )}
         </div>
       ) : (
         <div className="mt-6 px-4">
           <Formik
-            initialValues={{ amounts: users.map(() => '') }}
+            initialValues={{ amounts: members.map(() => '') }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
               console.log('Form values:', values);
@@ -56,19 +97,19 @@ const AdjustAmount = () => {
           >
             {({ errors, touched }) => (
               <Form>
-                {users.map((user, index) => (
-                  <div key={user} className="mb-4">
+                {members.map((member, index) => (
+                  <div key={member.id} className="mb-4">
                     <div className="flex items-center justify-between gap-14 mb-2">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-5">
                         <User className="text-white" />
-                        <span className="text-white">{user}</span>
+                        <span className="text-white text-base font-satoshi">{member.name}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <IndianRupee className="text-white" />
                         <Field
                           name={`amounts[${index}]`}
                           type="number"
-                          className={`form-input bg-transparent w-10 ${errors.amounts?.[index] && touched.amounts?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                          className={`form-input text-white bg-transparent w-10 ${errors.amounts?.[index] && touched.amounts?.[index] ? 'border-red-500' : 'border-gray-300'}`}
                           placeholder="0.00"
                         />
                       </div>
@@ -78,14 +119,20 @@ const AdjustAmount = () => {
                     )}
                   </div>
                 ))}
-                <div className="flex justify-center">
-                  <button type="submit" className="p-2 bg-buttonColor text-black rounded-2xl">Submit</button>
-                </div>
               </Form>
             )}
           </Formik>
         </div>
       )}
+
+      <div className="mt-6 flex justify-center">
+        <button
+          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs } })}
+          className="p-2 bg-buttonColor text-black rounded-2xl"
+        >
+          Continue
+        </button>
+      </div>
     </div>
   );
 }

@@ -21,11 +21,14 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchGroup from "./component/groups/searchgroup";
 import GroupExpense from "./component/groups/groupexpense";
-import AdjustAmount from './component/expenses/adjustamount';
+import AdjustAmount from "./component/expenses/adjustamount";
+import Paying from "./component/expenses/paying";
+import { GroupProvider} from '../src/component/auth/groupcontext'
 
 function App() {
   return (
     <>
+      <GroupProvider>
       <Routes>
         <Route>
           {/* Public Route */}
@@ -65,7 +68,8 @@ function App() {
               <Route path=":id/settings" element={<Settings />} />
               <Route path=":id/addexpense" element={<AddExpense />} />
               <Route path=":id/addexpense/adjustamount" element={ <AdjustAmount/>}></Route>
-              <Route path=":id/settings/addpeople" element={<SearchGroup/>}></Route>
+              <Route path=":id/settings/addpeople" element={<SearchGroup />}></Route>
+              <Route path=":id/addexpense/paying" element={<Paying/>}></Route>
             </Route>
             {/* <Route path="/groupinfo/:id" element={<GroupInfo />} /> */}
             <Route path="/creategroup" element={<CreateGroup />} />
@@ -76,7 +80,8 @@ function App() {
           </Route>
         </Route>
       </Routes>
-      <ToastContainer />
+        <ToastContainer />
+        </GroupProvider>
     </>
   );
 }
