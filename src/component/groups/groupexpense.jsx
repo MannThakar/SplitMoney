@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 import { ArrowLeft, Pencil, Trash2, Settings } from 'lucide-react';
 import { useNavigate, useLocation, useParams, Link } from 'react-router-dom';
 import { useState, useCallback, useEffect } from 'react';
@@ -49,40 +50,27 @@ const GroupExpense = () => {
   }, [id]);
 
   const deleteExpense = useCallback(async (expenseId) => {
-    confirmAlert({
-      title: 'Confirm to delete',
-      message: 'Are you sure you want to delete this expense?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: async () => {
-            try {
-              console.log(`Deleting expense ID: ${expenseId}`);
-              const res = await axios.delete(`${import.meta.env.VITE_API}/expenses/${expenseId}`, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("Token")}`,
-                },
-              });
-              if (res.status === 200) {
-                toast.success(res.data.message);
-                navigate('/')
-                fetchExpenseDetails(); // Fetch updated expense details after deletion
-              } else {
-                toast.error(res.data.message);
-              }
-            } catch (error) {
-              console.error("Delete Expense Error:", error);
-              toast.error("Error deleting expense");
-            }
+    if (window.confirm('Are you sure you want to delete this expense?')) {
+      try {
+        console.log(`Deleting expense ID: ${expenseId}`);
+        const res = await axios.delete(`${import.meta.env.VITE_API}/expenses/${expenseId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("Token")}`,
           },
-        },
-        {
-          label: 'No',
-          onClick: () => {},
-        },
-      ],
-    });
-  }, [fetchExpenseDetails]);
+        });
+        if (res.status === 200) {
+          toast.success(res.data.message);
+          navigate('/')
+          fetchExpenseDetails(); // Fetch updated expense details after deletion
+        } else {
+          toast.error(res.data.message);
+        }
+      } catch (error) {
+        console.error("Delete Expense Error:", error);
+        toast.error("Error deleting expense");
+      }
+    }
+  }, [fetchExpenseDetails, navigate]);
 
   useEffect(() => {
     getGroupApi();
@@ -106,12 +94,12 @@ const GroupExpense = () => {
           <button onClick={() => navigate(-1)}>
             <ArrowLeft className='text-white' />
           </button>
-          <button className="text-white" onClick={() => handleDeleteExpense(selectedExpenseId)}>
+          {/* <button className="text-white" onClick={() => handleDeleteExpense(selectedExpenseId)}>
             <Trash2 className='text-white' />
           </button>
           <button className="text-white" onClick={() => handleEditExpense(selectedExpenseId)}>
             <Pencil className='text-trashColor' />
-          </button>
+          </button> */}
         </div>
         <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
           <Settings className='text-white hover:text-textColor' />
@@ -136,16 +124,19 @@ const GroupExpense = () => {
           return (
             <div key={expense.id} className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
               <div className="flex justify-between items-center mb-2">
-                <div className="bg-stone-600 p-3 rounded-lg">
+                <div>
+                  <span className='font-satoshi text-lg text-white'>{ expense.description}</span>
+                  </div>
+                <div>
                   {/* <span className="text-white font-satoshi text-lg">{expense.description}</span> */}
                 </div>
                 <div className="flex items-center gap-1">
                   <button className="text-white" onClick={() => handleDeleteExpense(expense.id)}>
                       <Trash2 className='text-trashColor' />
                   </button>
-                  <button className="text-white" onClick={() => handleEditExpense(expense.id)}>
+                  {/* <button className="text-white" onClick={() => handleEditExpense(expense.id)}>
                     <Pencil className='text-white' />
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <div className="flex justify-between items-center">
