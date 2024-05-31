@@ -108,7 +108,7 @@ const GroupExpense = () => {
             <ArrowLeft className='text-white' />
           </button>
           <button className="text-white" onClick={() => handleDeleteExpense(selectedExpenseId)}>
-            <Trash2 classNmae='text-white' />
+            <Trash2 className='text-white' />
           </button>
           <button className="text-white" onClick={() => handleEditExpense(selectedExpenseId)}>
             <Pencil className='text-trashColor' />
@@ -126,10 +126,6 @@ const GroupExpense = () => {
         ></div>
         {group && (
           <h1>hello</h1>
-          // <div>
-          //   <h1 className="text-lg text-white">{group.name}</h1>
-          //   <h2 className="text-sm text-white">{group.description}</h2>
-          // </div>
         )}
       </div>
 
