@@ -1,24 +1,18 @@
+/* eslint-disable no-unused-vars */
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, User, IndianRupee } from 'lucide-react';
-import { useState, useEffect, useContext, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { GroupContext } from '../auth/groupcontext';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-
-const validationSchema = Yup.object().shape({
-  amounts: Yup.array().of(
-    Yup.number().required('Required').min(0, 'Amount must be greater than or equal to 0')
-  )
-});
 
 const AdjustAmount = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { setGroupId } = useContext(GroupContext);
   const [members, setMembers] = useState([]);
   const [selectedMemberIDs, setSelectedMemberIDs] = useState({});
   const [tab, setTab] = useState('equally');
+  const [amounts, setAmounts] = useState({});
+  console.log(selectedMemberIDs)
+  console.log(amounts)
 
   const viewMember = useCallback(async () => {
     try {
@@ -29,23 +23,28 @@ const AdjustAmount = () => {
       });
       const membersData = res.data.members;
       setMembers(membersData);
-      setGroupId(id);
     } catch (error) {
       console.error("Group Members", error);
     }
-  }, [id, setGroupId]);
-  
+  }, [id]);
+
   useEffect(() => {
     viewMember();
   }, [viewMember]);
-  
+
   const handleCheckboxChange = (memberId) => {
     setSelectedMemberIDs((prevSelectedMemberIDs) => ({
       ...prevSelectedMemberIDs,
       [memberId]: !prevSelectedMemberIDs[memberId],
     }));
   };
-  console.log(selectedMemberIDs);
+
+  const handleAmountChange = (memberId, amount) => {
+    setAmounts((prevAmounts) => ({
+      ...prevAmounts,
+      [memberId]: amount,
+    }));
+  };
 
   return (
     <div className="bg-primaryColor h-svh">
@@ -88,46 +87,32 @@ const AdjustAmount = () => {
         </div>
       ) : (
         <div className="mt-6 px-4">
-          <Formik
-            initialValues={{ amounts: members.map(() => '') }}
-            validationSchema={validationSchema}
-            onSubmit={(values) => {
-              console.log('Form values:', values);
-            }}
-          >
-            {({ errors, touched }) => (
-              <Form>
-                {members.map((member, index) => (
-                  <div key={member.id} className="mb-4">
-                    <div className="flex items-center justify-between gap-14 mb-2">
-                      <div className="flex items-center gap-5">
-                        <User className="text-white" />
-                        <span className="text-white text-base font-satoshi">{member.name}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <IndianRupee className="text-white" />
-                        <Field
-                          name={`amounts[${index}]`}
-                          type="number"
-                          className={`form-input text-white bg-transparent w-10 ${errors.amounts?.[index] && touched.amounts?.[index] ? 'border-red-500' : 'border-gray-300'}`}
-                          placeholder="0.00"
-                        />
-                      </div>
-                    </div>
-                    {errors.amounts?.[index] && touched.amounts?.[index] && (
-                      <div className="text-red-500 text-sm flex justify-end mt-1">{errors.amounts[index]}</div>
-                    )}
-                  </div>
-                ))}
-              </Form>
-            )}
-          </Formik>
+          {members.map((member) => (
+            <div key={member.id} className="mb-4">
+              <div className="flex items-center justify-between gap-14 mb-2">
+                <div className="flex items-center gap-5">
+                  <User className="text-white" />
+                  <span className="text-white text-base font-satoshi">{member.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <IndianRupee className="text-white" />
+                  <input
+                    type="number"
+                    value={amounts[member.id] || ''}
+                    onChange={(e) => handleAmountChange(member.id, e.target.value)}
+                    className="form-input text-white bg-transparent w-10 border-gray-300"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
       <div className="mt-6 flex justify-center">
         <button
-          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs } })}
+          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts } })}
           className="p-2 bg-buttonColor text-black rounded-2xl"
         >
           Continue
@@ -135,6 +120,6 @@ const AdjustAmount = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AdjustAmount;

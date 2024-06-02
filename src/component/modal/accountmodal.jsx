@@ -104,7 +104,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
                     </div>
                     <div className="flex items-center gap-2">
                         <Mail className="text-white" />
-                        <input type="email" placeholder="EMAIL" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white" value={email} required onChange={(e) => setEmail(e.target.value)} />
+                        <input type="email" placeholder="EMAIL" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white" value={email} required onChange={(e) => setEmail(e.target.value)} disabled />
                     </div>
                     <div className='flex items-center gap-2'>
                         <Smartphone className='text-white' />

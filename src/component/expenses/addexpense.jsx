@@ -5,13 +5,17 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 const AddExpense = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
+  const { state } = location;
+  const amounts = state && state.amounts ? state.amounts : {};
   const { selectedMemberIDs } = location.state || { selectedMemberIDs: {} };
 
+  const [type, setType] = useState('EQUALLY');
 
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Description is required'),
@@ -19,13 +23,27 @@ const AddExpense = () => {
     date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
   });
 
-const handleSubmit = async ({ description, amount, date,user_expenses }, { setSubmitting }) => {
-    const type = 'EQUALLY';
-    const userExpenses = Object.keys(selectedMemberIDs).map(memberId => ({
-      user_id: memberId,
-      amount: amount / Object.keys(selectedMemberIDs).length,
-    }));
-    
+  const handleTypeChange = (e) => {
+    setType(e.target.value);
+  };
+
+  const handleSubmit = async ({ description, amount, date }, { setSubmitting }) => {
+    let userExpenses = [];
+
+    if (type === 'EQUALLY') {
+      userExpenses = Object.keys(selectedMemberIDs).map(memberId => ({
+        user_id: memberId,
+        amount: amount / Object.keys(selectedMemberIDs).length,
+      }));
+    } else if (type === 'UNEQUALLY') {
+      userExpenses = amounts && Object.keys(amounts).length > 0
+        ? Object.keys(amounts).map(memberId => ({
+          user_id: memberId,
+          owned_amount: amounts[memberId],
+        }))
+        : [];
+    }
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/expenses`, {
         amount,
@@ -33,32 +51,32 @@ const handleSubmit = async ({ description, amount, date,user_expenses }, { setSu
         type,
         group_id: id,
         date,
-        user_expenses:userExpenses, // pass userExpenses directly
-  
+        user_expenses: userExpenses,
       }, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           Authorization: `Bearer ${localStorage.getItem('Token')}`
         },
       });
+
       if (response.status === 200) {
         toast.success(response.data.message);
-        navigate('/')
+        navigate('/');
       } else {
         toast.error(response.data.message);
       }
       setSubmitting(false);
-      
     } catch (error) {
-    if (error.response && error.response.status === 500) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error('An error occurred while submitting the form');
+      if (error.response && error.response.status === 400) {
+        toast.error(error.response.data.message);
+      } else if (error.response && error.response.status === 500) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error);
+      }
     }
-  } 
   };
-
-
+``
   return (
     <div className="bg-primaryColor h-screen px-3 flex flex-col items-center">
       <div className="pt-3 items-center w-full">
@@ -97,8 +115,14 @@ const handleSubmit = async ({ description, amount, date,user_expenses }, { setSu
               <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white" value={values.date} onChange={handleChange} />
             </div>
             <div className='w-full flex justify-start md:pl-20 pl-8'>
-
               <ErrorMessage name="date" component="div" className="text-sm text-red-500" />
+            </div>
+
+            <div className="flex gap-3 justify-center items-center mb-3">
+              <input type="radio" id="equally" name="type" value="EQUALLY" checked={type === 'EQUALLY'} onChange={handleTypeChange} />
+              <label htmlFor="equally" className='text-white'>Equally</label>
+              <input type="radio" id="unequally" name="type" value="UNEQUALLY" checked={type === 'UNEQUALLY'} onChange={handleTypeChange} />
+              <label htmlFor="unequally" className='text-white'>Unequally</label>
             </div>
 
             <div className="mt-4 flex justify-center">

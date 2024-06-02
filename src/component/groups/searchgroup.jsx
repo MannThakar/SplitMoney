@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { ArrowLeft, User, Mail, Users, UserRoundPlus } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Modal from "../modal/modal";
@@ -8,8 +9,9 @@ import { toast } from 'react-toastify';
 const SearchGroup = () => {
   const navigate = useNavigate();
   const debounceRef = useRef(null);
-  const location = useLocation();
-  const { id } = location.state;
+  // const location = useLocation();
+  // const { id } = location.state;
+  const {id} = useParams();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [group, setGroup] = useState([]);
@@ -36,8 +38,8 @@ const SearchGroup = () => {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
-      setGroup(res.data.data); // Assuming the data you need is in res.data
-      setFilteredGroup(res.data.data); // Initially, display all users
+      setGroup(res.data); // Assuming the data you need is in res.data
+      setFilteredGroup(res.data); // Initially, display all users
     } catch (error) {
       console.error("Error fetching data:", error);
     }
