@@ -60,7 +60,7 @@ const GroupExpense = () => {
         });
         if (res.status === 200) {
           toast.success(res.data.message);
-          navigate('/')
+          navigate(-1)
           fetchExpenseDetails(); // Fetch updated expense details after deletion
         } else {
           toast.error(res.data.message);
@@ -94,6 +94,7 @@ const GroupExpense = () => {
           <button onClick={() => navigate(-1)}>
             <ArrowLeft className='text-white' />
           </button>
+          <h2 className='text-white'>Expense Actions</h2>
           {/* <button className="text-white" onClick={() => handleDeleteExpense(selectedExpenseId)}>
             <Trash2 className='text-white' />
           </button>
@@ -101,41 +102,38 @@ const GroupExpense = () => {
             <Pencil className='text-trashColor' />
           </button> */}
         </div>
-        <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
+        {/* <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
           <Settings className='text-white hover:text-textColor' />
-        </Link>
+        </Link> */}
       </div>
-
-      <div className="relative pl-5 pt-3 flex items-center">
-        <div
+``
+      <div className="relative pl-5 flex items-center">
+        {/* <div
           className="w-14 h-14 rounded-2xl mr-4"
           style={{ backgroundColor: groupColor }}
-        ></div>
+        ></div> */}
         {group && (
           <h1>hello</h1>
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
+      <div className="flex-1 overflow-y-auto px-3 space-y-4 mb-20">
         {expenses.map((expense) => {
           const date = new Date(expense.date);
           const formattedDate = `${date.getDate()}-${date.toLocaleString('default', { month: 'short' })}-${date.getFullYear()}`;
-
+          const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
           return (
-            <div key={expense.id} className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
+           <div key={expense.id} className="p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
               <div className="flex justify-between items-center mb-2">
-                <div>
-                  <span className='font-satoshi text-lg text-white'>{ expense.description}</span>
-                  </div>
-                <div>
-                  {/* <span className="text-white font-satoshi text-lg">{expense.description}</span> */}
+                <div className="bg-stone-600 bg-opacity-50 p-2 rounded-lg">
+                  <span className="font-satoshi text-lg text-white">{expense.description}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <button className="text-white" onClick={() => handleDeleteExpense(expense.id)}>
-                      <Trash2 className='text-trashColor' />
+                    <Trash2 className="text-trashColor" />
                   </button>
                   {/* <button className="text-white" onClick={() => handleEditExpense(expense.id)}>
-                    <Pencil className='text-white' />
+                    <Pencil className="text-white" />
                   </button> */}
                 </div>
               </div>
@@ -146,11 +144,14 @@ const GroupExpense = () => {
                   </div>
                 </div>
                 <div className="p-2 rounded-lg">
-                  <span className="text-white font-satoshi text-base">You paid</span>
+                  <span className="text-white font-satoshi text-base">{payer} paid</span>
                   <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount}</span>
                 </div>
               </div>
             </div>
+
+
+
           );
         })}
       </div>
