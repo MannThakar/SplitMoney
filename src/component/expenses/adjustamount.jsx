@@ -46,6 +46,11 @@ const AdjustAmount = () => {
     }));
   };
 
+  //This function calculate the total amount inputed by the user`
+  const calculateTotalAmount = () => {
+    return Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
+  };
+
   return (
     <div className="bg-primaryColor h-svh">
       <div className='pt-3 pl-2 flex justify-between'>
@@ -107,6 +112,9 @@ const AdjustAmount = () => {
               </div>
             </div>
           ))}
+          <div className="mt-4 text-white text-lg flex justify-end">
+            Total Amount: <span className='font-bold text-xl font-mono'>{calculateTotalAmount()}</span>
+          </div>
         </div>
       )}
 
