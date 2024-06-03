@@ -15,6 +15,7 @@ const Friends = () => {
     const [perPage, setPerPage] = useState(5);
     const [prevPageUrl, setPrevPageUrl] = useState(null);
     const [nextPageUrl, setNextPageUrl] = useState(null);
+    const [totalFriends,setTotalFriends] = useState(null);
 
     const navigate = useNavigate();
 
@@ -31,6 +32,7 @@ const Friends = () => {
                     Authorization: `Bearer ${localStorage.getItem("Token")}`,
                 },
             });
+            setTotalFriends(res.data.total);
             setGroup(res.data.data);
             setTotalPages(res.data.last_page);
             setPrevPageUrl(res.data.prev_page_url);
@@ -62,7 +64,8 @@ const Friends = () => {
 
             <div className='p-4 pt-14'>
                 <div className='flex justify-end'>
-                    <h3 className='text-white text-sm font-satoshi'>Total Friends: <span className='text-textColor'>{group.length || 0}</span></h3>
+                    <h3 className='text-white text-sm font-satoshi'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
+                    {/* {group.length || 0} */}
                 </div>
                 {group.length > 0 ? (
                     <div>
