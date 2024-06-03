@@ -5,36 +5,15 @@ import { X, FilePenLine, IndianRupee, Calendar } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
 
-function GroupExpenseUpdate({ onClose, expense }) {
+function GroupExpenseUpdate({ onClose, expense, onUpdate }) {
     const modalRef = useRef();
-    const { id } = useParams()
-    console.log(id)
     const [expenseData, setExpenseData] = useState(expense);
 
-
-    const fetchExpenseDetails = useCallback(async () => {
-        try {
-            console.log(`Fetching expense details for group ID: ${id}`);
-            const res = await axios.get(`${import.meta.env.VITE_API}/expenses/?includes=user,userExpenses&group_id=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("Token")}`,
-                },
-            });
-            console.log(res)
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }, []);
-
-    // Handle form field changes
     const handleInputChange = useCallback((field, value) => {
         setExpenseData((prev) => ({ ...prev, [field]: value }));
     }, []);
 
-    // Handle form submission
     const expenseUpdate = useCallback(async (e) => {
         e.preventDefault();
         try {
@@ -49,14 +28,13 @@ function GroupExpenseUpdate({ onClose, expense }) {
                 },
                 {
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
                         Authorization: `Bearer ${localStorage.getItem('Token')}`
                     }
                 }
             );
 
             if (response.status === 200) {
-                onClose();
+                onUpdate();
                 toast.success(response.data.message);
             } else {
                 toast.error(response.data.message);
@@ -65,19 +43,14 @@ function GroupExpenseUpdate({ onClose, expense }) {
             toast.error('An error occurred while updating the expense.');
             console.log(error);
         }
-    }, [expenseData, onClose]);
+    }, [expenseData, onUpdate]);
 
-    // Handle modal close
     const closeModal = useCallback((e) => {
         if (modalRef.current === e.target) {
             onClose();
         }
     }, [onClose]);
 
-    useEffect(() => {
-        fetchExpenseDetails();
-``
-    })
     useEffect(() => {
         setExpenseData(expense);
     }, [expense]);
@@ -93,41 +66,50 @@ function GroupExpenseUpdate({ onClose, expense }) {
                 <h1 className="text-center font-satoshi text-xl text-white mb-4">Expense Update</h1>
                 <form onSubmit={expenseUpdate} className="space-y-4">
                     <div>
-                        <div className="flex items-center gap-2">
-                            <FilePenLine className='text-white' />
+                        <div className="flex items-center gap-3 border rounded-lg border-gray-600 bg-gray-700">
+                            <Calendar className="text-white ml-3" />
+                            <input
+                                type="date"
+                                name="date"
+                                value={expenseData.date}
+                                onChange={(e) => handleInputChange('date', e.target.value)}
+                                className="w-full p-2 text-white bg-transparent border-none outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-3 border rounded-lg border-gray-600 bg-gray-700">
+                            <IndianRupee className="text-white ml-3" />
                             <input
                                 type="text"
-                                placeholder="Enter the description"
-                                className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white"
-                                value={expenseData.description}
-                                required
-                                onChange={(e) => handleInputChange('description', e.target.value)}
-                            />
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <IndianRupee className='text-white' />
-                            <input
-                                type="number"
-                                placeholder="0.00"
-                                className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white"
+                                name="amount"
                                 value={expenseData.amount}
-                                required
                                 onChange={(e) => handleInputChange('amount', e.target.value)}
+                                placeholder="Amount"
+                                className="w-full p-2 text-white bg-transparent border-none outline-none"
                             />
                         </div>
-                        <div className='flex items-center gap-2'>
-                            <Calendar className='text-white' />
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-3 border rounded-lg border-gray-600 bg-gray-700">
+                            <FilePenLine className="text-white ml-3" />
                             <input
-                                type='date'
-                                className='flex-1 p-2 font-mono border-b-2 bg-transparent text-white'
-                                value={expenseData.date}
-                                required
-                                onChange={(e) => handleInputChange('date', e.target.value)}
+                                type="text"
+                                name="description"
+                                value={expenseData.description}
+                                onChange={(e) => handleInputChange('description', e.target.value)}
+                                placeholder="Description"
+                                className="w-full p-2 text-white bg-transparent border-none outline-none"
                             />
                         </div>
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className="w-2/4 p-2 text-black bg-buttonColor font-satoshi font-bold rounded-2xl">Save Changes</button>
+                        <button
+                            type="submit"
+                            className="bg-white w-40 font-bold text-black font-satoshi p-2 rounded-md"
+                        >
+                            Update
+                        </button>
                     </div>
                 </form>
             </div>

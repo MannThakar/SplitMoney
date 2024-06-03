@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText } from 'lucide-react';
-import GroupExpenseUpdate from "../modal/groupexpenseupdate";
+import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 
 const GroupInfo = () => {
   const navigate = useNavigate();
@@ -142,10 +142,10 @@ const GroupInfo = () => {
 
       <Link to={`/group/${id}/addexpense`}>
         <button className='fixed bottom-20 right-5 text-black w-40 bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
-          <ReceiptText className='text-black' />Add expense
+          <ReceiptText className='text-black'/>Add expense
         </button>
       </Link>
-
+        ``
       <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
           <UsersRound className={`size-5 ${isActive('/')}`} />
