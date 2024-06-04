@@ -61,7 +61,7 @@ const Home = () => {
           <Users className="text-white hover:text-textColor" onClick={() => navigate('/creategroup')} />
         </button>
         <div>
-          <h1 className="text-xl text-white font-semibold">Groups Details</h1>
+          <h1 className="text-xl text-white font-nunito font-semibold">Groups Details</h1>
         </div>
       </div>
       <div className='mt-2'></div>
@@ -78,7 +78,7 @@ const Home = () => {
                   >
                     <span className="text-5xl text-white">{icons[index % icons.length]}</span>
                   </div>
-                  <h2 className="text-lg font-semibold text-white">{e.name}</h2>
+                  <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
                 </div>
               </Link>
             </div>
@@ -91,15 +91,15 @@ const Home = () => {
       <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
           <Users className={`size-5 ${isActive('/')}`} />
-          <span className={`flex justify-start text-base font-satoshi ${isActive('/')}`}>Groups</span>
+          <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
         </button>
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
           <UserRound className={`size-5 ${isActive('/friends')}`} />
-          <span className={`flex justify-start text-base font-satoshi ${isActive('/friends')}`}>Friends</span>
+          <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
         </button>
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
           <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-          <span className={`flex justify-start text-base font-satoshi ${isActive('/accounts')}`}>Account</span>
+          <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
         </button>
       </div>
     </div>

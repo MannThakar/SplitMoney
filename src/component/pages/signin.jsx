@@ -68,8 +68,8 @@ const SignIn = () => {
         <div className="flex justify-center">
           <img src={LoginImg} alt="Login" className="w-40 h-40 md:w-52 md:h-52" />
         </div>
-        <div className="font-satoshi text-center">
-          <h1 className="text-3xl font-bold text-white">Login</h1>
+        <div className="font-nunito text-center">
+          <h1 className="text-4xl font-semibold font-nunito text-white">Login</h1>
         </div>
         <Formik
           initialValues={{ phone_no: '' }}
@@ -82,7 +82,7 @@ const SignIn = () => {
                 <div className="flex items-center gap-2 md:gap-3">
                   <Smartphone className="text-white" />
                   <Field
-                    type="text"
+                    type="number"
                     id="phone_no"
                     name="phone_no"
                     inputMode="numeric"
@@ -103,7 +103,7 @@ const SignIn = () => {
                 />
                 <button
                   type="submit"
-                  className="font-satoshi text-lg py-2 rounded-full w-2/4  text-black mt-8 bg-buttonColor font-bold mx-auto"
+                  className="font-nunito text-lg py-2 rounded-full w-2/4  text-black mt-8 bg-buttonColor font-bold mx-auto"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Sending OTP...' : 'Get OTP'}
@@ -113,7 +113,7 @@ const SignIn = () => {
           )}
         </Formik>
         <div className="flex justify-center mt-4">
-          <h2 className="text-sm gap-1 flex justify-center font-medium text-white font-satoshi">
+          <h2 className="text-sm gap-1 flex justify-center font-medium text-white font-nunito">
             Don't have an account?{' '}
             <Link to="/signup" className="text-textColor">
               Register

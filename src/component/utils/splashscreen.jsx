@@ -9,8 +9,8 @@ const SplashScreen = () => {
                     <div className="bg-gray-900 p-4 rounded-full mb-4">
                         <SplitLogo />
                     </div>
-                    <h1 className="text-4xl font-bold font-satoshi text-white mb-2">SplitMoney</h1>
-                    <p className="text-gray-400 font-satoshi text-center">
+                    <h1 className="text-4xl font-bold font-nunito text-white mb-2">SplitMoney</h1>
+                    <p className="text-gray-400 font-nunito text-center">
                         Effortlessly split expenses with friends
                     </p>
                 </div>

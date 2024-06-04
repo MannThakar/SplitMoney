@@ -12,7 +12,7 @@ const Friends = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(4);
     const [prevPageUrl, setPrevPageUrl] = useState(null);
     const [nextPageUrl, setNextPageUrl] = useState(null);
     const [totalFriends,setTotalFriends] = useState(null);
@@ -58,13 +58,13 @@ const Friends = () => {
             <div className="py-3 px-2 flex gap-2 fixed w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-20">
                 <button className='flex gap-2' onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
-                    <h2 className="text-white text-base font-satoshi">Friends List</h2>
+                    <h2 className="text-white text-lg font-nunito">Friends List</h2>
                 </button>
             </div>
 
             <div className='p-4 pt-14'>
                 <div className='flex justify-end'>
-                    <h3 className='text-white text-sm font-satoshi'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
+                    <h3 className='text-white text-sm font-nunito'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
                     {/* {group.length || 0} */}
                 </div>
                 {group.length > 0 ? (
@@ -76,10 +76,10 @@ const Friends = () => {
                                         <User className='text-white' />
                                         <h3 className='text-white text-xl font-semibold'>{item.name}</h3>
                                     </div>
-                                    {/* <div className='flex gap-2'>
+                                    <div className='flex gap-2'>
                                         <Mail className='text-white' />
-                                        <p className='text-white text-sm font-satoshi'>{item.email}</p>
-                                    </div> */}
+                                        <p className='text-white text-sm font-nunito'>{item.email}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -92,17 +92,17 @@ const Friends = () => {
             <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
                     <UsersRound className={`size-5 ${isActive('/')}`} />
-                    <span className={`flex justify-start text-base font-satoshi ${isActive('/')}`}>Groups</span>
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
                 </button>
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
                     <UserRound className={`size-5 ${isActive('/friends')}`} />
-                    <span className={`flex justify-start text-base font-satoshi ${isActive('/friends')}`}>Friends</span>
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
                 </button>
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
                     <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-                    <span className={`flex justify-start text-base font-satoshi ${isActive('/accounts')}`}>Account</span>
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
                 </button>
             </div>
 
@@ -110,8 +110,7 @@ const Friends = () => {
                 <button
                     className='bg-stone-800 p-2 rounded-md text-white disabled:opacity-50'
                     onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={!prevPageUrl}
-                >
+                    disabled={!prevPageUrl}>
                     Previous
                 </button>
                 <span className='text-white flex items-center'>
@@ -120,8 +119,7 @@ const Friends = () => {
                 <button
                     className='bg-stone-800 p-2 rounded-md text-white disabled:opacity-50'
                     onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={!nextPageUrl}
-                >
+                    disabled={!nextPageUrl}>
                     Next
                 </button>
             </div>

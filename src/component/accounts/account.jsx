@@ -67,7 +67,7 @@ const Account = () => {
             <div className='flex justify-between px-3'>
                 <button className="py-3 flex items-center gap-2 bg-primaryColor" onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
-                    <h2 className="text-white text-lg font-satoshi">Account</h2>
+                    <h2 className="text-white text-lg font-nunito">Account</h2>
                 </button>
                 <button className=''>
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
@@ -95,7 +95,7 @@ const Account = () => {
             )}
             {getAccountDetail ? (
                 <div className="px-4 flex flex-col items-center md:items-start">
-                {/* <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
+                {/* <h2 className="font-nunito text-white py-2 text-2xl">Account</h2>
                 <hr className="w-full" /> */}
 
                 <div className='flex gap-6 py-5 items-center w-full'>
@@ -103,21 +103,21 @@ const Account = () => {
                             <div className='flex flex-col gap-5'>
                                 <div className='flex gap-3'>
                                     <User className='text-white' />
-                                    <h1 className='text-sm font-poppins text-white'>{name}</h1>
+                                    <h1 className='text-sm font-nunito font-bold text-white'>{name}</h1>
                                 </div>
                                 <div className='flex gap-3'>
                                     <Mail className='text-white' />
-                                    <h2 className='text-sm font-poppins text-white'>{email}</h2>
+                                    <h2 className='text-sm font-nunito font-bold text-white'>{email}</h2>
                                 </div>
                                 <div className='flex gap-3'>
                                     <Smartphone className='text-white' />
-                                    <h2 className='text-sm font-mono font-bold text-white'>{phone}</h2>
+                                    <h2 className='text-sm font-nunito font-bold text-white'>{phone}</h2>
                                 </div>
                             </div>
                             </div>
                 <div className="w-2/4 flex justify-start w-full">
                     <button
-                        className="bg-white font-bold hover:opacity-80 text-black py-3 px-6 rounded-full"
+                        className="bg-white font-bold font-nunito hover:opacity-80 text-black py-3 px-6 rounded-full"
                         onClick={() => setLogout(true)}>Logout
                     </button>
                 </div>
@@ -133,17 +133,17 @@ const Account = () => {
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
                     <UsersRound className={`size-5 ${isActive('/')}`} />
-                    <span className={`flex justify-start text-base font-satoshi ${isActive('/')}`}>Groups</span>
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
                 </button>
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
                     <User className={`size-5 ${isActive('/friends')}`} />
-                    <span className={`flex justify-start text-base font-satoshi ${isActive('/friends')}`}>Friends</span>
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
                 </button>
 
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
                     <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-                    <span className={`flex justify-start text-base font-satoshi ${isActive('/accounts')}`}>Account</span>
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
                 </button>
             </div>
         </div>

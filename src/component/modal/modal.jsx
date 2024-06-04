@@ -61,8 +61,8 @@ function Modal({ onClose }) {
                 </div>
                 <div className='flex flex-col gap-3'>
                     <div>
-                        <h1 className='font-satoshi text-base text-white'>Invite other members too.</h1>
-                        <p className='font-satoshi text-base text-white'>Invite the other members via mail.</p>
+                        <h1 className='font-nunito text-base text-white'>Invite other members too.</h1>
+                        <p className='font-nunito text-base text-white'>Invite the other members via mail.</p>
                     </div>
                     <form onSubmit={groupInvite} className='pt-2 flex flex-col justify-center gap-3'>
                         <div className='flex gap-3 items-center'>
@@ -70,7 +70,7 @@ function Modal({ onClose }) {
                             <input
                                 type="email"
                                 placeholder='Enter the email'
-                                className='p-2 border-b-2 text-white bg-transparent w-full font-satoshi'
+                                className='p-2 border-b-2 text-white bg-transparent w-full font-nunito'
                                 pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                                 required
                                 onChange={(e) => setEmail(e.target.value)}
@@ -79,7 +79,7 @@ function Modal({ onClose }) {
                         <div className='flex justify-center'>
                             <button
                                 type="submit"
-                                className='p-2 text-black w-24 flex justify-center items-center font-satoshi bg-buttonColor rounded-2xl'
+                                className='p-2 text-black w-24 flex justify-center items-center font-nunito bg-buttonColor rounded-2xl'
                                 disabled={loading}>
                                 {loading ? "Sending..." : "Invite"} 
                             </button>
