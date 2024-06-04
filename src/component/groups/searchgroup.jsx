@@ -114,7 +114,7 @@ const SearchGroup = () => {
             <input
               type="text"
               placeholder="Enter name, email"
-              className="text-lg font-satoshi w-11/12 text-white bg-transparent rounded px-2"
+              className="text-lg font-nunito w-11/12 text-white bg-transparent rounded px-2"
               value={searchTerm}
               onChange={handleChange}
             />
@@ -126,7 +126,7 @@ const SearchGroup = () => {
             <Users className='text-black' />
           </div>
           <div>
-            <h3 className="font-satoshi text-white text-base">Add people to group</h3>
+            <h3 className="font-nunito text-white text-base">Add people to group</h3>
           </div>
         </button>
 
@@ -139,7 +139,7 @@ const SearchGroup = () => {
         )}
         <div className="flex-grow p-4 pt-14 overflow-y-auto">
           <div className="flex justify-end">
-            <h3 className="text-white text-sm font-satoshi">
+            <h3 className="text-white text-sm font-nunito">
               Total Friends: <span className="text-textColor">{filteredGroup.length}</span>
             </h3>
           </div>
@@ -158,7 +158,7 @@ const SearchGroup = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="text-white" />
-                <p className="text-white text-sm font-satoshi">{item.email}</p>
+                <p className="text-white text-sm font-nunito">{item.email}</p>
               </div>
             </div>
           ))}

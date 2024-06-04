@@ -93,18 +93,18 @@ function UpdateModal({ onClose, setGroup }) {
                         <X className="text-white hover:text-textColor" />
                     </button>
                 </div>
-                <h1 className="text-center font-satoshi text-xl text-white mb-4">Update group details</h1>
+                <h1 className="text-center font-nunito text-xl text-white mb-4">Update group details</h1>
                 <form onSubmit={groupUpdate} className="space-y-4">
                     <div className="flex items-center gap-2">
                         <User className="text-white" />
-                        <input type="text" placeholder="Enter group name" className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white" value={groupName} required onChange={(e) => setGroupName(e.target.value)} />
+                        <input type="text" placeholder="Enter group name" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white" value={groupName} required onChange={(e) => setGroupName(e.target.value)} />
                     </div>
                     <div className="flex items-center gap-2">
                         <FilePenLine className="text-white" />
-                        <input type="text" placeholder="Enter group description" className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white" value={groupDescr} required onChange={(e) => setGroupDescription(e.target.value)} />
+                        <input type="text" placeholder="Enter group description" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white" value={groupDescr} required onChange={(e) => setGroupDescription(e.target.value)} />
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className="w-2/4 p-2 font-bold text-black bg-buttonColor font-satoshi rounded-2xl">Update</button>
+                        <button type="submit" className="w-2/4 p-2 font-bold text-black bg-buttonColor font-nunito rounded-2xl">Update</button>
                     </div>
                 </form>
             </div>

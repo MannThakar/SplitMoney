@@ -96,22 +96,22 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
                         <X className="text-white" />
                     </button>
                 </div>
-                <h1 className="text-center font-satoshi text-xl text-white mb-4">Account Update</h1>
+                <h1 className="text-center font-nunito text-xl text-white mb-4">Account Update</h1>
                 <form onSubmit={accountUpdate} className="space-y-4">
                     <div className="flex items-center gap-2">
                         <User className="text-white" />
-                        <input type="text" placeholder="Enter group name" className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white" value={name} required onChange={(e) => setName(e.target.value)} />
+                        <input type="text" placeholder="Enter group name" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white" value={name} required onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div className="flex items-center gap-2">
                         <Mail className="text-white" />
-                        <input type="email" placeholder="EMAIL" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" className="flex-1 p-2 font-satoshi border-b-2 bg-transparent text-white" value={email} required onChange={(e) => setEmail(e.target.value)} disabled />
+                        <input type="email" placeholder="EMAIL" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white" value={email} required onChange={(e) => setEmail(e.target.value)} disabled />
                     </div>
                     <div className='flex items-center gap-2'>
                         <Smartphone className='text-white' />
                         <input
                             type='number'
                             placeholder="PHONE NO"
-                            className='flex-1 p-2 font-mono border-b-2 bg-transparent text-white'
+                            className='flex-1 p-2 font-nunito border-b-2 bg-transparent text-white'
                             value={phone}
                             required
                             onChange={(e) => {
@@ -123,7 +123,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
                         />
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className="w-2/4  p-2 text-black bg-buttonColor font-satoshi font-bold rounded-2xl">Save Changes</button>
+                        <button type="submit" className="w-2/4  p-2 text-black bg-buttonColor font-nunito font-bold rounded-2xl">Save Changes</button>
                     </div>
                 </form>
             </div>

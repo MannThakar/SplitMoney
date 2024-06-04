@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { ArrowLeft, Pencil, Trash2, Settings } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate, useLocation, useParams, Link } from 'react-router-dom';
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ const GroupExpense = () => {
   const [modals, setModals] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [selectedExpense, setSelectedExpense] = useState(null);
+  const [getExpenseId, setExpenseId] = useState([]);
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
 
   const getGroupApi = useCallback(async () => {
@@ -37,16 +38,30 @@ const GroupExpense = () => {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
+      setExpenseId(res.data)
       if (res.status === 200) {
         setExpenses(res.data); // Update local state with the fetched data
+        toast.success(res.data.message)
       } else {
-        toast.error('Failed to fetch expense details');
+        toast.error(res.data.message);
       }
     } catch (error) {
       console.error("Fetch Expense Details Error:", error);
       toast.error("Error fetching expense details");
     }
   }, [id]);
+
+  const ExpenseDetail = async (expenseId) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API}/expenses/${expenseId}?includes=userExpenses.user`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const deleteExpense = useCallback(async (expenseId) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
@@ -59,7 +74,7 @@ const GroupExpense = () => {
         });
         if (res.status === 200) {
           toast.success(res.data.message);
-          navigate(-1)
+          navigate(`/group/${id}`);
           fetchExpenseDetails(); // Fetch updated expense details after deletion
         } else {
           toast.error(res.data.message);
@@ -80,6 +95,10 @@ const GroupExpense = () => {
     deleteExpense(expenseId);
   };
 
+  const handleExpenseDetail = (expenseId) => {
+    ExpenseDetail(expenseId);
+  };
+
   const handleEditExpense = (expense) => {
     setSelectedExpense(expense);
     setModals(true);
@@ -92,7 +111,7 @@ const GroupExpense = () => {
           <button onClick={() => navigate(-1)}>
             <ArrowLeft className='text-white' />
           </button>
-          <h2 className='text-white'>Expense Actions</h2>
+          <h2 className='text-white font-nunito text-lg'>Expense Actions</h2>
         </div>
       </div>
 
@@ -108,16 +127,16 @@ const GroupExpense = () => {
           const formattedDate = `${date.getDate()}-${date.toLocaleString('default', { month: 'short' })}-${date.getFullYear()}`;
           const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
           return (
-            <div key={expense.id} className="p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
+            <div key={expense.id} className="p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg" onClick={() => navigate(`/group/${id}/expense/${expense.id}/expensedetails`, { state: { expenseId: expense.id } })}>
               <div className="flex justify-between items-center mb-2">
                 <div className="bg-stone-600 bg-opacity-50 p-2 rounded-lg">
-                  <span className="font-satoshi text-lg text-white">{expense.description}</span>
+                  <span className="font-nunito text-lg text-white">{expense.description}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <button className="text-white" onClick={() => handleEditExpense(expense)}>
+                  <button className="text-white" onClick={(e) => { e.stopPropagation(); handleEditExpense(expense); }}>
                     <Pencil className="text-white" />
                   </button>
-                  <button className="text-white" onClick={() => handleDeleteExpense(expense.id)}>
+                  <button className="text-white" onClick={(e) => { e.stopPropagation(); handleDeleteExpense(expense.id); }}>
                     <Trash2 className="text-trashColor" />
                   </button>
                 </div>
@@ -125,11 +144,11 @@ const GroupExpense = () => {
               <div className="flex justify-between items-center">
                 <div className="p-2 rounded-lg">
                   <div>
-                    <span className="font-bold font-mono text-lg text-white">{formattedDate}</span>
+                    <span className="font-bold font-nunito text-lg text-white">{formattedDate}</span>
                   </div>
                 </div>
                 <div className="p-2 rounded-lg">
-                  <span className="text-white font-satoshi text-base">{payer} paid</span>
+                  <span className="text-white font-nunito text-base">{payer} paid</span>
                   <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount}</span>
                 </div>
               </div>

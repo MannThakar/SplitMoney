@@ -16,7 +16,7 @@ const GroupInfo = () => {
   const [expenses, setExpenses] = useState([]);
   const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  const [userId, setUserId] = useState(null); // Add state for user ID`
+  const [userId, setUserId] = useState(null); // Add state for user ID
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
@@ -94,8 +94,8 @@ const GroupInfo = () => {
           style={{ backgroundColor: groupColor }}
         ></div>
         <div>
-          <h1 className="text-lg text-white">{group?.name}</h1>
-          <h2 className="text-sm text-white">{group?.description}</h2>
+          <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
+          <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
         </div>
       </div>
 
@@ -113,29 +113,27 @@ const GroupInfo = () => {
           const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
 
           return (
-           <Link key={expense.id} to={`/group/${id}/expense`} state={{ color: groupColor }}>
-                <div className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-                  <div className="flex gap-3 items-center mb-2">
-                    <div className="bg-stone-600 bg-opacity-50 p-3 rounded-lg">
-                      <span className="text-white font-satoshi text-lg">{expense.description}</span>
-                    </div>
-                    <div className="p-2 rounded-lg">
-                      <span className="text-white font-satoshi text-base">{payer} paid</span>
-                      <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount.toFixed(2)}</span>
-                    </div>
+            <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
+              <Link to={`/group/${id}/expense`} state={{ color: groupColor }}>
+                <div className="flex gap-14 mb-2">
+                  <div className="bg-stone-600 bg-opacity-50 p-2 rounded-lg">
+                    <span className="text-white font-nunito text-lg">{expense.description}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <div className="p-2 rounded-lg">
-                      <div>
-                        <span className="font-bold font-mono text-base text-white">{day}-{month}-{year}</span>
-                      </div>
-                    </div>
-                    <div className="p-2 rounded-lg">
-                      <span className="font-bold font-mono text-base text-white">Owned: ₹{ownedAmount.toFixed(2)}</span>
-                    </div>
+                  <div className="p-1 rounded-lg flex flex-col">
+                    <span className="text-white font-nunito text-base">{payer}</span>
+                    <span className="font-bold text-lentColor text-lg ml-2 font-sans">you lent ₹{expense.amount.toFixed(2)}</span>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="p-1 rounded-lg">
+                    <span className="font-bold font-nunito text-sm text-white">{day}-{month}-{year}</span>
+                  </div>
+                  <div className="p-1 rounded-lg">
+                    <span className="font-bold font-nunito text-base text-red-500">you borrow: ₹{ownedAmount.toFixed(2)}</span>
                   </div>
                 </div>
               </Link>
+            </div>
           );
         })}
       </div>
@@ -145,7 +143,7 @@ const GroupInfo = () => {
           <ReceiptText className='text-black'/>Add expense
         </button>
       </Link>
-        ``
+      
       <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
           <UsersRound className={`size-5 ${isActive('/')}`} />
@@ -166,3 +164,4 @@ const GroupInfo = () => {
 };
 
 export default GroupInfo;
+

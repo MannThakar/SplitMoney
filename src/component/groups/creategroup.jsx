@@ -59,11 +59,11 @@ const CreateGroup = () => {
         <div className="bg-primaryColor min-h-screen flex flex-col items-center">
             <div className="py-3 flex gap-2 px-2 w-full">
                 <button className='flex items-center flex-row-reverse gap-2' onClick={() => navigate(-1)}>
-                    <h2 className='text-white text-lg font-satoshi'>Create a group</h2>
+                    <h2 className='text-white text-lg font-nunito'>Create a group</h2>
                     <ArrowLeft className='text-white' />
                 </button>
             </div>
-            {/* <h1 className="font-santoshi text-white text-3xl flex justify-center items-center mb-4">Create a group</h1> */}
+            {/* <h1 className="font-nunito text-white text-3xl flex justify-center items-center mb-4">Create a group</h1> */}
             <div className="w-full max-w-md px-4">
                 <Formik
                     initialValues={{ name: '', description: '' }}
@@ -75,7 +75,7 @@ const CreateGroup = () => {
                             <div className='py-4 flex flex-col gap-4'>
                                 <div className='flex items-center gap-3'>
                                     <Users className='text-white' />
-                                    <Field type='text' name="name" className="w-full p-2 border-b-2 bg-transparent font-satoshi text-white" placeholder="Group name" />
+                                    <Field type='text' name="name"   className="w-full  border-b-2 border-white bg-transparent font-nunito text-white focus:outline-none" placeholder="Group name" />
                                 </div>
                                 <div className='flex justify-start ml-8'>
                                     <ErrorMessage name="name" component="div" className="text-sm text-red-500" />
@@ -83,14 +83,14 @@ const CreateGroup = () => {
 
                                 <div className='flex items-center gap-3'>
                                     <ReceiptText className='text-white' />
-                                    <Field type='text' name="description" className="w-full p-2 border-b-2 bg-transparent font-satoshi text-white" placeholder="Group description" />
+                                    <Field type='text' name="description" className="w-full border-b-2 bg-transparent font-nunito text-white focus:outline-none" placeholder="Group description" />
                                 </div>
                                 <div className='flex justify-start ml-8'>
                                     <ErrorMessage name="description" component="div" className="text-sm text-red-500" />
                                 </div>
                             </div>
                             <div className="flex justify-center">
-                                <button type='submit' className="text-xl w-2/4 py-2 md:py-4 h-10 flex items-center justify-center rounded-full bg-buttonColor font-santoshi font-semibold text-black" disabled={isSubmitting}>
+                                <button type='submit' className="text-xl w-2/4 py-2 md:py-4 h-10 flex items-center justify-center rounded-full bg-buttonColor font-nunito font-semibold text-black" disabled={isSubmitting}>
                                     {isSubmitting ? 'Wait...' : 'Done'}
                                 </button>
                             </div>
