@@ -87,7 +87,7 @@ function SignUp() {
         }}
       />
       <div className="w-full max-w-md p-6 md:p-9 shadow-md bg-primaryColor">
-        <h2 className="text-3xl font-semibold text-center text-white font-satoshi">Sign Up</h2>
+        <h2 className="text-4xl font-semibold text-center text-white font-nunito">Sign Up</h2>
         <Formik
           initialValues={{ type: '', phone_no: '', name: '', email: '' }}
           validationSchema={validationSchema}
@@ -104,7 +104,7 @@ function SignUp() {
                       id="name"
                       name="name"
                       placeholder="Full Name"
-                      className="w-full p-2 text-base border-b-2 bg-transparent text-white font-satoshi"
+                      className="w-full p-2 text-base border-b-2 bg-transparent text-white font-nunito"
                     />
                   </div>
                   <div className="flex justify-start ml-8 md:justify-start">
@@ -118,10 +118,10 @@ function SignUp() {
                       id="email"
                       name="email"
                       placeholder="Email"
-                      className="w-full p-2 text-base border-b-2 bg-transparent text-white font-satoshi"
+                      className="w-full p-2 text-base border-b-2 bg-transparent text-white font-nunito"
                     />
                   </div>
-                  <div className="flex justify-start md:justify-start ml-8 md:pl-8">
+                  <div className="flex justify-start md:justify-start ml-8">
                     <ErrorMessage name="email" component="div" className="text-sm text-red-500" />
                   </div>
 
@@ -132,7 +132,7 @@ function SignUp() {
                       id="phone_no"
                       name="phone_no"
                       inputMode="numeric"
-                      className="w-full p-2 bg-transparent text-base border-b-2 text-white font-mono"
+                      className="w-full p-2 bg-transparent text-base border-b-2 text-white font-nunito"
                       placeholder="Phone"
                       onChange={(e) => {
                         const value = e.target.value;
@@ -142,7 +142,7 @@ function SignUp() {
                       }}
                     />
                   </div>
-                  <div className="flex justify-start md:justify-start ml-8 md:pl-8">
+                  <div className="flex justify-start md:justify-start ml-8">
                     <ErrorMessage name="phone_no" component="div" className="text-sm text-red-500" />
                   </div>
                 </div>
@@ -150,7 +150,7 @@ function SignUp() {
                 <div className="flex justify-center ">
                   <button
                     type="submit"
-                    className="w-2/4 mt-9 py-2 font-bold text-lg text-black rounded-full bg-buttonColor font-santoshi"
+                    className="w-2/4 mt-9 py-2 font-bold text-lg text-black rounded-full bg-buttonColor font-nunito"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit'}
@@ -158,7 +158,7 @@ function SignUp() {
                 </div>
 
                 <div className="flex justify-center mt-4">
-                  <h2 className="text-sm font-medium text-white font-santoshi">
+                  <h2 className="text-sm font-medium text-white font-nunito">
                     Already have an account? <Link to="/signin" className="text-textColor">Log in</Link>
                   </h2>
                 </div>

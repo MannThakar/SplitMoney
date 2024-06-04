@@ -28,10 +28,12 @@ const AdjustAmount = () => {
     }
   }, [id]);
 
+  
   useEffect(() => {
     viewMember();
   }, [viewMember]);
 
+  //This function is used to select the checkbox value and fetch the userId from selected checkbox
   const handleCheckboxChange = (memberId) => {
     setSelectedMemberIDs((prevSelectedMemberIDs) => ({
       ...prevSelectedMemberIDs,
@@ -39,6 +41,7 @@ const AdjustAmount = () => {
     }));
   };
 
+  //This function handle the inputed amount by the user and also get the userId of the inputed amount
   const handleAmountChange = (memberId, amount) => {
     setAmounts((prevAmounts) => ({
       ...prevAmounts,
@@ -46,7 +49,7 @@ const AdjustAmount = () => {
     }));
   };
 
-  //This function calculate the total amount inputed by the user`
+  //This function calculate the total amount inputed by the user
   const calculateTotalAmount = () => {
     return Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
   };
@@ -56,7 +59,7 @@ const AdjustAmount = () => {
       <div className='pt-3 pl-2 flex justify-between'>
         <button className='flex gap-2' onClick={() => navigate(-1)}>
           <ArrowLeft className='text-white' />
-          <h2 className='text-white text-lg font-satoshi'>Adjust split</h2>
+          <h2 className='text-white text-lg font-nunito'>Adjust split</h2>
         </button>
       </div>
 
@@ -77,7 +80,7 @@ const AdjustAmount = () => {
                     <User className="text-white" />
                   </div>
                   <div>
-                    <h3 className="font-satoshi text-white text-base">{member.name}</h3>
+                    <h3 className="font-nunito text-white text-base">{member.name}</h3>
                   </div>
                 </button>
                 <input
@@ -97,7 +100,7 @@ const AdjustAmount = () => {
               <div className="flex items-center justify-between gap-14 mb-2">
                 <div className="flex items-center gap-5">
                   <User className="text-white" />
-                  <span className="text-white text-base font-satoshi">{member.name}</span>
+                  <span className="text-white text-base font-nunito">{member.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <IndianRupee className="text-white" />
@@ -113,14 +116,14 @@ const AdjustAmount = () => {
             </div>
           ))}
           <div className="mt-4 text-white text-lg flex justify-end">
-            Total Amount: <span className='font-bold text-xl font-mono'>{calculateTotalAmount()}</span>
+            Total Amount: <span className='font-bold text-xl font-nunito'>{calculateTotalAmount()}</span>
           </div>
         </div>
       )}
 
       <div className="mt-6 flex justify-center">
         <button
-          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts } })}
+          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts} })}
           className="p-2 bg-buttonColor text-black rounded-2xl"
         >
           Continue

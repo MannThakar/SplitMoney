@@ -63,7 +63,7 @@ function GroupExpenseUpdate({ onClose, expense, onUpdate }) {
                         <X className="text-white" />
                     </button>
                 </div>
-                <h1 className="text-center font-satoshi text-xl text-white mb-4">Expense Update</h1>
+                <h1 className="text-center font-nunito text-xl text-white mb-4">Expense Update</h1>
                 <form onSubmit={expenseUpdate} className="space-y-4">
                     <div>
                         <div className="flex items-center gap-3 border rounded-lg border-gray-600 bg-gray-700">
@@ -106,7 +106,7 @@ function GroupExpenseUpdate({ onClose, expense, onUpdate }) {
                     <div className="flex justify-center">
                         <button
                             type="submit"
-                            className="bg-white w-40 font-bold text-black font-satoshi p-2 rounded-md"
+                            className="bg-white w-40 font-bold text-black font-nunito p-2 rounded-md"
                         >
                             Update
                         </button>

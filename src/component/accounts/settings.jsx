@@ -6,7 +6,7 @@
 
 import { useNavigate, useParams, useLocation,Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { ArrowLeft, Pencil, Users, Trash } from 'lucide-react';
 import Modal from "../modal/modal";
@@ -74,9 +74,10 @@ const Settings = ({ onClose }) => {
                     }
                 );
                 if (res.status === 200) {
+                    toast.success(res.data.message)
                     navigate('/');
                 } else {
-                    toast.error(res);
+                    toast.error(res.data.message);
                 }
             } catch (error) {
                 console.error("Error:", error);
@@ -92,26 +93,26 @@ const Settings = ({ onClose }) => {
             <div className='pt-3 pl-2'>
                 <button className='flex gap-2' onClick={() => navigate(-1)}>
                     <ArrowLeft className='text-white' />
-                    <h2 className='text-white text-lg font-satoshi'>Group settings</h2>
+                    <h2 className='text-white text-lg font-nunito'>Group settings</h2>
                 </button>
             </div>
             <div className='px-4'>
                 <div className='flex my-3 items-center justify-between'>
                     <div className='h-14 w-14 rounded-2xl' style={{ backgroundColor: groupColor }}></div>
-                    <span className="font-satoshi text-white text-lg">{group}</span>
+                    <span className="font-nunito text-white text-lg">{group}</span>
                     <button>
                         <Pencil className='text-white hover:text-textColor' onClick={editGroup} />
                     </button>
                 </div>
                 <div className='my-2'>
-                    <span className="font-satoshi text-lg text-white">Group members</span>
+                    <span className="font-nunito text-lg text-white">Group members</span>
                     <div className='overflow-y-auto max-h-60 my-2 space-y-2'>
                           <Link to={`/group/${id}/settings/addpeople`} className="flex items-center gap-5" >
                             <div className="rounded-full flex h-10 w-10 p-2 bg-white">
                                 <Users className='text-black' />
                             </div>
                             <div>
-                                <h3 className="font-satoshi text-white text-base">Add people to group</h3>
+                                <h3 className="font-nunito text-white text-base">Add people to group</h3>
                             </div>
                         </Link>
                         {member.map((e, index) => (
@@ -120,7 +121,7 @@ const Settings = ({ onClose }) => {
                                     <Users className='text-black' />
                                 </div>
                                 <div>
-                                    <h3 className="font-satoshi text-white text-base">{e.name}</h3>
+                                    <h3 className="font-nunito text-white text-base">{e.name}</h3>
                                 </div>
                             </button>
                         ))}
@@ -134,7 +135,7 @@ const Settings = ({ onClose }) => {
                         <div className='rounded-full h-10 w-10 p-2 bg-white flex justify-center'>
                             <Trash className='text-red-600' />
                         </div>
-                        <span className="font-satoshi text-white text-base">Delete group</span>
+                        <span className="font-nunito text-white text-base">Delete group</span>
                     </button>
                 </div>
             </div>

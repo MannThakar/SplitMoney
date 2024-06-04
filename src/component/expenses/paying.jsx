@@ -30,7 +30,7 @@ const Paying = () => {
         <div className='pt-3 pl-2 flex justify-between'>
             <button className='flex gap-2' onClick={() => navigate('/')}>
             <ArrowLeft className='text-white' />
-            <h2 className='text-white text-lg font-satoshi'>Who paid?</h2>
+            <h2 className='text-white text-lg font-nunito'>Who paid?</h2>
             </button>
         </div>
         <div className='pt-3 px-3'>
@@ -44,7 +44,7 @@ const Paying = () => {
                                     <User className='text-black' />
                                 </div>
                                 <div>
-                                    <h3 className='font-satoshi text-white text-base'>{member.name}</h3>
+                                    <h3 className='font-nunito text-white text-base'>{member.name}</h3>
                                 </div>
                             </button>
                             

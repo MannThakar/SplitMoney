@@ -126,13 +126,13 @@ function Otp() {
 
       <div className="flex flex-col justify-center items-center mt-5 w-full max-w-md">
         <div className="p-8 bg-stone-800 rounded-2xl w-full">
-          <h1 className="text-2xl text-center text-white font-satoshi mb-2">Verification Code</h1>
-          <p className="text-sm font-normal text-center text-white font-poppins mb-3">OTP sent to +91 {phone_no}</p>
+          <h1 className="text-2xl text-center text-white font-nunito mb-2">Verification Code</h1>
+          <p className="text-sm font-normal text-center text-white font-nunito mb-3">OTP sent to +91 {phone_no}</p>
           <div className="flex justify-center space-x-1 mt-3">
             {codes.map((code, index) => (
               <input
                 key={index}
-                type="text"
+                type="number"
                 id={`verificationCode${index}`}
                 name={`verificationCode${index}`}
                 value={code}
@@ -148,7 +148,7 @@ function Otp() {
           <div className="flex justify-center mt-5">
             <button
               type="submit"
-              className="text-lg font-bold bg-buttonColor rounded-full py-2 font-satoshi w-2/4 text-black"
+              className="text-lg font-bold bg-buttonColor rounded-full py-2 font-nunito w-2/4 text-black"
               onClick={handleOtp}
               disabled={loading || isButtonDisabled}
             >
@@ -156,7 +156,7 @@ function Otp() {
             </button>
           </div>
           <div className="flex justify-center mt-4">
-            <button className='font-satoshi font-bold text-base rounded-md text-textColor' onClick={resendOtps}>Resend Otp</button>
+            <button className='font-nunito font-bold text-base rounded-md text-textColor' onClick={resendOtps}>Resend Otp</button>
           </div>
         </div>
       </div>

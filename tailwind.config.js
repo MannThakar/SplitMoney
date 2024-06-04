@@ -4,9 +4,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				poppins: ["Poppins", "sans-serif"],
-				panchang: ["Panchang", "sans-serif"],
-				satoshi: ["Habibi", "serif"],
+				nunito: ['Nunito', 'sans-serif'],
 			},
 			screens: {
 				xxs: "320px",
@@ -36,6 +34,7 @@ export default {
 				highlightColor: "#FFD700",
 				boxColor: "#857f95",
 				trashColor: "#D50000",
+				lentColor: "#09B83E"
 			},
 		},
 
