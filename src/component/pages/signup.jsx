@@ -1,10 +1,10 @@
-/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 import { Smartphone, Mail, User } from 'lucide-react';
 
 // Define the Yup schema for validation 
@@ -45,7 +45,15 @@ const validate = async (values) => {
 
 function SignUp() {
   const navigate = useNavigate();
+  const location = useLocation();
   const type = 'verification';
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    if (localStorage.getItem('inviteToken') && location.state?.email) {
+      setUserEmail(location.state.email);
+    }
+  }, [location.state]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const { name, email, phone_no } = values;
@@ -86,8 +94,10 @@ function SignUp() {
       />
       <div className="w-full max-w-md p-6 md:p-9 shadow-md bg-primaryColor">
         <h2 className="text-3xl font-semibold text-center text-white font-satoshi">Sign Up</h2>
+
         <Formik
-          initialValues={{ type: '', phone_no: '', name: '', email: '' }}
+          initialValues={{ type: '', phone_no: '', name: '', email: userEmail}}
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -140,7 +150,7 @@ function SignUp() {
                       }}
                     />
                   </div>
-                  <div className="flex justify-start md:justify-start ml-8 md:pl-8">
+                  <div className="flex justify-start md:justify-start ml-8 ">
                     <ErrorMessage name="phone_no" component="div" className="text-sm text-red-500" />
                   </div>
                 </div>

@@ -3,15 +3,14 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import LoginImg from '../../assets/Login.svg';
 import { Smartphone } from 'lucide-react';
 
-const SignIn = () => {
-  const navigate = useNavigate();
-  const type = 'login';
 
+const SignIn = () => {
+  
+  const type = 'login';
   const validationSchema = Yup.object().shape({
     phone_no: Yup.string()
       .matches(/^[0-9]{10}$/, 'Mobile number must be 10 digits')

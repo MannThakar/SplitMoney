@@ -3,9 +3,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+<<<<<<< Updated upstream
 import { Group, X } from 'lucide-react';
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
+=======
+
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
+import { ArrowLeft, Pencil, Users, Trash } from 'lucide-react';
+>>>>>>> Stashed changes
 import Modal from "../modal/modal";
 import { toast, Toaster } from 'react-hot-toast';
 import axios from 'axios';
@@ -124,11 +133,19 @@ const Settings = ({ onClose }) => {
                 {/* Group member detail add people in group and email */}
 
                 <div className='my-2'>
+<<<<<<< Updated upstream
                     <span className="font-satoshi text-lg text-white ">Group members</span>
                     <div className='space-y-5 my-2'>
                         <button className="flex gap-5 items-center" onClick={() => setModal(true)}>
                             <div className="rounded-full h-10 w-10 p-2 bg-white">
                                 <Plus className='text-black' onClick={"/creategroup"} />
+=======
+                    <span className="font-satoshi text-lg text-white">Group members</span>
+                    <div className='overflow-y-auto max-h-60 my-2 space-y-2'>
+                        <Link to={`/group/${id}/settings/addpeople`} className="flex items-center gap-5" >
+                            <div className="rounded-full flex h-10 w-10 p-2 bg-white">
+                                <Users className='text-black' />
+>>>>>>> Stashed changes
                             </div>
                             <div>
                                 <h3 className="font-satoshi text-white text-base">Add group members</h3>

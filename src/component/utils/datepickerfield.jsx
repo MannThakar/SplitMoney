@@ -15,7 +15,7 @@ const DatePickerField = ({ name }) => {
                 onChange={(date) => {
                     setFieldValue(name, date);
                 }}
-                className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white"
+                className="border-b w-full max-w-xs border-gray-400 p-2 bg-transparent text-white "
                 placeholderText="Select a date"
                 dateFormat="yyyy/MM/dd"
             />
