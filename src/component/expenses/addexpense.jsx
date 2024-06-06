@@ -5,7 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const AddExpense = () => {
   const navigate = useNavigate();
@@ -13,8 +13,8 @@ const AddExpense = () => {
   const location = useLocation();
   const { state } = location;
   const amounts = state && state.amounts ? state.amounts : {};
-  const { selectedMemberIDs } = location.state || { selectedMemberIDs: {} };
-  const [type, setType] = useState('EQUALLY');
+  const { selectedMemberIDs, tab } = location.state || { selectedMemberIDs: {}, tab: 'equally' };
+  const [type, setType] = useState(tab.toUpperCase());
 
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Description is required'),
@@ -22,19 +22,15 @@ const AddExpense = () => {
     date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
   });
 
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
+  const getCurrentDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
-  const getCurrentDate = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
-const currentDate = getCurrentDate();
+  const currentDate = getCurrentDate();
   const handleSubmit = async ({ description, amount, date }, { setSubmitting }) => {
     let userExpenses = [];
 
@@ -70,6 +66,8 @@ const currentDate = getCurrentDate();
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate(`/group/${id}`);
+        // Remove form data from localStorage after adding expense
+        localStorage.removeItem('expenseFormData');
       } else {
         toast.error(response.data.message);
       }
@@ -85,69 +83,70 @@ const currentDate = getCurrentDate();
     }
   };
 
+  // Load form data from localStorage if available
+  const initialFormData = JSON.parse(localStorage.getItem('expenseFormData')) || { description: '', amount: '', date: currentDate };
+
   return (
-    <div className="bg-primaryColor h-screen px-3 flex flex-col items-center">
-      <div className="pt-3 items-center w-full">
-        <button className='flex gap-2'>
-          <ArrowLeft className="text-white" onClick={() => navigate(-1)} />
-          <h2 className="text-white text-lg font-nunito">Add Expense</h2>
-        </button>
-      </div>
-      <hr className='bg-white' />
+    <>
+      <div className="bg-primaryColor h-screen px-3 flex flex-col items-center">
+        <div className="py-3 items-center w-full">
+          <button className='flex gap-2'>
+            <ArrowLeft className="text-white flex items-center" onClick={() => navigate(-1)} />
+            <h2 className="text-white text-lg font-nunito">Add Expense</h2>
+          </button>
+        </div>
+        <hr className='bg-white' />
 
-      <Formik
-        initialValues={{ description: '', amount: '', date: currentDate }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        
-        {({ isSubmitting, handleChange, values }) =>(
-          <Form className="w-full max-w-md">
-            <div className="flex gap-3 pt-3 justify-center items-center mb-3">
-              <FilePenLine className='text-white' />
-              <Field type="text" id="description" name="description" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" placeholder="Enter the description" value={values.description} onChange={handleChange} />
-            </div>
-            <div className='flex justify-start md:pl-20 pl-10'>
-              <ErrorMessage name="description" component="div" className="text-sm text-red-500" />
-            </div>
+        <Formik
+          initialValues={initialFormData}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
 
-            <div className="flex gap-3 justify-center items-center my-3">
-              <IndianRupee className='text-white' />
-              <Field type="number" id="amount" name="amount" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" placeholder="0.00" value={values.amount} onChange={handleChange} />
-            </div>
-            <div className='w-full flex justify-start md:pl-20 pl-10'>
-              <ErrorMessage name="amount" component="div" className="text-sm text-red-500" />
-            </div>
+          {({ isSubmitting, handleChange, values }) => (
+            <Form className="w-full max-w-md">
+              <div className="flex gap-3 pt-3 justify-center items-center mb-3">
+                <FilePenLine className='text-white' />
+                <Field type="text" id="description" name="description" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" placeholder="Enter the description" value={values.description} onChange={handleChange} />
+              </div>
+              <div className='flex justify-start md:pl-20 pl-10'>
+                <ErrorMessage name="description" component="div" className="text-sm text-red-500" />
+              </div>
 
-            <div className="flex gap-3 justify-center items-center my-3">
-              <Calendar className='text-white' />
-              <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" value={values.date} onChange={handleChange} />
-            </div>
-            <div className='w-full flex justify-start md:pl-20 pl-10'>
+              <div className="flex gap-3 justify-center items-center my-3">
+                <IndianRupee className='text-white' />
+                <Field type="number" id="amount" name="amount" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" placeholder="0.00" value={values.amount} onChange={handleChange} />
+              </div>
+              <div className='w-full flex justify-start md:pl-20 pl-10'>
+                <ErrorMessage name="amount" component="div" className="text-sm text-red-500" />
+              </div>
+
+              <div className="flex gap-3 justify-center items-center my-3">
+                <Calendar className='text-white' />
+                <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" value={values.date} onChange={handleChange} />
+              </div>
+
+              <div className='w-full flex justify-start md:pl-20 pl-10'>
               <ErrorMessage name="date" component="div" className="text-sm text-red-500" />
-            </div>
-            <div className="flex gap-3 justify-center items-center my-3">
-              <input type="radio" id="equally" name="type" value="EQUALLY" checked={type === 'EQUALLY'} onChange={handleTypeChange} />
-              <label htmlFor="equally" className='text-white'>Equally</label>
-              <input type="radio" id="unequally" name="type" value="UNEQUALLY" checked={type === 'UNEQUALLY'} onChange={handleTypeChange} />
-              <label htmlFor="unequally" className='text-white'>Unequally</label>
-            </div>
+              </div>
 
-            <div className="mt-4 flex justify-center">
-              <button type="submit" className="w-36 py-2 font-bold text-black rounded-full bg-buttonColor font-nunito" disabled={isSubmitting}>
-                {isSubmitting ? 'Adding...' : 'Add'}
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-      <div className="mt-6">
-        <span className='text-xl text-white font-nunito'>
-          Paid by <Link to={`/group/${id}/addexpense`} className="bg-white text-black rounded px-2">you</Link> and split <Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">equally</Link>
-        </span>
-      </div>
+
+          <div className="mt-4 flex justify-center">
+            <button type="submit" className="w-36 py-2 font-bold text-black rounded-full bg-buttonColor font-nunito" disabled={isSubmitting}>
+              {isSubmitting ? 'Adding...' : 'Add'}
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
+    <div className="mt-6">
+      <span className='text-lg text-white font-nunito'>
+        Paid by <Link to={`/group/${id}/addexpense`} className="bg-white text-black rounded px-2">you</Link> and split <Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">{tab.toLowerCase()}</Link>
+      </span>
     </div>
-  );
+  </div>
+</>
+);
 };
 
 export default AddExpense;

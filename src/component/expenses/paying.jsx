@@ -27,7 +27,7 @@ const Paying = () => {
 
   return (
     <div className="bg-primaryColor h-svh">
-        <div className='pt-3 pl-2 flex justify-between'>
+        <div className='py-3 px-2 flex justify-between'>
             <button className='flex gap-2' onClick={() => navigate('/')}>
             <ArrowLeft className='text-white' />
             <h2 className='text-white text-lg font-nunito'>Who paid?</h2>

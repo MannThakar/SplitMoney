@@ -33,7 +33,7 @@ const AdjustAmount = () => {
     viewMember();
   }, [viewMember]);
 
-  //This function is used to select the checkbox value and fetch the userId from selected checkbox
+  // This function is used to select the checkbox value and fetch the userId from selected checkbox
   const handleCheckboxChange = (memberId) => {
     setSelectedMemberIDs((prevSelectedMemberIDs) => ({
       ...prevSelectedMemberIDs,
@@ -41,22 +41,25 @@ const AdjustAmount = () => {
     }));
   };
 
-  //This function handle the inputed amount by the user and also get the userId of the inputed amount
+  // This function handles the inputted amount by the user and also gets the userId of the inputted amount
   const handleAmountChange = (memberId, amount) => {
-    setAmounts((prevAmounts) => ({
+    if (amount.length <= 4 && /^\d{0,4}$/.test(amount)) {
+        setAmounts((prevAmounts) => ({
       ...prevAmounts,
       [memberId]: amount,
     }));
+    }
+    
   };
 
-  //This function calculate the total amount inputed by the user
+  // This function calculates the total amount inputted by the user
   const calculateTotalAmount = () => {
     return Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
   };
 
   return (
     <div className="bg-primaryColor h-svh">
-      <div className='pt-3 pl-2 flex justify-between'>
+      <div className='py-3 px-2 flex justify-between'>
         <button className='flex gap-2' onClick={() => navigate(-1)}>
           <ArrowLeft className='text-white' />
           <h2 className='text-white text-lg font-nunito'>Adjust split</h2>
@@ -110,6 +113,7 @@ const AdjustAmount = () => {
                     onChange={(e) => handleAmountChange(member.id, e.target.value)}
                     className="form-input text-white bg-transparent w-10 border-gray-300"
                     placeholder="0.00"
+                    maxLength="4"
                   />
                 </div>
               </div>
@@ -123,7 +127,7 @@ const AdjustAmount = () => {
 
       <div className="mt-6 flex justify-center">
         <button
-          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts} })}
+          onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts, tab } })}
           className="p-2 bg-buttonColor text-black rounded-2xl"
         >
           Continue
