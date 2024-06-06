@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Link, useNavigate,Loacation } from 'react-router-dom';
+import { Link, useNavigate,useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -51,7 +51,7 @@ function SignUp() {
   const location = useLocation();
 
   useEffect(() => {
-    if (locaStorage.getItem('inviteToken') && location.state?.email) {
+    if (localStorage.getItem('inviteToken') && location.state?.email) {
       setUserEmail(location.state.email);
     }
   },[location.state]);
