@@ -25,6 +25,7 @@ const Settings = ({ onClose }) => {
     const [member, setMember] = useState([]);
 
     const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
+    const imageURL = location.state?.imageURL || 'https://w3schools.com/w3images/avatar2.png';
 
     const getGroupApi = async () => {
         try {
@@ -90,15 +91,18 @@ const Settings = ({ onClose }) => {
 
     return (
         <div className="bg-primaryColor h-svh">
-            <div className='pt-3 pl-2'>
-                <button className='flex gap-2' onClick={() => navigate(-1)}>
+            <div className='py-2 px-2'>
+                <button className='flex gap-2 items-center' onClick={() => navigate(-1)}>
                     <ArrowLeft className='text-white' />
                     <h2 className='text-white text-lg font-nunito'>Group settings</h2>
                 </button>
             </div>
             <div className='px-4'>
-                <div className='flex my-3 items-center justify-between'>
-                    <div className='h-14 w-14 rounded-2xl' style={{ backgroundColor: groupColor }}></div>
+                <div className='flex py-3 items-center justify-between'>
+                    <div className='h-14 w-14 rounded-2xl' style={{ backgroundColor: groupColor }} >
+                        {/* <img src={imageURL} alt='Group' className="w-full h-full rounded-2xl object-cover"/> */}
+                    </div>
+                    
                     <span className="font-nunito text-white text-lg">{group}</span>
                     <button>
                         <Pencil className='text-white hover:text-textColor' onClick={editGroup} />

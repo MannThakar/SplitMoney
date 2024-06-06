@@ -1,11 +1,12 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,Loacation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { Smartphone, Mail, User } from 'lucide-react';
+import {useState,useEffect} from 'react';
 
 // Define the Yup schema for validation 
 const validationSchema = Yup.object().shape({
@@ -46,6 +47,14 @@ const validate = async (values) => {
 function SignUp() {
   const navigate = useNavigate();
   const type = 'verification';
+  const [userEmail, setUserEmail] = useState('');
+  const location = useLocation();
+
+  useEffect(() => {
+    if (locaStorage.getItem('inviteToken') && location.state?.email) {
+      setUserEmail(location.state.email);
+    }
+  },[location.state]);
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     const { name, email, phone_no } = values;
@@ -76,20 +85,10 @@ function SignUp() {
 
   return (
     <div className="w-full h-svh flex items-center justify-center bg-primaryColor">
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 7000,
-          style: {
-            background: '#363636',
-            color: '#fff',
-          },
-        }}
-      />
       <div className="w-full max-w-md p-6 md:p-9 shadow-md bg-primaryColor">
         <h2 className="text-4xl font-semibold text-center text-white font-nunito">Sign Up</h2>
         <Formik
-          initialValues={{ type: '', phone_no: '', name: '', email: '' }}
+          initialValues={{ type: '', phone_no: '', name: '', email: userEmail }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >

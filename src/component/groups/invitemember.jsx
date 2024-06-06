@@ -10,6 +10,7 @@ const GroupInvite = () => {
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get('token');
     const accessToken = localStorage.getItem('Token');
+    const email = queryParams.get('email');  
 
 
     useEffect(() => {
@@ -18,16 +19,16 @@ const GroupInvite = () => {
             console.log("Access Token is Avaliable");
             navigate('/');
         }
+        else if (!accessToken) {
+           localStorage.setItem('inviteToken', token);
+           console.log("Access Token is Not Avaliable");
+           navigate('/signin');
+        }       
         else {
-            localStorage.setItem('inviteToken', token);
-            checkInvitation();
+            // localStorage.setItem('inviteToken', token);
+            // checkInvitation();
+            navigate('/');
         }
-        /*  else if (!accessToken) {
- 
-            localStorage.setItem('inviteToken', token);
-            console.log("Access Token is Not Avaliable");
-             /* navigate('/signin'); */
-
 
     }, [accessToken]);
 
@@ -45,13 +46,14 @@ const GroupInvite = () => {
             );
             if (response.status == 200) {
                 if (accessToken) {
-                    toast.success("successfully accepted the invitation");
+                    toast.success(response.data.message);
                     navigate('/');
+                    console.log('email::::::',email)
 
                 }
                 else {
-                    toast.error("please login to accept the invitation")
-                    navigate('/signin')
+                    toast.error(response.data.message);
+                    navigate('/signin',{state:{email:email}})
                 }
             }
             else
@@ -59,13 +61,9 @@ const GroupInvite = () => {
         } catch (error) {
             console.error('Error:', error);
             toast.error(error.response.data.message);
-            navigate('/signup');
+            navigate('/signup',{state:{email:email}});
         }
     }
-
-
-
-
     return (
         <>
             <SplashScreen />

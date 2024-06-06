@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify'
 
+
 function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
     const modalRef = useRef();
     const [name, setName] = useState('');
@@ -89,7 +90,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
     }
 
     return (
-        <div ref={modalRef} onClick={closeModal} className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
+        <div ref={modalRef} onClick={closeModal} className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-2xl flex items-center justify-center">
             <div className="bg-stone-800 w-11/12 h-80 py-4 md:w-2/5 rounded-xl mx-auto p-6">
                 <div className="flex justify-end">
                     <button onClick={onClose}>

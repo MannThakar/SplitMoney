@@ -4,19 +4,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { Users } from 'lucide-react'
-import { UserRound } from 'lucide-react';
-import { CircleUserRound } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { Users, UserRound, CircleUserRound } from 'lucide-react';
 import { CiViewList } from "react-icons/ci";
 import SplashScreen from '../utils/splashscreen';
 
 const Home = () => {
   const navigate = useNavigate();
   const [res, setRes] = useState([]);
+  const [imageURL, setImageURL] = useState('');
   const colors = ["#7c3aed", "#0891b2", "#16a34a", "#ea580c"];
-  const icons = [<CiViewList />,<CiViewList />];
-
+  const icons = [<CiViewList />, <CiViewList />];
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
 
@@ -39,24 +37,32 @@ const Home = () => {
     }
   }
 
+  const getAccountDetail = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+      setImageURL(res.data.image_url);
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  };
+
   useEffect(() => {
     viewGroup();
+    getAccountDetail();
   }, []);
 
   return (
     <div className="bg-primaryColor h-svh">
-
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 2000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
-        }}
-      />
-      <div className="px-3 py-2 flex justify-between items-center flex-row-reverse  bg-opacity-50 backdrop-blur-sm">
+      <div className="px-3 py-2 flex justify-between items-center flex-row-reverse bg-opacity-50 backdrop-blur-sm">
         <button>
           <Users className="text-white hover:text-textColor" onClick={() => navigate('/creategroup')} />
         </button>
@@ -70,13 +76,12 @@ const Home = () => {
         {res.length ? (
           res.map((e, index) => (
             <div key={index} className="w-11/12 mx-auto mt-3">
-              <Link to={`/group/${e.id}`} state={{ color: e.color }}>
+              <Link to={`/group/${e.id}`} state={{ color: e.color,imageURL }}>
                 <div className="flex gap-5 items-center">
                   <div
                     className="flex w-14 h-14 rounded-xl items-center justify-center"
-                    style={{ backgroundColor: e.color }}
-                  >
-                    <span className="text-5xl text-white">{icons[index % icons.length]}</span>
+                    style={{ backgroundColor: e.color }}>
+                    <span className='text-white text-5xl'>{icons[index % icons.length]}</span>
                   </div>
                   <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
                 </div>
@@ -84,7 +89,7 @@ const Home = () => {
             </div>
           ))
         ) : (
-          <SplashScreen/>
+          <SplashScreen />
         )}
       </div>
 

@@ -17,9 +17,13 @@ const GroupInfo = () => {
   const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [userId, setUserId] = useState(null); // Add state for user ID
+  const [groupState,setGroupState] = useState([]);
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
+  const imageURL = location.state?.imageURL || 'https://www.w3schools.com/w3images/avatar2.png';
+  // const ID = location.pathname.split('/')[2];
+  // console.log(ID)
 
   const getGroupApi = useCallback(async () => {
     try {
@@ -33,6 +37,29 @@ const GroupInfo = () => {
       console.error("Error fetching data:", error);
     }
   }, [id]);
+
+  //Overall Group Statistics
+  const Statistics  = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API}/group-statistics/${id}`, {
+          headers:{
+            Authorization: `Bearer ${localStorage.getItem("Token")}`,
+          },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setGroupState(response.data)
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+  useEffect(() => {
+    Statistics()
+  },[])
+  
 
   const fetchExpenseDetails = useCallback(async () => {
     try {
@@ -79,11 +106,11 @@ const GroupInfo = () => {
 
   return (
     <div className='h-screen bg-primaryColor flex flex-col'>
-      <div className="flex w-full justify-between px-3 pt-3">
+      <div className="flex w-full justify-between px-2 py-3">
         <button onClick={() => navigate(-1)}>
           <ArrowLeft className='text-white' />
         </button>
-        <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
+        <Link to={`/group/${id}/settings`} state={{ color: groupColor,imageURL }}>
           <Settings className='text-white hover:text-textColor' />
         </Link>
       </div>
@@ -92,12 +119,26 @@ const GroupInfo = () => {
         <div
           className="w-14 h-14 rounded-2xl mr-4"
           style={{ backgroundColor: groupColor }}
-        ></div>
+        >
+            {/* <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/> */}
+        </div>
+        
         <div>
           <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
           <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
         </div>
       </div>
+      {groupState.map((item, index) => (
+          <div key={index} className="mt-1">
+              {/* <span className='text-white'>{item.user.name}</span>
+              <span className='text-white'>Total: {item.expense.total}</span> */}
+              <p>Type:
+                 <span className='text-white font-santoshi font-bold' style={{ color: item.expense.type === "DEBT" ? '#09B83E' : 'red' }}>
+                { item.expense.type == "DEBT" ? `You Owe ${item.user.name } ₹${item.expense.total.toFixed(2)}`:`${item.user.name} Owes you ₹${item.expense.total.toFixed(2)}`}</span>
+              </p>
+             
+          </div>
+        ))}
 
       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
         {expenses.map((expense) => {
@@ -113,23 +154,22 @@ const GroupInfo = () => {
           const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
 
           return (
-            <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-              <Link to={`/group/${id}/expense`} state={{ color: groupColor }}>
-                <div className="flex gap-14 mb-2">
-                  <div className="bg-stone-600 bg-opacity-50 p-2 rounded-lg">
-                    <span className="text-white font-nunito text-lg">{expense.description}</span>
+            <div key={expense.id} className="my-4 p-4 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
+              <Link to={`/group/${id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="font-bold font-nunito text-base text-white">
+                      {day}-{month}-{year}
+                    </h2>
+                    <span className="font-bold font-nunito text-sm text-trashColor">
+                      you borrow: ₹{ownedAmount.toFixed(2)}
+                    </span>
                   </div>
-                  <div className="p-1 rounded-lg flex flex-col">
-                    <span className="text-white font-nunito text-base">{payer}</span>
-                    <span className="font-bold text-lentColor text-lg ml-2 font-sans">you lent ₹{expense.amount.toFixed(2)}</span>
-                  </div>
-                </div>
-                <div className="flex gap-6">
-                  <div className="p-1 rounded-lg">
-                    <span className="font-bold font-nunito text-sm text-white">{day}-{month}-{year}</span>
-                  </div>
-                  <div className="p-1 rounded-lg">
-                    <span className="font-bold font-nunito text-base text-red-500">you borrow: ₹{ownedAmount.toFixed(2)}</span>
+                  <div className="flex flex-col">
+                    <h3 className="text-white font-nunito text-base">{expense.description}</h3>
+                    <h4 className="text-white font-nunito text-base">
+                      {payer} paid ₹{expense.amount.toFixed(2)}
+                    </h4>
                   </div>
                 </div>
               </Link>

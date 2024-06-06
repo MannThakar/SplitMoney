@@ -18,7 +18,7 @@ const GroupExpense = () => {
   const [getExpenseId, setExpenseId] = useState([]);
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
 
-  const getGroupApi = useCallback(async () => {
+  const getGroupApi = (async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
         headers: {
@@ -31,7 +31,7 @@ const GroupExpense = () => {
     }
   }, [id]);
 
-  const fetchExpenseDetails = useCallback(async () => {
+  const fetchExpenseDetails = (async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API}/expenses/?includes=user,userExpenses&group_id=${id}`, {
         headers: {
@@ -63,6 +63,8 @@ const GroupExpense = () => {
     }
   };
 
+  
+
   const deleteExpense = useCallback(async (expenseId) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
       try {
@@ -89,7 +91,7 @@ const GroupExpense = () => {
   useEffect(() => {
     getGroupApi();
     fetchExpenseDetails();
-  }, [getGroupApi, fetchExpenseDetails]);
+  }, []);
 
   const handleDeleteExpense = (expenseId) => {
     deleteExpense(expenseId);
