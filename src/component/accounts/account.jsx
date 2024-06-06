@@ -83,98 +83,98 @@ const Account = () => {
         navigate('/signin');
     };
 
-    if (!name || !email || !phone) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-primaryColor">
-                <SplashScreen />
+    // if (!name || !email || !phone) {
+    //     return (
+    //         <div className="flex justify-center items-center min-h-screen bg-primaryColor">
+    //             <SplashScreen />
+    //         </div>
+    //     );
+    // }
+
+    return (
+        <div className="bg-primaryColor min-h-screen flex flex-col">
+            <div className='flex justify-between px-3 py-3'>
+                <button className="flex items-center gap-2" onClick={() => navigate(-1)}>
+                    <ArrowLeft className="text-white" />
+                    <h2 className="text-white text-lg font-nunito">Account</h2>
+                </button>
+                <button>
+                    <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
+                </button>
             </div>
-        );
-    }
-
-return (
-    <div className="bg-primaryColor min-h-screen flex flex-col overflow-hidden">
-        <div className='flex justify-between px-3 py-3'>
-            <button className="flex items-center gap-2" onClick={() => navigate(-1)}>
-                <ArrowLeft className="text-white" />
-                <h2 className="text-white text-lg font-nunito">Account</h2>
-            </button>
-            <button>
-                <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
-            </button>
-        </div>
-        {logout && (
-            <LogoutModal
-                onLogout={handleLogout}
-                onCancel={() => setLogout(false)}
-            />
-        )}
-        {modal && (
-            <AccountModal
-                onClose={() => setModal(false)}
-                id={id}
-                isEdit={isEdit}
-                setIsEdit={setIsEdit}
-            />
-        )}
-        {/* Wrapper for splash screen */}
-        <div className="flex-grow overflow-y-auto">
-            {name && email && phone ? (
-                <div className="px-4 flex flex-col">
-                    <div className='flex flex-col gap-6 py-3 justify-start'>
-                        <div className='flex justify-start gap-5'>
-                            <div className='relative w-16 h-16'>
-                                <img
-                                    src={imageURL || fallbackImage}
-                                    alt="Profile"
-                                    className="w-full h-full object-cover rounded-full"
-                                />
-                                <label className='absolute bottom-0 right-0 p-1 bg-white rounded-full cursor-pointer'>
-                                    <ImageUp className='text-black size-5' />
-                                    <input
-                                        type='file'
-                                        name='upload'
-                                        onChange={handleImage}
-                                        className="hidden"
+            
+            {/* Wrapper for splash screen */}
+            <div className="flex-grow overflow-y-auto">
+                {name && email && phone ? (
+                    <div className="px-4 flex flex-col">
+                        <div className='flex flex-col gap-6 py-3 justify-start'>
+                            <div className='flex justify-start gap-5'>
+                                <div className='relative w-16 h-16'>
+                                    <img
+                                        src={imageURL || fallbackImage}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover rounded-full"
                                     />
-                                </label>
-                            </div>
-                            <div className="text-left">
-                                <h1 className='text-lg font-nunito font-bold text-white'>{name}</h1>
-                                <h2 className='text-sm font-nunito text-white'>{email}</h2>
-                                <h2 className='text-sm font-nunito font-bold text-white'>{phone}</h2>
-
+                                    <label className='absolute bottom-0 right-0 p-1 bg-white rounded-full cursor-pointer'>
+                                        <ImageUp className='text-black size-5' />
+                                        <input
+                                            type='file'
+                                            name='upload'
+                                            onChange={handleImage}
+                                            className="hidden"
+                                        />
+                                    </label>
+                                </div>
+                                <div className="text-left">
+                                    <h1 className='text-lg font-nunito font-bold text-white'>{name}</h1>
+                                    <h2 className='text-sm font-nunito text-white'>{email}</h2>
+                                    <h2 className='text-sm font-nunito font-bold text-white'>{phone}</h2>
+                                </div>
                             </div>
                         </div>
+                        <div className="w-full flex justify-start items-center md:justify-start gap-2">
+                            <LogOut className='text-white flex items-center'/>
+                            <button
+                                className="font-bold text-lg font-nunito hover:opacity-80 text-white py-2"
+                                onClick={() => setLogout(true)}>Logout
+                            </button>
+                        </div>
                     </div>
-                    <div className="w-full flex justify-start items-center md:justify-start gap-2">
-                        <LogOut className='text-white flex items-center'/>
-                        <button
-                            className="font-bold text-lg font-nunito hover:opacity-80 text-white py-2"
-                            onClick={() => setLogout(true)}>Logout
-                        </button>
-                    </div>
-                </div>
+                
             ) : (
                 <SplashScreen />
+                )}
+            </div>
+            {logout && (
+                <LogoutModal
+                    onLogout={handleLogout}
+                    onCancel={() => setLogout(false)}
+                />
             )}
+            {modal && (
+                <AccountModal
+                    onClose={() => setModal(false)}
+                    id={id}
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                />
+            )}
+            <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
+                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
+                    <UsersRound className={`size-5 ${isActive('/')}`} />
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
+                </button>
+                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
+                    <User className={`size-5 ${isActive('/friends')}`} />
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
+                </button>
+                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
+                    <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
+                    <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
+                </button>
+            </div>
         </div>
-        <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
-            <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
-                <UsersRound className={`size-5 ${isActive('/')}`} />
-                <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
-            </button>
-            <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
-                <User className={`size-5 ${isActive('/friends')}`} />
-                <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
-            </button>
-            <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-                <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-                <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
-            </button>
-        </div>
-    </div>
-);
-
+    );
 };
 
 export default Account;

@@ -4,7 +4,7 @@ const SplashScreen = () => {
     return (
         <>
             <div className='grow h-14'></div>
-            <div className="bg-black flex flex-col items-center justify-center px-4">
+            <div className="bg-black flex flex-col items-center justify-center px-4 md:flex md:flex-col md:justify-center md:items-center">
                 <div className="flex flex-col items-center mb-8">
                     <div className="bg-gray-900 p-4 rounded-full mb-4">
                         <SplitLogo />
