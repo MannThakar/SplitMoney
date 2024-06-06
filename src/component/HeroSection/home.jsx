@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { Users, UserRound, CircleUserRound } from 'lucide-react';
@@ -76,14 +76,21 @@ const Home = () => {
         {res.length ? (
           res.map((e, index) => (
             <div key={index} className="w-11/12 mx-auto mt-3">
-              <Link to={`/group/${e.id}`} state={{ color: e.color,imageURL }}>
+              <Link to={`/group/${e.id}`} state={{ color: e.color, imageURL }}>
                 <div className="flex gap-5 items-center">
                   <div
                     className="flex w-14 h-14 rounded-xl items-center justify-center"
                     style={{ backgroundColor: e.color }}>
                     <span className='text-white text-5xl'>{icons[index % icons.length]}</span>
                   </div>
-                  <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
+                  <div className="flex-1">
+                    <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
+                    <div className="flex items-center gap-2">
+                      <p className={`text-sm font-bold font-nunito ${e.groupStatistics.type === 'borrowed' ? 'text-red-500' : 'text-green-500'}`}>
+                        {e.groupStatistics.type === 'borrowed' ? 'You owe' : 'You are owed'} ₹{e.groupStatistics.amount}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </Link>
             </div>
