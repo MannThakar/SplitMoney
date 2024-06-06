@@ -27,6 +27,7 @@ const Home = () => {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
+      console.log('groups::::::::',response);
       const groupsWithColors = response.data.map((group, index) => ({
         ...group,
         color: colors[index % colors.length],
@@ -45,6 +46,7 @@ const Home = () => {
         },
       });
       setImageURL(res.data.image_url);
+      console.log('me:::::::',res``)
       if (res.status === 200) {
         toast.success(res.data.message);
       } else {
