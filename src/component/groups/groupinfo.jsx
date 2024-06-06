@@ -107,7 +107,7 @@ const GroupInfo = () => {
   return (
     <div className='h-screen bg-primaryColor flex flex-col'>
       <div className="flex w-full justify-between px-2 py-3">
-        <button onClick={() => navigate(-1)}>
+        <button onClick={() => navigate('/')}>
           <ArrowLeft className='text-white' />
         </button>
         <Link to={`/group/${id}/settings`} state={{ color: groupColor,imageURL }}>

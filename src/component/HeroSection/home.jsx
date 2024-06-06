@@ -87,7 +87,7 @@ const Home = () => {
                     <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
                     <div className="flex items-center gap-2">
                       <p className={`text-sm font-bold font-nunito ${e.groupStatistics.type === 'borrowed' ? 'text-red-500' : 'text-green-500'}`}>
-                        {e.groupStatistics.type === 'borrowed' ? 'You owe' : 'You are owed'} ₹{e.groupStatistics.amount}
+                        {e.groupStatistics.type === 'borrowed' ? 'You owe' : 'You are owed'} ₹{e.groupStatistics.amount.toFixed(2)}
                       </p>
                     </div>
                   </div>
