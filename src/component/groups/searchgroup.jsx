@@ -80,6 +80,7 @@ const SearchGroup = () => {
     );
   };
 
+  //This function is use to invite the member by clicking which member want to add.
   const inviteMemberDirect = async () => {
     try {
       const res = await axios.post(`${import.meta.env.VITE_API}/group-members`, {
@@ -91,24 +92,21 @@ const SearchGroup = () => {
         },
       });
       if (res.status === 200) {
-        toast.success("Members added to group successfully");
+        toast.success(res.data.message);
 
       } else {
-        console.error(res);
+        console.error(res.data.message);
       }
     } catch (error) {
       console.error("Error adding members to group:", error);
     }
   };
-
-  console.log(selectedUserIds);     
-
   return (
     <>
       <div className="bg-primaryColor h-screen flex flex-col">
-        <div className="flex gap-2 pt-3 pl-2">
+        <div className="flex gap-2 py-3 px-2">
           <button className="flex gap-2 items-center">
-            <ArrowLeft className="text-white" onClick={() => navigate(-1)} />
+            <ArrowLeft className="text-white flex items-center" onClick={() => navigate(-1)} />
           </button>
           <div className='w-full'>
             <input
@@ -121,21 +119,24 @@ const SearchGroup = () => {
           </div>
         </div>
 
-        <button className="flex gap-2 px-2 pt-3 items-center" onClick={() => setModal(true)}>
-          <div className="rounded-full h-10 w-10 p-2 bg-white">
-            <Users className='text-black' />
+        <button className="flex gap-3 px-6 py-3" onClick={() => setModal(true)}>
+          <div>
+            <Users className='text-white '/>
           </div>
           <div>
             <h3 className="font-nunito text-white text-base">Add people to group</h3>
           </div>
         </button>
-
+        
+        
+        
         {visible && (
-          <div className="flex justify-end">
-            <button onClick={inviteMemberDirect} className="bg-white text-black p-4 rounded-2xl w-24 text-5xl flex justify-center mr-4">
-              <UserRoundPlus />
+          <div className="flex justify-end px-4 py-2">
+            <button onClick={inviteMemberDirect} className="flex gap-2 ">
+                <UserRoundPlus className='text-white' />
+                <h2 className='text-white'>Add Members</h2>
             </button>
-          </div>
+        </div>
         )}
         <div className="flex-grow p-4 pt-14 overflow-y-auto">
           <div className="flex justify-end">
