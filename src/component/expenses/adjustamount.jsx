@@ -9,10 +9,11 @@ const AdjustAmount = () => {
   const { id } = useParams();
   const [members, setMembers] = useState([]);
   const [selectedMemberIDs, setSelectedMemberIDs] = useState({});
+  const [selectAll, setSelectAll] = useState(false);
   const [tab, setTab] = useState('equally');
   const [amounts, setAmounts] = useState({});
-  console.log(selectedMemberIDs)
-  console.log(amounts)
+  console.log(selectedMemberIDs);
+  console.log(amounts);
 
   const viewMember = useCallback(async () => {
     try {
@@ -28,12 +29,10 @@ const AdjustAmount = () => {
     }
   }, [id]);
 
-  
   useEffect(() => {
     viewMember();
   }, [viewMember]);
 
-  // This function is used to select the checkbox value and fetch the userId from selected checkbox
   const handleCheckboxChange = (memberId) => {
     setSelectedMemberIDs((prevSelectedMemberIDs) => ({
       ...prevSelectedMemberIDs,
@@ -41,18 +40,30 @@ const AdjustAmount = () => {
     }));
   };
 
-  // This function handles the inputted amount by the user and also gets the userId of the inputted amount
-  const handleAmountChange = (memberId, amount) => {
-    if (amount.length <= 4 && /^\d{0,4}$/.test(amount)) {
-        setAmounts((prevAmounts) => ({
-      ...prevAmounts,
-      [memberId]: amount,
-    }));
+  const handleSelectAllChange = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+
+    if (newSelectAll) {
+      const newSelectedMemberIDs = {};
+      members.forEach((member) => {
+        newSelectedMemberIDs[member.id] = true;
+      });
+      setSelectedMemberIDs(newSelectedMemberIDs);
+    } else {
+      setSelectedMemberIDs({});
     }
-    
   };
 
-  // This function calculates the total amount inputted by the user
+  const handleAmountChange = (memberId, amount) => {
+    if (amount.length <= 4 && /^\d{0,4}$/.test(amount)) {
+      setAmounts((prevAmounts) => ({
+        ...prevAmounts,
+        [memberId]: amount,
+      }));
+    }
+  };
+
   const calculateTotalAmount = () => {
     return Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
   };
@@ -76,24 +87,35 @@ const AdjustAmount = () => {
           {!members || members.length === 0 ? (
             <h1>Loader</h1>
           ) : (
-            members.map((member) => (
-              <div key={member.id} className="flex items-center justify-between mb-4">
-                <button className="flex gap-5 items-center">
-                  <div className="">
-                    <User className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-nunito text-white text-base">{member.name}</h3>
-                  </div>
-                </button>
+            <>
+              <div className="flex items-center justify-end gap-3 mb-4">
+                <span className="text-white text-base font-bold font-nunito">All</span>
                 <input
                   type="checkbox"
                   className="form-checkbox text-white"
-                  checked={!!selectedMemberIDs[member.id]}
-                  onChange={() => handleCheckboxChange(member.id)}
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
                 />
               </div>
-            ))
+              {members.map((member) => (
+                <div key={member.id} className="flex items-center justify-between mb-4">
+                  <button className="flex gap-5 items-center">
+                    <div className="">
+                      <User className="text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-nunito text-white text-base">{member.name}</h3>
+                    </div>
+                  </button>
+                  <input
+                    type="checkbox"
+                    className="form-checkbox text-white"
+                    checked={!!selectedMemberIDs[member.id]}
+                    onChange={() => handleCheckboxChange(member.id)}
+                  />
+                </div>
+              ))}
+            </>
           )}
         </div>
       ) : (
@@ -138,3 +160,4 @@ const AdjustAmount = () => {
 };
 
 export default AdjustAmount;
+
