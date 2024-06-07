@@ -16,13 +16,19 @@ const CreateGroup = () => {
             .matches(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces')
             .required('Group Name is required'),
         description: Yup.string()
-            .matches(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces')
+            .matches(/^[a-zA-Z\s]+$/, 'Description can only contain letters and spaces')
             .required('Description is required'),
     });
 
+    const capitalizeFirstLetter = (value) => {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+    };
 
+    const handleBlur = (event, setFieldValue) => {
+        const { name, value } = event.target;
+        setFieldValue(name, capitalizeFirstLetter(value));
+    };
 
-    
     const HandleSubmit = async ({ name, description }, { setSubmitting }) => {
         const type = 'group_expenses';
         if (type === 'group_expenses') {
@@ -36,25 +42,23 @@ const CreateGroup = () => {
                         'X-Requested-With': 'XMLHttpRequest',
                         Authorization: `Bearer ${localStorage.getItem('Token')}`
                     },
-
-                })
+                });
                 if (response.status === 200) {
-                    toast.success('Group Created')
+                    toast.success('Group Created');
                     const data = {
                         ids: response.data.group.id,
                         name: response.data.name,
                         info: response.data.description,
                     };
                     navigate('/', { state: data });
-
                 }
             } catch (error) {
-                toast.error(error.response.data.messsage);
+                toast.error(error.response.data.message);
             }
             setSubmitting(false);
         }
+    };
 
-    }
     return (
         <div className="bg-primaryColor min-h-screen flex flex-col items-center">
             <div className="py-3 flex gap-2 px-2 w-full">
@@ -63,19 +67,24 @@ const CreateGroup = () => {
                     <ArrowLeft className='text-white' />
                 </button>
             </div>
-            {/* <h1 className="font-nunito text-white text-3xl flex justify-center items-center mb-4">Create a group</h1> */}
             <div className="w-full max-w-md px-4">
                 <Formik
                     initialValues={{ name: '', description: '' }}
                     validationSchema={validationSchema}
                     onSubmit={HandleSubmit}
                 >
-                    {({ isSubmitting }) => (
+                    {({ isSubmitting, setFieldValue }) => (
                         <Form className="w-full">
                             <div className='py-4 flex flex-col gap-4'>
                                 <div className='flex items-center gap-3'>
                                     <Users className='text-white' />
-                                    <Field type='text' name="name"   className="w-full  border-b-2 border-white bg-transparent font-nunito text-white focus:outline-none" placeholder="Group name" />
+                                    <Field
+                                        type='text'
+                                        name="name"
+                                        className="w-full border-b-2 border-white bg-transparent font-nunito text-white focus:outline-none"
+                                        placeholder="Group name"
+                                        onBlur={(e) => handleBlur(e, setFieldValue)}
+                                    />
                                 </div>
                                 <div className='flex justify-start ml-8'>
                                     <ErrorMessage name="name" component="div" className="text-sm text-red-500" />
@@ -83,7 +92,13 @@ const CreateGroup = () => {
 
                                 <div className='flex items-center gap-3'>
                                     <ReceiptText className='text-white' />
-                                    <Field type='text' name="description" className="w-full border-b-2 bg-transparent font-nunito text-white focus:outline-none" placeholder="Group description" />
+                                    <Field
+                                        type='text'
+                                        name="description"
+                                        className="w-full border-b-2 bg-transparent font-nunito text-white focus:outline-none"
+                                        placeholder="Group description"
+                                        onBlur={(e) => handleBlur(e, setFieldValue)}
+                                    />
                                 </div>
                                 <div className='flex justify-start ml-8'>
                                     <ErrorMessage name="description" component="div" className="text-sm text-red-500" />

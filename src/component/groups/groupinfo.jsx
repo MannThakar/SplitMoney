@@ -17,13 +17,11 @@ const GroupInfo = () => {
   const [group, setGroup] = useState(null);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [userId, setUserId] = useState(null); // Add state for user ID
-  const [groupState,setGroupState] = useState([]);
+  const [groupState, setGroupState] = useState([]);
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
   const imageURL = location.state?.imageURL || 'https://www.w3schools.com/w3images/avatar2.png';
-  // const ID = location.pathname.split('/')[2];
-  // console.log(ID)
 
   const getGroupApi = useCallback(async () => {
     try {
@@ -38,7 +36,6 @@ const GroupInfo = () => {
     }
   }, [id]);
 
-  //Overall Group Statistics
   const Statistics  = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API}/group-statistics/${id}`, {
@@ -56,10 +53,10 @@ const GroupInfo = () => {
       toast.error(error.response.data.message);
     }
   }
+
   useEffect(() => {
     Statistics()
   },[])
-  
 
   const fetchExpenseDetails = useCallback(async () => {
     try {
@@ -133,7 +130,7 @@ const GroupInfo = () => {
               {/* <span className='text-white'>{item.user.name}</span>
               <span className='text-white'>Total: {item.expense.total}</span> */}
               <p>Type:
-                 <span className='text-white font-santoshi font-bold' style={{ color: item.expense.type === "DEBT" ? '#09B83E' : 'red' }}>
+                 <span className='text-white font-nunito text-sm font-bold' style={{ color: item.expense.type === "DEBT" ? '#09B83E' : 'red' }}>
                 { item.expense.type == "DEBT" ? `You Owe ${item.user.name } ₹${item.expense.total.toFixed(2)}`:`${item.user.name} Owes you ₹${item.expense.total.toFixed(2)}`}</span>
               </p>
              
@@ -146,6 +143,11 @@ const GroupInfo = () => {
           const month = date.toLocaleString('default', { month: 'short' });
           const year = date.getFullYear();
           const day = date.getDate();
+
+          const createdAtDate = new Date(expense.created_at);
+          const createdAtMonth = createdAtDate.toLocaleString('default', { month: 'short' });
+          const createdAtYear = createdAtDate.getFullYear();
+          const createdAtDay = createdAtDate.getDate();
 
           const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
           const ownedAmount = userExpense ? userExpense.owned_amount : 0;
@@ -171,6 +173,9 @@ const GroupInfo = () => {
                       {payer} paid ₹{expense.amount.toFixed(2)}
                     </h4>
                   </div>
+                  <div>
+                    <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -193,15 +198,22 @@ const GroupInfo = () => {
           <UserRound className={`size-5 ${isActive('/friends')}`} />
           <span className={`flex justify-start text-base ${isActive('/friends')}`}>Friends</span>
         </button>
-        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-          <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-          <span className={`flex justify-start text-base ${isActive('/accounts')}`}>Account</span>
+        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/account")}>
+          <CircleUserRound className={`size-5 ${isActive('/account')}`} />
+          <span className={`flex justify-start text-base ${isActive('/account')}`}>Account</span>
         </button>
       </div>
-      {modals && <GroupExpenseUpdate onClose={() => setModals(false)} expense={selectedExpense} />}
+      {modals && selectedExpense && (
+        <GroupExpenseUpdate
+          modals={modals}
+          setModals={setModals}
+          expense={selectedExpense}
+        />
+      )}
     </div>
   );
 };
 
 export default GroupInfo;
+
 

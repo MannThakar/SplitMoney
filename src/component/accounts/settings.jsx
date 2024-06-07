@@ -4,28 +4,52 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
-import { useNavigate, useParams, useLocation,Link } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { ArrowLeft, Pencil, Users, Trash } from 'lucide-react';
 import Modal from "../modal/modal";
 import UpdateModal from "../modal/updatemodal";
+import { ImageUp } from "lucide-react";
 
 const Settings = ({ onClose }) => {
 
     const navigate = useNavigate();
     const { id } = useParams();
     const location = useLocation();
-
     const [modal, setModal] = useState(false);
     const [modals, setModals] = useState(false);
     const [update, setUpdate] = useState(false);
     const [group, setGroup] = useState(null);
     const [member, setMember] = useState([]);
+    const [imageURL, setImageURL] = useState(null);
+    const [userId, setUserId] = useState(null);  // User ID state
+    const fallbackImage = "https://www.w3schools.com/w3images/avatar2.png"; // Replace this with your fallback image URL
 
     const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
-    const imageURL = location.state?.imageURL || 'https://w3schools.com/w3images/avatar2.png';
+
+    const getAccountDetail = async () => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("Token")}`,
+                },
+            });
+            setImageURL(res.data.image_url); // Set image URL
+            setUserId(res.data.id); // Set user ID
+            if (res.status === 200) {
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+    useEffect(() => {
+        getAccountDetail(); 
+    },[])
 
     const getGroupApi = async () => {
         try {
@@ -112,7 +136,7 @@ const Settings = ({ onClose }) => {
                     <span className="font-nunito text-lg text-white">Group members</span>
                     <div className='overflow-y-auto max-h-60 my-2 space-y-2'>
                           <Link to={`/group/${id}/settings/addpeople`} className="flex items-center gap-5" >
-                            <div className="rounded-full flex h-10 w-10 p-2 bg-white">
+                            <div className="rounded-full flex h-10 w-10 p-2 px-2 bg-white">
                                 <Users className='text-black' />
                             </div>
                             <div>
@@ -121,8 +145,12 @@ const Settings = ({ onClose }) => {
                         </Link>
                         {member.map((e, index) => (
                             <button key={index} className="flex gap-5 items-center">
-                                <div className="rounded-full h-10  w-10 p-2 bg-white">
-                                    <Users className='text-black' />
+                                <div className='relative w-10 h-10'>
+                                    <img
+                                        src={e.id === userId ? imageURL : fallbackImage} // Set the profile picture if ID matches
+                                        alt="Profile"
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
                                 </div>
                                 <div>
                                     <h3 className="font-nunito text-white text-base">{e.name}</h3>
@@ -148,3 +176,4 @@ const Settings = ({ onClose }) => {
 }
 
 export default Settings;
+
