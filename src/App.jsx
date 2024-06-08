@@ -22,7 +22,9 @@ import GroupExpense from "./component/groups/groupexpense";
 import AdjustAmount from "./component/expenses/adjustamount";
 import Paying from "./component/expenses/paying";
 import { GroupProvider } from "../src/component/auth/groupcontext";
-import ExpenseDetails from "../src/component/expenses/expense-details" 
+import ExpenseDetails from "../src/component/expenses/expense-details";
+import GroupExpenseUpdate from "../src/component/modal/groupexpenseupdate";
+import UpdateAmount from "../src/component/expenses/update-amount";
   
 function App() {
   return (
@@ -65,6 +67,9 @@ function App() {
                 <Route path=":id" element={<GroupInfo />} />
                 <Route path=":id/expense/" element={<GroupExpense />}/>
                 <Route path=":id/expense/:expenseid/expensedetails" element={<ExpenseDetails />} /> {/* Updated route */}
+                <Route path=":id/expense/:expenseId/expensedetails/editexpense" element={<GroupExpenseUpdate />} />
+                <Route path=":id/expense/:expenseId/expensedetails/editexpense/updateamount" element={<UpdateAmount/>} />
+
                 {/* <Route path=":id/expense/" /> */}
                 <Route path=":id/settings" element={<Settings />} />
                 <Route path=":id/addexpense" element={<AddExpense />}></Route>

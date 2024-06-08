@@ -100,8 +100,8 @@ const ExpenseDetail = () => {
 
     return (
         <div className='bg-primaryColor h-svh px-3 flex flex-col'>
-            <div className='py-3 px-2 flex items-center'>
-                <button className='flex items-center gap-2' onClick={() => navigate(-1)}>
+            <div className='py-3 flex items-center'>
+                <button className='flex items-center gap-2' onClick={() => navigate(`/group/${id}`)}>
                     <ArrowLeft className='text-white' />
                     <h2 className='text-white text-lg font-nunito'>Expense Details</h2>
                 </button>
@@ -142,11 +142,13 @@ const ExpenseDetail = () => {
                             
                         />
                     )}
+                    <div ></div>
                 </div>
             )}
             {details && (
                 <div className='flex justify-center items-center gap-5 mt-4'>
-                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-12 w-16 rounded-xl bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => handleEditExpense(details)}>
+                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-12 w-16 rounded-xl bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`)} >
+                        {/* onClick={() => handleEditExpense(details)} */}
                         {/* <Pencil className="text-white" /> */}
                         Edit
                     </button>
