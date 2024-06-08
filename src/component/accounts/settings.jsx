@@ -12,6 +12,7 @@ import { ArrowLeft, Pencil, Users, Trash } from 'lucide-react';
 import Modal from "../modal/modal";
 import UpdateModal from "../modal/updatemodal";
 import { ImageUp } from "lucide-react";
+import DeleteConfirmation from '../modal/delete-confirmation';
 
 const Settings = ({ onClose }) => {
 
@@ -25,6 +26,8 @@ const Settings = ({ onClose }) => {
     const [member, setMember] = useState([]);
     const [imageURL, setImageURL] = useState(null);
     const [userId, setUserId] = useState(null);  // User ID state
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false); // State for delete confirmation modal
+    const [groupToDelete, setGroupToDelete] = useState(null); // State for group to delete
     const fallbackImage = "https://www.w3schools.com/w3images/avatar2.png"; // Replace this with your fallback image URL
 
     const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
@@ -86,31 +89,36 @@ const Settings = ({ onClose }) => {
         setUpdate(true);
     };
 
-    const handleDelete = async (id) => {
-        let del = confirm("Are you sure!!");
-        if (del) {
-            try {
-                const res = await axios.delete(
-                    `${import.meta.env.VITE_API}/groups/${id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("Token")}`,
-                        },
-                    }
-                );
-                if (res.status === 200) {
-                    toast.success(res.data.message)
-                    navigate('/');
-                } else {
-                    toast.error(res.data.message);
+    const handleDelete = async () => {
+        setShowDeleteConfirmation(true); // Show the delete confirmation modal
+        setGroupToDelete(id); // Set the group ID to delete
+    };
+
+    const confirmDelete = async () => {
+        try {
+            const res = await axios.delete(
+                `${import.meta.env.VITE_API}/groups/${groupToDelete}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+                    },
                 }
-            } catch (error) {
-                console.error("Error:", error);
-                toast.error("An error occurred. Please try again later.");
+            );
+            if (res.status === 200) {
+                toast.success(res.data.message)
+                navigate('/');
+            } else {
+                toast.error(res.data.message);
             }
-        } else {
-            toast.error("You pressed cancel");
+        } catch (error) {
+            console.error("Error:", error);
+            toast.error("An error occurred. Please try again later.");
         }
+        setShowDeleteConfirmation(false); // Hide the delete confirmation modal
+    };
+
+    const cancelDelete = () => {
+        setShowDeleteConfirmation(false); // Hide the delete confirmation modal
     };
 
     return (
@@ -163,7 +171,7 @@ const Settings = ({ onClose }) => {
                     {modal && <Modal onClose={() => setModal(false)} />}
                     {modals && <UpdateModal onClose={() => setModals(false)} ids={id} setGroup={setGroup} />}
                     {update && <UpdateModal onClose={() => setUpdate(false)} setGroup={setGroup} />}
-                    <button className="flex gap-5 pt-3 items-center" onClick={() => handleDelete(id)}>
+                    <button className="flex gap-5 pt-3 items-center" onClick={handleDelete}>
                         <div className='rounded-full h-10 w-10 p-2 bg-white flex justify-center'>
                             <Trash className='text-red-600' />
                         </div>
@@ -171,9 +179,14 @@ const Settings = ({ onClose }) => {
                     </button>
                 </div>
             </div>
+            {showDeleteConfirmation && (
+                <DeleteConfirmation
+                    onLogout={confirmDelete}
+                    onCancel={cancelDelete}
+                />
+            )}
         </div>
     )
 }
 
 export default Settings;
-
