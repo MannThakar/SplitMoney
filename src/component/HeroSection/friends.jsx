@@ -89,8 +89,8 @@ const Friends = () => {
             </div>
 
             <div className='p-4 pt-24'> {/* Add some padding to the top */}
-                <div className='flex justify-end fixed top-12 w-full bg-primaryColor bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-20 z-10 px-4'>
-                    <h3 className='text-white text-sm font-nunito'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
+                <div className='flex fixed w-full right-1 justify-end top-14 bg-white bg-opacity-10 backdrop-filter border border-white border-opacity-20 z-10 px-5'>
+                    <h3 className='text-white text-sm  font-nunito bg-opacity-10 backdrop-filter backdrop-blur-lg border-opacity-20 z-10'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
                 </div>
                 <div className='pt-8'> {/* Ensure content is below the fixed elements */}
                     {group.length > 0 ? (

@@ -198,9 +198,9 @@ const GroupInfo = () => {
           <UserRound className={`size-5 ${isActive('/friends')}`} />
           <span className={`flex justify-start text-base ${isActive('/friends')}`}>Friends</span>
         </button>
-        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/account")}>
-          <CircleUserRound className={`size-5 ${isActive('/account')}`} />
-          <span className={`flex justify-start text-base ${isActive('/account')}`}>Account</span>
+        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
+          <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
+          <span className={`flex justify-start text-base ${isActive('/accounts')}`}>Account</span>
         </button>
       </div>
       {modals && selectedExpense && (
