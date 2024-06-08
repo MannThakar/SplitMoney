@@ -1,4 +1,4 @@
-``/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 import { toast } from 'react-toastify';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import DeleteConfirmation from '../modal/delete-confirmation';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -18,6 +19,8 @@ const ExpenseDetail = () => {
     const [selectedExpense, setSelectedExpense] = useState(null);
     const [details, setDetails] = useState(null);
     const [isUpdate, setIsUpdate] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [expenseToDelete, setExpenseToDelete] = useState(null);
     const expenseId = location.pathname.split("/")[4];
 
     const fetchExpenseDetailgroup = useCallback(async () => {
@@ -52,30 +55,29 @@ const ExpenseDetail = () => {
     };
 
     const deleteExpense = useCallback(async (expenseId) => {
-        if (window.confirm('Are you sure you want to delete this expense?')) {
-            try {
-                console.log(`Deleting expense ID: ${expenseId}`);
-                const res = await axios.delete(`${import.meta.env.VITE_API}/expenses/${expenseId}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("Token")}`,
-                    },
-                });
-                if (res.status === 200) {
-                    toast.success(res.data.message);
-                    navigate(`/group/${id}`);
-                } else {
-                    toast.error(res.data.message);
-                }
-                fetchExpenseDetailgroup(); // Fetch updated expense details after deletion
-            } catch (error) {
-                console.error("Delete Expense Error:", error);
-                toast.error("Error deleting expense");
+        try {
+            console.log(`Deleting expense ID: ${expenseId}`);
+            const res = await axios.delete(`${import.meta.env.VITE_API}/expenses/${expenseId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("Token")}`,
+                },
+            });
+            if (res.status === 200) {
+                toast.success(res.data.message);
+                navigate(`/group/${id}`);
+            } else {
+                toast.error(res.data.message);
             }
+            fetchExpenseDetailgroup(); // Fetch updated expense details after deletion
+        } catch (error) {
+            console.error("Delete Expense Error:", error);
+            toast.error("Error deleting expense");
         }
     }, [fetchExpenseDetailgroup, navigate]);
 
     const handleDeleteExpense = (expenseId) => {
-        deleteExpense(expenseId);
+        setExpenseToDelete(expenseId);
+        setShowDeleteConfirmation(true);
     };
 
     const handleEditExpense = (expense) => {
@@ -119,6 +121,17 @@ const ExpenseDetail = () => {
                 },
             ],
         };
+    };
+
+    const handleDeleteConfirmation = () => {
+        deleteExpense(expenseToDelete);
+        setShowDeleteConfirmation(false);
+        setExpenseToDelete(null);
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteConfirmation(false);
+        setExpenseToDelete(null);
     };
 
     return (
@@ -227,6 +240,12 @@ const ExpenseDetail = () => {
                         Delete
                     </button>
                 </div>
+            )}
+            {showDeleteConfirmation && (
+                <DeleteConfirmation
+                    onLogout={handleDeleteConfirmation}
+                    onCancel={handleCancelDelete}
+                />
             )}
         </div>
     );
