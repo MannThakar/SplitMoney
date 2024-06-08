@@ -156,7 +156,7 @@ const GroupInfo = () => {
           const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
 
           return (
-            <div key={expense.id} className="my-4 p-4 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
+            <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
               <Link to={`/group/${id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">

@@ -107,7 +107,7 @@ const AddExpense = () => {
           UseLocalStorage('expenseFormData', values);
 
           return (
-            <Form className="w-full max-w-md">
+            <Form className="w-full max-w-md ">
               <div className="flex gap-3 pt-3 justify-center items-center mb-3">
                 <FilePenLine className='text-white' />
                 <Field type="text" id="description" name="description" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" placeholder="Enter the description" value={values.description} onChange={handleChange} />
