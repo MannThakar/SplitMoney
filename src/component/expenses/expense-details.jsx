@@ -1,10 +1,14 @@
-/* eslint-disable no-unused-vars */
+``/* eslint-disable no-unused-vars */
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { ArrowLeft} from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 import { toast } from 'react-toastify';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ExpenseDetail = () => {
     const location = useLocation();
@@ -13,7 +17,7 @@ const ExpenseDetail = () => {
     const navigate = useNavigate();
     const [selectedExpense, setSelectedExpense] = useState(null);
     const [details, setDetails] = useState(null);
-    const [isUpdate,setIsUpdate] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
     const expenseId = location.pathname.split("/")[4];
 
     const fetchExpenseDetailgroup = useCallback(async () => {
@@ -79,27 +83,46 @@ const ExpenseDetail = () => {
         setModals(true);
     };
 
-     const getGroupApi = useCallback(async () => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("Token")}`,
-        },
-      });
-      
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }, [id]);
+    const getGroupApi = useCallback(async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("Token")}`,
+                },
+            });
 
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }, [id]);
 
     useEffect(() => {
         fetchExpenseDetail();
         fetchExpenseDetailgroup();
     }, [isUpdate]);
 
+    const generateChartData = (userExpenses) => {
+        const labels = userExpenses.map(ue => ue.user.name);
+        const data = userExpenses.map(ue => ue.owned_amount);
+
+        return {
+            labels,
+            datasets: [
+                {
+                    label: 'Amount',
+                    data,
+                    backgroundColor: labels.map(name => name === details.user.name ? 'rgba(9, 184, 62, 0.8)' : 'rgba(255, 0, 0, 0.8)'),
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 2,
+                    hoverBackgroundColor: labels.map(name => name === details.user.name ? 'rgba(9, 184, 62, 1)' : 'rgba(255, 0, 0, 1)'),
+                    hoverBorderColor: 'rgba(255, 255, 255, 1)',
+                },
+            ],
+        };
+    };
+
     return (
-        <div className='bg-primaryColor h-svh px-3 flex flex-col'>
+        <div className='bg-primaryColor h-svh px-2 flex flex-col'>
             <div className='py-3 flex items-center'>
                 <button className='flex items-center gap-2' onClick={() => navigate(`/group/${id}`)}>
                     <ArrowLeft className='text-white' />
@@ -107,9 +130,9 @@ const ExpenseDetail = () => {
                 </button>
             </div>
             {details && (
-                <div className='p-4 mt-4 rounded-lg bg-stone-700  bg-opacity-30 border border-white border-opacity-20 shadow-lg'>
+                <div className='p-2 mt-1 rounded-lg bg-stone-700 bg-opacity-30 border border-white border-opacity-20 shadow-lg'>
                     <h1 className='text-white mb-2 font-nunito font-bold'>Description: {details.description}</h1>
-                    <h2 className='text-white mb-4 font-nunito font-bold'>Paid by {details.user.name}: <span className='text-lentColor font-nunito text-lg ml-1'>{details.amount}</span></h2>
+                    <h2 className='text-white mb-2 font-nunito font-bold'>Paid by {details.user.name}: <span className='text-lentColor font-nunito text-lg ml-1'>{details.amount}</span></h2>
                     <div>
                         <h2 className='text-white font-bold mb-2'>User Expenses</h2>
                         <div className='space-y-2'>
@@ -117,7 +140,7 @@ const ExpenseDetail = () => {
                                 const isPayerUser = details.payer_user_id === userExpense.user.id;
                                 const textColor = isPayerUser ? '#09B83E' : '#FF0000';
                                 return (
-                                    <div key={index} className='p-2 rounded-lg bg-stone-600 bg-opacity-50'>
+                                    <div key={index} className='p-1 rounded-lg bg-stone-600 bg-opacity-50'>
                                         <p className='text-white'>
                                             {isPayerUser ? `${userExpense.user.name} paid: ` : `${userExpense.user.name} borrowed: `}
                                             <span className={`font-bold text-lg`} style={{ color: textColor }}>
@@ -127,6 +150,58 @@ const ExpenseDetail = () => {
                                     </div>
                                 );
                             })}
+                        </div>
+                        <div className='mt-4'>
+                            <Bar 
+                                data={generateChartData(details.user_expenses)} 
+                                options={{ 
+                                    responsive: true, 
+                                    maintainAspectRatio: false, 
+                                    plugins: { 
+                                        legend: { display: false },
+                                        tooltip: {
+                                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                            titleFont: { size: 16 },
+                                            bodyFont: { size: 14 },
+                                            bodySpacing: 6,
+                                            borderColor: 'rgba(255, 255, 255, 0.8)',
+                                            borderWidth: 1,
+                                            cornerRadius: 4,
+                                            padding: 10,
+                                            displayColors: false,
+                                        },
+                                    },
+                                    animation: {
+                                        duration: 1000,
+                                        easing: 'easeInOutQuad',
+                                    },
+                                    scales: {
+                                        x: {
+                                            ticks: {
+                                                color: 'white',
+                                                font: {
+                                                    size: 14,
+                                                },
+                                            },
+                                            grid: {
+                                                display: false,
+                                            },
+                                        },
+                                        y: {
+                                            ticks: {
+                                                color: 'white',
+                                                font: {
+                                                    size: 14,
+                                                },
+                                            },
+                                            grid: {
+                                                color: 'rgba(255, 255, 255, 0.2)',
+                                            },
+                                        },
+                                    },
+                                }} 
+                                className='h-44 md:h-64 w-full'
+                            />
                         </div>
                     </div>
                     {modals && (
@@ -139,21 +214,16 @@ const ExpenseDetail = () => {
                                 setModals(false);
                                 fetchExpenseDetailgroup();
                             }}
-                            
                         />
                     )}
-                    <div ></div>
                 </div>
             )}
             {details && (
                 <div className='flex justify-center items-center gap-5 mt-4'>
                     <button className="flex justify-center font-nunito items-center gap-2 text-white h-12 w-16 rounded-xl bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`)} >
-                        {/* onClick={() => handleEditExpense(details)} */}
-                        {/* <Pencil className="text-white" /> */}
                         Edit
                     </button>
                     <button className="flex justify-center font-nunito items-center gap-2 text-white h-12 w-16 rounded-xl bg-red-600 hover:bg-red-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => handleDeleteExpense(details.id)}>
-                        {/* <Trash2 className="text-white" /> */}
                         Delete
                     </button>
                 </div>
