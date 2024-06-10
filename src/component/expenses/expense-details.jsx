@@ -183,6 +183,7 @@ const ExpenseDetail = () => {
                                             padding: 10,
                                             displayColors: false,
                                         },
+                                        
                                     },
                                     animation: {
                                         duration: 1000,

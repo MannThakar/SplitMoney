@@ -1,3 +1,4 @@
+
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
@@ -36,7 +37,7 @@ const GroupInfo = () => {
     }
   }, [id]);
 
-  const Statistics  = async () => {
+  const Statistics = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API}/group-statistics/${id}`, {
           headers:{
@@ -66,7 +67,9 @@ const GroupInfo = () => {
         },
       });
       if (res.status === 200) {
-        setExpenses(res.data); // Update local state with the fetched data
+        // Sort expenses by date
+        const sortedExpenses = res.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setExpenses(sortedExpenses); // Update local state with the fetched and sorted data
       } else {
         toast.error('Failed to fetch expense details');
       }
@@ -215,5 +218,6 @@ const GroupInfo = () => {
 };
 
 export default GroupInfo;
+
 
 
