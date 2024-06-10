@@ -114,7 +114,6 @@ const GroupInfo = () => {
           console.log(expense)
 
           return (
-<<<<<<< Updated upstream
             <div key={expense.id} className="my-4 p-2 bg-stone-700 rounded-lg shadow-lg">
               <div className="flex justify-between items-center mb-2">
                 <div className="bg-stone-600 p-3 rounded-lg">
@@ -129,28 +128,6 @@ const GroupInfo = () => {
                 <div className="p-2 rounded-lg">
                   <div>
                     <span className="font-bold font-mono text-lg text-white"> {day}-{month}-{year}</span>
-=======
-            <Link key={expense.id} to={`/group/${id}/expense`} state={{ color: groupColor }}>
-                <div className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-                  <div className="flex gap-3 items-center mb-2">
-                    <div className="bg-stone-600 bg-opacity-50 p-3 rounded-lg">
-                      <span className="text-white font-satoshi text-lg">{expense.description}</span>
-                    </div>
-                    <div className="p-2 rounded-lg">
-                      <span className="text-white font-satoshi text-base">{payer} paid</span>
-                      <span className="font-bold text-red-500 text-lg ml-2 font-sans">₹{expense.amount.toFixed(2)}</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="p-2 rounded-lg">
-                      <div>
-                        <span className="font-bold font-mono text-base text-white">{day}-{month}-{year}</span>
-                      </div>
-                    </div>
-                    <div className="p-2 rounded-lg">
-                      <span className="font-bold font-mono text-base text-white">Owned: ₹{ownedAmount.toFixed(2)}</span>
-                    </div>
->>>>>>> Stashed changes
                   </div>
                 </div>
                 <div className=" p-2 rounded-lg">

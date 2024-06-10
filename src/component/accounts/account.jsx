@@ -20,18 +20,12 @@ const Account = () => {
     const [phone, setPhone] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
     const [logout, setLogout] = useState(false);
-<<<<<<< Updated upstream
-
-
-    //Api call and the function to get the account details
-=======
     const [profile, setProfile] = useState(null);
-    const navigate = useNavigate();
+    
     const fileInputRef = useRef(null);
     const pic = localStorage.getItem('profiled');
     
     // This function is used to get the account details of the user like name, email, phone
->>>>>>> Stashed changes
     const getAccountDetail = async () => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
@@ -58,14 +52,11 @@ const Account = () => {
         getAccountDetail();
     }, [isEdit]);
 
-<<<<<<< Updated upstream
 
     const navigate = useNavigate();
 
     //Logout function
-=======
     // This function is used to clear all the tokens from localStorage
->>>>>>> Stashed changes
     const handleLogout = () => {
         localStorage.removeItem('Token');
         navigate('/signin');
@@ -118,23 +109,17 @@ const Account = () => {
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
                 </button>
             </div>
-<<<<<<< Updated upstream
 
             {/* Logout modal for */}
-=======
->>>>>>> Stashed changes
             {logout && (
                 <LogoutModal
                     onLogout={handleLogout}
                     onCancel={() => setLogout(false)}
                 />
             )}
-<<<<<<< Updated upstream
 
 
             {/* Account modal */}
-=======
->>>>>>> Stashed changes
             {modal && (
                 <AccountModal
                     onClose={() => setModal(false)}
@@ -143,7 +128,6 @@ const Account = () => {
                     setIsEdit={setIsEdit}
                 />
             )}
-<<<<<<< Updated upstream
 
             <div className="px-4 flex flex-col items-center md:items-start">
                 <h2 className="font-satoshi text-white py-2 text-2xl">Account</h2>
@@ -186,53 +170,6 @@ const Account = () => {
             {modal && <AccountModal onClose={() => setModal(false)} id={id} isEdit={isEdit} setIsEdit={setIsEdit} />}
             
             {/* Footer */}
-=======
-            {getAccountDetail ? (
-                <div className="px-4 flex flex-col items-center md:items-start">
-                    <div className='flex gap-6 py-5 items-center w-full'>
-                        <div className='flex flex-col gap-5'>
-                            <div className='flex flex-col items-center gap-3' onClick={triggerFileInputClick}>
-                                
-                                {pic ? (
-                                    <img src={pic} alt="Profile" className="w-24 h-24 rounded-full object-cover cursor-pointer" />
-                                ) : (
-                                    <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-white cursor-pointer">
-                                        No Image
-                                    </div>
-                                )}
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    ref={fileInputRef}
-                                    onChange={handleFileChange}
-                                />
-                            </div>
-                            <div className='flex gap-3'>
-                                <User className='text-white' />
-                                <h1 className='text-sm font-poppins text-white'>{name}</h1>
-                            </div>
-                            <div className='flex gap-3'>
-                                <Mail className='text-white' />
-                                <h2 className='text-sm font-poppins text-white'>{email}</h2>
-                            </div>
-                            <div className='flex gap-3'>
-                                <Smartphone className='text-white' />
-                                <h2 className='text-sm font-mono font-bold text-white'>{phone}</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-2/4 flex justify-start w-full">
-                        <button
-                            className="bg-white font-bold hover:opacity-80 text-black py-3 px-6 rounded-full"
-                            onClick={() => setLogout(true)}>Logout
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                <SplashScreen />
-            )}
->>>>>>> Stashed changes
             <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
                     <UsersRound className={`size-5 ${isActive('/')}`} />

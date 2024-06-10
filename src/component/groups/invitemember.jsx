@@ -2,19 +2,17 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SplashScreen from '../utils/splashscreen';
+import { toast } from 'react-toastify';
 import axios from 'axios';
-<<<<<<< Updated upstream
-=======
 
-
->>>>>>> Stashed changes
 const GroupInvite = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get('token');
     const accessToken = localStorage.getItem('Token');
     const email = queryParams.get('email');
-    
+
+
 
     useEffect(() => {
         if (accessToken) {
@@ -25,11 +23,11 @@ const GroupInvite = () => {
         else if (!accessToken) {
             localStorage.setItem('inviteToken', token);
             console.log("Access Token is Not Avaliable");
+            checkInvitation();
             navigate('/signin');
+
         }
-        else {
-            navigate('/');
-        }
+
 
     }, [accessToken]);
 
@@ -45,44 +43,24 @@ const GroupInvite = () => {
                     }
                 }
             );
-            
-            if (response.status == 200) {
-<<<<<<< Updated upstream
-                alert('You have successfully joined the group');
-                navigate('/');
-=======
-                if (accessToken) {
-                    toast.success("successfully accepted the invitation");
-                    navigate('/');
-                    console.log(email);
 
+            if (response.status == 200) {
+                if (accessToken) {
+                    toast.success(response.data.message);
+                    navigate('/');
                 }
                 else {
-                    
-                    toast.error("please login to accept the invitation")
-                    /* navigate('/signin') */
-                    navigate('/signin',{state: {email: email}});
-                    console.log(email);
+                    toast.error(response.data.message);
                 }
->>>>>>> Stashed changes
             }
             else
                 alert('Invalid Token');
         } catch (error) {
             console.error('Error:', error);
-<<<<<<< Updated upstream
-            alert(error.response.data.message);
-            navigate('/');
-=======
             toast.error(error.response.data.message);
-            navigate('/signup',{state: {email: email}});
-            /* navigate('/signup'); */
->>>>>>> Stashed changes
+            navigate('/signup', { state: { email: email } });
         }
     }
-
-
-
     return (
         <>
             <SplashScreen />
