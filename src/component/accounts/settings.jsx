@@ -115,8 +115,8 @@ const Settings = ({ onClose }) => {
             toast.error("An error occurred. Please try again later.");
         }
         setShowDeleteConfirmation(false); // Hide the delete confirmation modal
-    };
-
+        };
+          
     const cancelDelete = () => {
         setShowDeleteConfirmation(false); // Hide the delete confirmation modal
     };

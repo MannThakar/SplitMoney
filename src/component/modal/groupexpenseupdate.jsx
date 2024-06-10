@@ -333,14 +333,14 @@ function GroupExpenseUpdate() {
         </Formik>
         <div className="mt-6 md:flex md:justify-center flex justify-center mx-2">
           <span className='text-base text-white font-nunito'>
-            Paid by <Link to={`/group/${id}/addexpense`} className="bg-white text-black rounded px-2">you</Link> and split <Link to={`/group/${id}/expense/${expenseId}/expensedetails/editexpense/updateamount`} className="bg-white text-black rounded px-2">{tab === 'equally' ? 'equally' : 'unequally'}</Link>
+            Paid by <Link className="bg-white text-black rounded px-2" to={`/group/${id}/addexpense/paying`}>you</Link> and split <Link to={`/group/${id}/expense/${expenseId}/expensedetails/editexpense/updateamount`} className="bg-white text-black rounded px-2">{tab === 'equally' ? 'equally' : 'unequally'}</Link>
           </span>
         </div>
       </div>
     </>
   );
 }
-
+// to={`/group/${id}/addexpense`}
 export default GroupExpenseUpdate;
 
 

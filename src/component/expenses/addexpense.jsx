@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
+
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, FilePenLine, IndianRupee, Calendar } from 'lucide-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UseLocalStorage from './uselocalstorage'; // Make sure to import the custom hook
 
 const AddExpense = () => {
@@ -14,13 +15,22 @@ const AddExpense = () => {
   const location = useLocation();
   const { state } = location;
   const amounts = state && state.amounts ? state.amounts : {};
-  const { selectedMemberIDs, tab } = location.state || { selectedMemberIDs: {}, tab: 'equally' };
+  const { selectedMemberIDs = {}, tab = 'equally' } = state || { tab: 'equally' };
+  const { user_id = {}, selectedMemberName = 'you' } = state || { user_id: {}, tab: 'equally', selectedMemberName: 'you' };
+
+  const payerUserData = JSON.parse(localStorage.getItem('payer_user_id'));
+  const user_name = payerUserData ? payerUserData.selectedMemberName || selectedMemberName : selectedMemberName;
+  const payerUserId = payerUserData ? payerUserData.user_id || user_id : user_id;
+
+  // console.log(user_name);
+  // console.log(payerUserId)
+
+
   const [type, setType] = useState(tab.toUpperCase());
 
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Description is required'),
     amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
-
     date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
   });
 
@@ -33,10 +43,9 @@ const AddExpense = () => {
   };
 
   const currentDate = getCurrentDate();
-
   const handleSubmit = async ({ description, amount, date }, { setSubmitting }) => {
     let userExpenses = [];
-
+    
     if (type === 'EQUALLY') {
       userExpenses = Object.keys(selectedMemberIDs).map(memberId => ({
         user_id: memberId,
@@ -51,10 +60,12 @@ const AddExpense = () => {
         : [];
     }
 
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/expenses`, {
         amount,
         description,
+        payer_user_id: payerUserId,
         type,
         group_id: id,
         date,
@@ -70,6 +81,7 @@ const AddExpense = () => {
         toast.success(response.data.message);
         navigate(`/group/${id}`);
         localStorage.removeItem('expenseFormData');
+        localStorage.removeItem('payer_user_id');
       } else {
         toast.error(response.data.message);
       }
@@ -79,19 +91,21 @@ const AddExpense = () => {
         toast.error(error.response.data.message);
       } else if (error.response && error.response.status === 500) {
         toast.error(error.response.data.message);
+      } else if (error.response && error.response.status === 422) {
+        toast.error(error.response.data.message)
       } else {
-        toast.error(error);
+        toast.error(error.message);
       }
     }
   };
 
-  const initialFormData = JSON.parse(localStorage.getItem('expenseFormData')) || { description: '', amount: '', date: currentDate };
+  const initialFormData = JSON.parse(localStorage.getItem('expenseFormData')) || { description: '', amount: '', date: currentDate, payer_user_id: localStorage.getItem('payer_user_id') || user_id };
 
   return (
     <div className="bg-primaryColor h-screen px-3 flex flex-col items-center">
       <div className="py-3 items-center w-full">
-        <button className='flex gap-2'>
-          <ArrowLeft className="text-white flex items-center" onClick={() => navigate(-1)} />
+        <button className='flex gap-2' onClick={() => navigate(-1)}>
+          <ArrowLeft className="text-white flex items-center" />
           <h2 className="text-white text-lg font-nunito">Add Expense</h2>
         </button>
       </div>
@@ -143,15 +157,21 @@ const AddExpense = () => {
         }}
       </Formik>
       <div className="mt-6">
-        <span className='text-lg text-white font-nunito'>
-          Paid by <Link to={`/group/${id}/addexpense`} className="bg-white text-black rounded px-2"><Link to={`/group/${id}/addexpense/paying`}>you</Link></Link> and split <Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">{tab.toLowerCase()}</Link>
-        </span>
-      </div>
-    </div>
-  );
+        <span className='text-base text-white font-nunito'>Paid by <Link to={`/group/${id}/addexpense/paying`} className='bg-white text-black rounded px-2' >{user_name}</Link>
+          and split <Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">{tab ? tab.toLowerCase() : 'equally'}</Link>
+  </span>
+</div>
+</div>
+);
 };
 
 export default AddExpense;
+
+
+
+
+
+
 
 
 
