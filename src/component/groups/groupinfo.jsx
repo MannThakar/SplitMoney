@@ -67,9 +67,10 @@ const GroupInfo = () => {
         },
       });
       if (res.status === 200) {
-        // Sort expenses by date
-        const sortedExpenses = res.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-        setExpenses(sortedExpenses); // Update local state with the fetched and sorted data
+       
+        // const sortedExpenses = res.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // setExpenses(sortedExpenses); 
+        setExpenses(res.data)
       } else {
         toast.error('Failed to fetch expense details');
       }
