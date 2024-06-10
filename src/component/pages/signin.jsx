@@ -4,9 +4,9 @@ import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
 import LoginImg from '../../assets/Login.svg';
 import { Smartphone } from 'lucide-react';
+import {toast} from 'react-toastify';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -42,10 +42,10 @@ const SignIn = () => {
         navigate('/otp', { state: data })
       }
       if (response.data.original === 'User does not exist') {
-        toast.error('Please signup first');
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.response.data.message);
     }
     finally {
       setSubmitting(false);
@@ -54,16 +54,6 @@ const SignIn = () => {
 
   return (
     <div className="bg-primaryColor h-svh flex items-center justify-center">
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 2000,
-          style: {
-            background: '#363636',
-            color: '#fff',
-          },
-        }}
-      />
       <div className="container mx-auto px-6 flex flex-col items-center justify-center">
         <div className="flex justify-center">
           <img src={LoginImg} alt="Login" className="w-40 h-40 md:w-52 md:h-52" />
@@ -86,7 +76,7 @@ const SignIn = () => {
                     id="phone_no"
                     name="phone_no"
                     inputMode="numeric"
-                    className="w-full p-2 bg-transparent text-base border-b-2 text-white md:max-w-xs"
+                  className="w-full p-2 bg-transparent text-base border-b-2 text-white md:max-w-xs focus:outline-none"
                     placeholder="Phone"
                     onChange={(e) => {
                       const value = e.target.value;
