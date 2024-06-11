@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ArrowLeft, User, Mail, Users, UserRoundPlus } from "lucide-react";
+import { ArrowLeft, User, Mail, Users, UserRoundPlus,Search} from "lucide-react";
 import { useLocation, useNavigate,useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
@@ -11,7 +11,8 @@ const SearchGroup = () => {
   const debounceRef = useRef(null);
   // const location = useLocation();
   // const { id } = location.state;
-  const {id} = useParams();
+  const { id } = useParams();
+  const inputRef = useRef(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [group, setGroup] = useState([]);
@@ -66,6 +67,10 @@ const SearchGroup = () => {
     getGroupApi();
   }, []);
 
+  useEffect(() => {
+    inputRef.current.focus();
+  })
+
   // Update button visibility when selectedUserIds changes
   useEffect(() => {
     setVisible(selectedUserIds.length > 0);
@@ -107,16 +112,19 @@ const SearchGroup = () => {
         <div className="flex gap-2 py-3 px-2">
           <button className="flex gap-2 items-center">
             <ArrowLeft className="text-white flex items-center" onClick={() => navigate(-1)} />
+          
           </button>
-          <div className='w-full'>
+          <div className='w-full flex gap-2 px-3'>
+            <Search className='text-white'/>
             <input
               type="text"
+              ref={inputRef}
               placeholder="Enter name, email"
-              className="text-lg font-nunito w-11/12 text-white bg-transparent rounded px-2"
+              className="text-lg font-nunito w-11/12 text-white bg-transparent focus:outline-none rounded px-2"
               value={searchTerm}
               onChange={handleChange}
             />
-          </div>
+         </div>
         </div>
 
         <button className="flex gap-3 px-6 py-3" onClick={() => setModal(true)}>
