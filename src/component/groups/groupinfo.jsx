@@ -116,19 +116,21 @@ const GroupInfo = () => {
         </Link>
       </div>
 
-      <div className="relative pl-5 pt-3 flex items-center">
+      <div className="relative px-5 pt-3 flex items-center">
         <div
           className="w-14 h-14 rounded-2xl mr-4"
           style={{ backgroundColor: groupColor }}
         >
             {/* <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/> */}
         </div>
-        
+
         <div>
           <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
           <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
         </div>
       </div>
+      
+      
       {groupState.map((item, index) => (
           <div key={index} className="mt-1">
               {/* <span className='text-white'>{item.user.name}</span>
@@ -141,6 +143,9 @@ const GroupInfo = () => {
           </div>
         ))}
 
+         <div className='px-9 pt-3'>
+              <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white hover:bg-opacity-80 transition duration-75 ease-in-out hover:scale-105' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
+        </div> 
       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
         {expenses.map((expense) => {
           const date = new Date(expense.date);

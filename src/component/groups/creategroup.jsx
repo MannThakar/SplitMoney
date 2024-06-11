@@ -14,10 +14,12 @@ const CreateGroup = () => {
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .matches(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces')
-            .required('Group Name is required'),
+            .required('Group Name is required')
+            .max(20,'Group name cannot exceed 20 characters'),
         description: Yup.string()
             .matches(/^[a-zA-Z\s]+$/, 'Description can only contain letters and spaces')
-            .required('Description is required'),
+            .required('Description is required')
+            .max(35,'Group Description cannot exceed 35 characters'),
     });
 
     const capitalizeFirstLetter = (value) => {
@@ -84,6 +86,7 @@ const CreateGroup = () => {
                                         className="w-full border-b-2 border-white bg-transparent font-nunito text-white focus:outline-none"
                                         placeholder="Group name"
                                         onBlur={(e) => handleBlur(e, setFieldValue)}
+                                        maxLength={20}
                                     />
                                 </div>
                                 <div className='flex justify-start ml-8'>
@@ -98,6 +101,7 @@ const CreateGroup = () => {
                                         className="w-full border-b-2 bg-transparent font-nunito text-white focus:outline-none"
                                         placeholder="Group description"
                                         onBlur={(e) => handleBlur(e, setFieldValue)}
+                                        maxLength={35}
                                     />
                                 </div>
                                 <div className='flex justify-start ml-8'>
@@ -105,7 +109,7 @@ const CreateGroup = () => {
                                 </div>
                             </div>
                             <div className="flex justify-center">
-                                <button type='submit' className="text-xl w-2/4 py-2 md:py-4 h-10 flex items-center justify-center rounded-full bg-buttonColor font-nunito font-semibold text-black" disabled={isSubmitting}>
+                                <button type='submit' className="text-xl w-1/3 py-2 md:py-4 h-10 flex items-center justify-center rounded-full bg-buttonColor font-nunito font-semibold text-black" disabled={isSubmitting}>
                                     {isSubmitting ? 'Wait...' : 'Done'}
                                 </button>
                             </div>

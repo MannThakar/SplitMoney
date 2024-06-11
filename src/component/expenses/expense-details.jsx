@@ -32,6 +32,7 @@ const ExpenseDetail = () => {
             });
             if (res.status === 200) {
                 toast.success(res.data.message);
+                
             } else {
                 toast.error(res.data.message);
             }
@@ -142,12 +143,13 @@ const ExpenseDetail = () => {
                     <h2 className='text-white text-lg font-nunito'>Expense Details</h2>
                 </button>
             </div>
+             
             {details && (
                 <div className='p-2 mt-1 rounded-lg bg-stone-700 bg-opacity-30 border border-white border-opacity-20 shadow-lg'>
                     <h1 className='text-white mb-2 font-nunito font-bold'>Description: {details.description}</h1>
                     <h2 className='text-white mb-2 font-nunito font-bold'>Paid by {details.user.name}: <span className='text-lentColor font-nunito text-lg ml-1'>{details.amount}</span></h2>
                     <div>
-                        <h2 className='text-white font-bold mb-2'>User Expenses</h2>
+                        <h2 className='text-white font-bold mb-1'>User Expenses</h2>
                         <div className='space-y-2'>
                             {details.user_expenses.map((userExpense, index) => {
                                 const isPayerUser = details.payer_user_id === userExpense.user.id;
@@ -164,58 +166,60 @@ const ExpenseDetail = () => {
                                 );
                             })}
                         </div>
-                        <div className='mt-4'>
-                            <Bar 
-                                data={generateChartData(details.user_expenses)} 
-                                options={{ 
-                                    responsive: true, 
-                                    maintainAspectRatio: false, 
-                                    plugins: { 
-                                        legend: { display: false },
-                                        tooltip: {
-                                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                            titleFont: { size: 16 },
-                                            bodyFont: { size: 14 },
-                                            bodySpacing: 6,
-                                            borderColor: 'rgba(255, 255, 255, 0.8)',
-                                            borderWidth: 1,
-                                            cornerRadius: 4,
-                                            padding: 10,
-                                            displayColors: false,
+                        <div className='overflow-x-auto overflow-y-hidden'>
+                            <div style={{ minWidth: '600px' }}>
+                                <Bar 
+                                    data={generateChartData(details.user_expenses)} 
+                                    options={{ 
+                                        responsive: true, 
+                                        maintainAspectRatio: false, 
+                                        plugins: { 
+                                            legend: { display: false },
+                                            tooltip: {
+                                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                                titleFont: { size: 16 },
+                                                bodyFont: { size: 14 },
+                                                bodySpacing: 6,
+                                                borderColor: 'rgba(255, 255, 255, 0.8)',
+                                                borderWidth: 1,
+                                                cornerRadius: 4,
+                                                padding: 10,
+                                                displayColors: false,
+                                            },
                                         },
-                                        
-                                    },
-                                    animation: {
-                                        duration: 1000,
-                                        easing: 'easeInOutQuad',
-                                    },
-                                    scales: {
-                                        x: {
-                                            ticks: {
-                                                color: 'white',
-                                                font: {
-                                                    size: 14,
+                                        animation: {
+                                            duration: 1000,
+                                            easing: 'easeInOutQuad',
+                                        },
+                                        scales: {
+                                            x: {
+                                                ticks: {
+                                                    color: 'white',
+                                                    font: {
+                                                        size: 12,
+                                                    },
+                                                },
+                                                grid: {
+                                                    display: false,
                                                 },
                                             },
-                                            grid: {
-                                                display: false,
-                                            },
-                                        },
-                                        y: {
-                                            ticks: {
-                                                color: 'white',
-                                                font: {
-                                                    size: 14,
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    color: 'white',
+                                                    font: {
+                                                        size: 10,
+                                                    },
+                                                },
+                                                grid: {
+                                                    color: 'rgba(255, 255, 255, 0.2)',
                                                 },
                                             },
-                                            grid: {
-                                                color: 'rgba(255, 255, 255, 0.2)',
-                                            },
                                         },
-                                    },
-                                }} 
-                                className='h-44 md:h-64 w-full'
-                            />
+                                    }} 
+                                    className='h-28 md:h-64 w-full'
+                                />
+                            </div>
                         </div>
                     </div>
                     {modals && (
@@ -233,11 +237,11 @@ const ExpenseDetail = () => {
                 </div>
             )}
             {details && (
-                <div className='flex justify-center items-center gap-5 mt-4'>
-                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-12 w-16 rounded-xl bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`)} >
+                <div className='flex justify-center items-center gap-5 md:mt-2 '>
+                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-10 w-16 rounded-xl bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`)} >
                         Edit
                     </button>
-                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-12 w-16 rounded-xl bg-red-600 hover:bg-red-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => handleDeleteExpense(details.id)}>
+                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-10 w-16 rounded-xl bg-red-600 hover:bg-red-800 transition duration-200 ease-in-out transform hover:scale-105" onClick={() => handleDeleteExpense(details.id)}>
                         Delete
                     </button>
                 </div>
