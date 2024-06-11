@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import SplashScreen  from '../utils/splashscreen';
+import SplashScreen from '../utils/splashscreen';
 
 const SettleBalance = () => {
     const navigate = useNavigate();
@@ -44,9 +44,9 @@ const SettleBalance = () => {
             </div>
             <div className="px-4">
                 {expenses && expenses.length > 0 ? expenses.map((expenseItem) => (
-                    <div 
-                        key={expenseItem.user.id} 
-                        className="flex justify-between items-center my-2" 
+                    <div
+                        key={expenseItem.user.id}
+                        className="flex justify-between my-1 items-center cursor-pointer hover:bg-secondaryColor p-2 rounded"
                         onClick={() => navigate(`/group/${id}/expense/settlebalance/recordpayment`, { state: { user_id: expenseItem.user.id } })}
                     >
                         <span className='text-white'>{expenseItem.user.name}</span>
@@ -57,7 +57,7 @@ const SettleBalance = () => {
                         )}
                     </div>
                 )) : (
-                    <SplashScreen/>
+                    <SplashScreen />
                 )}
             </div>
         </div>
