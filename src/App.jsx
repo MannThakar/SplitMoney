@@ -25,6 +25,8 @@ import { GroupProvider } from "../src/component/auth/groupcontext";
 import ExpenseDetails from "../src/component/expenses/expense-details";
 import GroupExpenseUpdate from "../src/component/modal/groupexpenseupdate";
 import UpdateAmount from "../src/component/expenses/update-amount";
+import SettleBalance from "../src/component/expenses/settle-balance";
+import RecordPayment from "../src/component/expenses/record-payment";
   
 function App() {
   return (
@@ -65,7 +67,9 @@ function App() {
               <Route path="*" element={<Navigate to="/" />}></Route>
               <Route path="/group">
                 <Route path=":id" element={<GroupInfo />} />
-                <Route path=":id/expense/" element={<GroupExpense />}/>
+                <Route path=":id/expense/" element={<GroupExpense />} />
+                <Route path=":id/expense/settlebalance" element={<SettleBalance />} />
+                <Route path=":id/expense/settlebalance/recordpayment" element={<RecordPayment/> } />
                 <Route path=":id/expense/:expenseid/expensedetails" element={<ExpenseDetails />} /> {/* Updated route */}
                 <Route path=":id/expense/:expenseId/expensedetails/editexpense" element={<GroupExpenseUpdate />} />
                 <Route path=":id/expense/:expenseId/expensedetails/editexpense/updateamount" element={<UpdateAmount/>} />
@@ -73,9 +77,9 @@ function App() {
                 {/* <Route path=":id/expense/" /> */}
                 <Route path=":id/settings" element={<Settings />} />
                 <Route path=":id/addexpense" element={<AddExpense />}></Route>
-                <Route path=":id/addexpense/adjustamount" element={<AdjustAmount />}></Route>
-                <Route path=":id/settings/addpeople" element={<SearchGroup />}></Route>
-                <Route path=":id/addexpense/paying" element={<Paying />}></Route>
+                <Route path=":id/addexpense/adjustamount" element={<AdjustAmount />}/>
+                <Route path=":id/settings/addpeople" element={<SearchGroup />}/>
+                <Route path=":id/addexpense/paying" element={<Paying />} />
               </Route>
               {/* <Route path="/groupinfo/:id" element={<GroupInfo />} /> */}
               <Route path="/creategroup" element={<CreateGroup />} />

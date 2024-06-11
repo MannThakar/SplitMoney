@@ -149,7 +149,7 @@ const Paying = () => {
         localStorage.setItem('payer_user_id', JSON.stringify({ user_id: memberId, selectedMemberName: memberName }));
 
         navigate(`/group/${id}/addexpense`, { state: { user_id: memberId, selectedMemberName: memberName } });
-        console.log('who pay:::::',memberId,memberName);
+        // console.log('who pay:::::',memberId,memberName);
     };
 
     return (

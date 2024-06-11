@@ -7,7 +7,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
 
 function UpdateModal({ onClose, setGroup }) {
     const modalRef = useRef();
@@ -56,12 +55,16 @@ function UpdateModal({ onClose, setGroup }) {
                 onClose(false);
                 if (response.status === 200) {
                     setGroup(groupName);
-                    toast.success('Group updated successfully');
+                    toast.success(response.data.message);
                 } else {
-                    toast.error('Error while updating group');
+                    toast.error(response.data.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                if (error.response && error.response.status === 500) {
+                    toast.error(error.response.data.message)
+                } else {
+                    toast.error(error);
+                }
             }
         }
     }
@@ -77,16 +80,7 @@ function UpdateModal({ onClose, setGroup }) {
 
     return (
         <div ref={modalRef} onClick={closeModal} className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
-            <Toaster
-                position="top-center"
-                toastOptions={{
-                    duration: 3000,
-                    style: {
-                        background: "#363636",
-                        color: "#fff",
-                    },
-                }}
-            />
+          
             <div className="bg-stone-800 w-11/12 h-64 py-4 md:w-2/5 rounded-xl mx-auto p-6">
                 <div className="flex justify-end">
                     <button onClick={onClose}>
@@ -104,7 +98,9 @@ function UpdateModal({ onClose, setGroup }) {
                         <input type="text" placeholder="Enter group description" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white" value={groupDescr} required onChange={(e) => setGroupDescription(e.target.value)} />
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className="w-2/4 p-2 font-bold text-black bg-buttonColor font-nunito rounded-2xl">Update</button>
+                        <button type="submit" className="md:w-1/4 w-1/3 p-2 font-bold text-black bg-buttonColor font-nunito rounded-2xl">
+                           {groupUpdate ? 'Update':'Updating'}
+                        </button>
                     </div>
                 </form>
             </div>

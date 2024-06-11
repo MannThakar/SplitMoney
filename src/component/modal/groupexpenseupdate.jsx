@@ -271,7 +271,9 @@ function GroupExpenseUpdate() {
         toast.error(error.response.data.message);
       } else if (error.response && error.response.status === 500) {
         toast.error(error.response.data.message);
-      } else {
+      } else if (error.response && error.response.status === 422) { 
+        toast.error(error.response.data.message);
+      }else {
         toast.error(error);
       }
     }
