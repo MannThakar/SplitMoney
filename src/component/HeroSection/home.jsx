@@ -83,7 +83,8 @@ const Home = () => {
                   <div
                     className="flex w-14 h-14 rounded-xl items-center justify-center"
                     style={{ backgroundColor: e.color }}>
-                    <span className='text-white text-5xl'>{icons[index % icons.length]}</span>
+                    {/* <span className='text-white text-5xl'>{icons[index % icons.length]}</span> */}
+                    {e.image_url == null ? <img src="https://www.w3schools.com/w3images/avatar2.png" className="rounded-xl" /> : <img src={e.image_url} className="rounded-xl" />}
                   </div>
                   <div className="flex-1">
                     <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>

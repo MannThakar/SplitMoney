@@ -50,6 +50,35 @@ const Settings = ({ onClose }) => {
             console.log('Error fetching data:', error);
         }
     };
+
+    
+    const handleUpload = async (file) => {
+        if (!file) {
+            toast.error('Please select a file to upload.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('url', file);
+        formData.append('type', 'GROUP'); // Assuming 'png' is the required type
+        formData.append('group_id', id);
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API}/upload`, formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("Token")}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.status === 200) {
+                // Update any necessary state or UI here
+                toast.success(response.data.message);
+                navigate('/')
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    };
     useEffect(() => {
         getAccountDetail(); 
     },[])
@@ -123,7 +152,7 @@ const Settings = ({ onClose }) => {
 
     return (
         <div className="bg-primaryColor h-svh">
-            <div className='py-2 px-2'>
+            <div className='py-3 px-2'>
                 <button className='flex gap-2 items-center' onClick={() => navigate(-1)}>
                     <ArrowLeft className='text-white' />
                     <h2 className='text-white text-lg font-nunito'>Group settings</h2>

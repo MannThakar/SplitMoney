@@ -50,13 +50,20 @@ const Account = () => {
     // Image upload function
     const handleImage = async (event) => {
         const file = event.target.files[0];
-        if (!file) return;
+        if (!file) return;``
 
         const formData = new FormData();
         formData.append('image', file);
-
+        // console.log('image:::',formData);
+        const type = 'USER';
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API}/upload`, formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API}/upload`,
+                {
+                    url:file,
+                    type
+                },
+                
+                {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("Token")}`,
                     'Content-Type': 'multipart/form-data',

@@ -81,17 +81,20 @@ const Friends = () => {
 
     return (
         <div className='bg-primaryColor min-h-screen relative'>
-            <div className="py-3 px-2 flex gap-2 fixed w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-20 z-10">
+            <div className="py-3 px-2 flex justify-between gap-2 fixed w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-20 z-10">
                 <button className='flex gap-2' onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
                     <h2 className="text-white text-lg font-nunito">Friends List</h2>
                 </button>
+                    <div className='flex justify-end items-center'>
+                        <span className='text-white font-nunito'>Total Friends: </span><span className='text-textColor font-nunito'>{totalFriends}</span>
+                    </div>
             </div>
 
             <div className='p-4 pt-24'> {/* Add some padding to the top */}
-                <div className='flex fixed w-full right-1 justify-end top-14 bg-white bg-opacity-10 backdrop-filter border border-white border-opacity-20 z-10 px-5'>
+                {/* <div className='flex fixed w-full right-1 justify-end top-[5px] bg-white bg-opacity-10 backdrop-filter border border-white border-opacity-20 z-10 px-5'>
                     <h3 className='text-white text-sm  font-nunito bg-opacity-10 backdrop-filter backdrop-blur-lg border-opacity-20 z-10 px-2'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
-                </div>
+                </div> */}
                 <div className='pt-8'> {/* Ensure content is below the fixed elements */}
                     {group.length > 0 ? (
                         <div className='grid grid-cols-1 gap-4'>
