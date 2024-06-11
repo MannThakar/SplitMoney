@@ -20,6 +20,10 @@ const GroupInfo = () => {
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
+<<<<<<< Updated upstream
+=======
+  const imageURL = location.state?.img || 'https://www.w3schools.com/w3images/avatar2.png';
+>>>>>>> Stashed changes
 
   const getGroupApi = useCallback(async () => {
     try {
@@ -34,6 +38,31 @@ const GroupInfo = () => {
     }
   }, [id]);
 
+<<<<<<< Updated upstream
+=======
+  const Statistics = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API}/group-statistics/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setGroupState(response.data)
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+
+  useEffect(() => {
+    Statistics()
+  }, [])
+
+>>>>>>> Stashed changes
   const fetchExpenseDetails = useCallback(async () => {
     try {
       console.log(`Fetching expense details for group ID: ${id}`);
@@ -89,21 +118,49 @@ const GroupInfo = () => {
           <h2 className='text-white text-base '>back</h2>
           <ArrowLeft className='text-white' />
         </button>
+<<<<<<< Updated upstream
         <Link to={`/group/${id}/settings`} state={{ color: groupColor }}>
+=======
+        <Link to={`/group/${id}/settings`} state={{ color: groupColor, imageURL }}>
+>>>>>>> Stashed changes
           <Settings className='text-white hover:text-textColor' />
         </Link>
       </div>
 
       <div className="relative pl-5 pt-3 flex items-center">
+
+        {/* Add Here in this component */}
         <div
           className="w-14 h-14 rounded-2xl mr-4"
+<<<<<<< Updated upstream
           style={{ backgroundColor: groupColor }}
         ></div>
+=======
+          style={{ backgroundColor: "red" }}
+        >
+          <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/>
+        </div>
+
+>>>>>>> Stashed changes
         <div>
           <h1 className=" text-lg text-white">{group?.name}</h1>
           <h2 className=" text-sm text-white">{group?.description}</h2>
         </div>
       </div>
+<<<<<<< Updated upstream
+=======
+      {groupState.map((item, index) => (
+        <div key={index} className="mt-1">
+          {/* <span className='text-white'>{item.user.name}</span>
+              <span className='text-white'>Total: {item.expense.total}</span> */}
+          <p>Type:
+            <span className='text-white font-nunito text-sm font-bold' style={{ color: item.expense.type === "DEBT" ? '#09B83E' : 'red' }}>
+              {item.expense.type == "DEBT" ? `You Owe ${item.user.name} ₹${item.expense.total.toFixed(2)}` : `${item.user.name} Owes you ₹${item.expense.total.toFixed(2)}`}</span>
+          </p>
+
+        </div>
+      ))}
+>>>>>>> Stashed changes
 
       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20"> {/* Adjusted for spacing */}
         {expenses.map((expense) => {
@@ -144,7 +201,11 @@ const GroupInfo = () => {
       </div>
 
       <Link to={`/group/${id}/addexpense`}>
+<<<<<<< Updated upstream
         <button className='fixed bottom-20 right-5 text-black w-40  bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
+=======
+        <button className='fixed bottom-20 right-5 text-black w-40 bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
+>>>>>>> Stashed changes
           <ReceiptText className='text-black' />Add expense
         </button>
       </Link>
@@ -169,3 +230,9 @@ const GroupInfo = () => {
 };
 
 export default GroupInfo;
+<<<<<<< Updated upstream
+=======
+
+
+
+>>>>>>> Stashed changes

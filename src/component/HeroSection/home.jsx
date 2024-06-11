@@ -30,6 +30,10 @@ const Home = () => {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
+<<<<<<< Updated upstream
+=======
+      console.log('groups::::::::', response);
+>>>>>>> Stashed changes
       const groupsWithColors = response.data.map((group, index) => ({
         ...group,
         color: colors[index % colors.length],
@@ -40,6 +44,28 @@ const Home = () => {
     }
   }
 
+<<<<<<< Updated upstream
+=======
+  const getAccountDetail = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+      setImageURL(res.data.image_url);
+      console.log('me:::::::', res``)
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  };
+
+>>>>>>> Stashed changes
   useEffect(() => {
     viewGroup();
   }, []);
@@ -71,6 +97,7 @@ const Home = () => {
         {res.length ? (
           res.map((e, index) => (
             <div key={index} className="w-11/12 mx-auto mt-3">
+<<<<<<< Updated upstream
               <Link to={`/group/${e.id}`} state={{ color: e.color }}>
                 <div className="flex gap-5 items-center">
                   <div
@@ -78,6 +105,24 @@ const Home = () => {
                     style={{ backgroundColor: e.color }}
                   >
                     <span className="text-5xl text-white">{icons[index % icons.length]}</span>
+=======
+              <Link to={`/group/${e.id}`} state={{ color: e.color, img: e.image_url }}>
+                <div className="flex gap-5 items-center">
+                  <div
+                    className="flex w-14 h-14 rounded-xl items-center justify-center"
+                  >
+
+                    {e.image_url == null ? <img src="https://www.w3schools.com/w3images/avatar2.png" className="rounded-xl" /> : <img src={e.image_url} className="rounded-xl" />}
+
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
+                    <div className="flex items-center gap-2">
+                      <p className={`text-sm font-bold font-nunito ${e.groupStatistics.type === 'borrowed' ? 'text-red-500' : 'text-green-500'}`}>
+                        {e.groupStatistics.type === 'borrowed' ? 'You owe' : 'You are owed'} ₹{e.groupStatistics.amount.toFixed(2)}
+                      </p>
+                    </div>
+>>>>>>> Stashed changes
                   </div>
                   <h2 className="text-lg font-semibold text-white">{e.name}</h2>
                 </div>
