@@ -148,11 +148,11 @@ function Otp() {
           <div className="flex justify-center mt-5">
             <button
               type="submit"
-              className="text-lg font-bold bg-buttonColor rounded-full py-2 font-nunito w-2/4 text-black"
+              className="text-lg font-bold bg-buttonColor rounded-full py-2 font-nunito w-2/4 md:w-1/3 text-black"
               onClick={handleOtp}
               disabled={loading || isButtonDisabled}
             >
-              {loading ? 'Verifying...' : 'Verify'}
+              {loading ? 'Wait...' : 'Verify'}
             </button>
           </div>
           <div className="flex justify-center mt-4">

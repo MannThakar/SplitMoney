@@ -50,11 +50,10 @@ const Account = () => {
     // Image upload function
     const handleImage = async (event) => {
         const file = event.target.files[0];
-        if (!file) return;``
+        if (!file) return;
 
         const formData = new FormData();
         formData.append('image', file);
-        // console.log('image:::',formData);
         const type = 'USER';
         try {
             const response = await axios.post(`${import.meta.env.VITE_API}/upload`,
@@ -101,10 +100,12 @@ const Account = () => {
     return (
         <div className="bg-primaryColor min-h-screen flex flex-col">
             <div className='flex justify-between px-3 py-3'>
-                <button className="flex items-center gap-2" onClick={() => navigate(-1)}>
+                <div className="flex items-center gap-2">
+                <button  onClick={() => navigate(-1)}>
                     <ArrowLeft className="text-white" />
-                    <h2 className="text-white text-lg font-nunito">Account</h2>
                 </button>
+                    <h2 className="text-white text-lg font-nunito">Account</h2>
+                </div>
                 <button>
                     <Pencil className='text-white size-5 hover:text-textColor' onClick={() => setModal(true)} />
                 </button>
@@ -140,11 +141,17 @@ const Account = () => {
                             </div>
                         </div>
                         <div className="w-full flex justify-start items-center md:justify-start gap-2">
-                            <LogOut className='text-white flex items-center'/>
-                            <button
-                                className="font-bold text-lg font-nunito hover:opacity-80 text-white py-2"
-                                onClick={() => setLogout(true)}>Logout
-                            </button>
+                            <div className='flex  gap-2 items-center'> 
+                                   <button className='flex gap-2 items-center' onClick={() => setLogout(true)}>
+                                        <LogOut className="text-white flex items-center" />
+                                    </button>
+                                        <h2 className="text-white text-lg font-nunito" >Logout</h2>
+                                {/* <button
+                               <LogOut className='text-white ' />
+                                    className="font-bold text-lg font-nunito hover:opacity-80 text-white py-2"
+                                    
+                                </button> */}
+                            </div>
                         </div>
                     </div>
                 

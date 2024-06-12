@@ -32,7 +32,7 @@ const SettleBalance = () => {
 
     useEffect(() => {
         fetchStatistics();
-    }, []);
+    }, [id]);
 
     return (
         <div className="bg-primaryColor h-svh">
@@ -47,7 +47,7 @@ const SettleBalance = () => {
                     <div
                         key={expenseItem.user.id}
                         className="flex justify-between my-1 items-center cursor-pointer hover:bg-secondaryColor p-2 rounded"
-                        onClick={() => navigate(`/group/${id}/expense/settlebalance/recordpayment`, { state: { user_id: expenseItem.user.id } })}
+                        onClick={() => navigate(`/group/${id}/expense/settlebalance/recordpayment`, { state: { user_id: expenseItem.user.id, total: expenseItem.expense.total } })}
                     >
                         <span className='text-white'>{expenseItem.user.name}</span>
                         {expenseItem.expense.type === 'DEBT' ? (

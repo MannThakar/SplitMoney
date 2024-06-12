@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-// import React from 'react';
+import React from 'react';
 import App from './App.jsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { GroupProvider } from './component/auth/groupcontext.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
+  <React.StrictMode>
   <AuthProvider>
     <GroupProvider>
       <BrowserRouter>
@@ -16,6 +16,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </BrowserRouter>
   </GroupProvider>
     </AuthProvider>
-    // </React.StrictMode>
+    </React.StrictMode>
     
 )
