@@ -234,10 +234,12 @@ const AdjustAmount = () => {
   return (
     <div className="bg-primaryColor h-svh">
       <div className='py-3 px-2 flex justify-between'>
-        <button className='flex gap-2' onClick={() => navigate(-1)}>
-          <ArrowLeft className='text-white' />
+        <div className='flex gap-2'>
+          <button  onClick={() => navigate(-1)}>
+            <ArrowLeft className='text-white' />
+          </button>
           <h2 className='text-white text-lg font-nunito'>Adjust split</h2>
-        </button>
+        </div>
       </div>
 
       <div className="flex justify-center gap-10 mt-4">

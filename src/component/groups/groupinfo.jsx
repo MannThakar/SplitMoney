@@ -116,7 +116,7 @@ const GroupInfo = () => {
         </Link>
       </div>
 
-      <div className="relative px-5 pt-3 flex items-center">
+      <div className="relative px-4 pt-3 flex items-center">
         <div
           className="w-14 h-14 rounded-2xl mr-4"
           style={{ backgroundColor: groupColor }}
@@ -132,19 +132,28 @@ const GroupInfo = () => {
       
       
       {groupState.map((item, index) => (
-          <div key={index} className="mt-1">
-              {/* <span className='text-white'>{item.user.name}</span>
-              <span className='text-white'>Total: {item.expense.total}</span> */}
-              <p>Type:
-                 <span className='text-white font-nunito text-sm font-bold' style={{ color: item.expense.type === "DEBT" ? '#09B83E' : 'red' }}>
-                { item.expense.type == "DEBT" ? `You Owe ${item.user.name } ₹${item.expense.total.toFixed(2)}`:`${item.user.name} Owes you ₹${item.expense.total.toFixed(2)}`}</span>
-              </p>
-             
-          </div>
-        ))}
+    <div key={index} className="mt-1">
+        <p>Type:
+            <span
+                className='text-white font-nunito text-sm font-bold'
+                style={{
+                    color: item.expense.type === "DEBT"
+                        ? (item.expense.total === 0 ? 'white' : '#09B83E')
+                        : (item.expense.type === "Balanced" ? 'white' : 'red')
+                }}
+            >
+                {item.expense.type === "DEBT"
+                    ? `You Owe ${item.user.name} ₹${item.expense.total.toFixed(2)}`
+                    : item.expense.type === "Balanced"
+                        ? `${item.user.name} and you are balanced`
+                        : `${item.user.name} Owes you ₹${item.expense.total.toFixed(2)}`}
+            </span>
+        </p>
+    </div>
+))}
 
          <div className='px-9 pt-3'>
-              <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white hover:bg-opacity-80 transition duration-75 ease-in-out hover:scale-105' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
+            <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white hover:bg-opacity-80 transition duration-75 ease-in-out hover:scale-105 hover:font-extrabold' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
         </div> 
       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
         {expenses.map((expense) => {

@@ -108,10 +108,12 @@ const AddExpense = () => {
   return (
     <div className="bg-primaryColor h-screen px-3 flex flex-col items-center">
       <div className="py-3 items-center w-full">
-        <button className='flex gap-2' onClick={() => navigate(`/group/${id}`,localStorage.removeItem('expenseFormData'),localStorage.removeItem('payer_user_id'))}>
-          <ArrowLeft className="text-white flex items-center" />
+        <div className='flex gap-2'>
+          <button  onClick={() => navigate(`/group/${id}`, localStorage.removeItem('expenseFormData'), localStorage.removeItem('payer_user_id'))}>
+            <ArrowLeft className="text-white flex items-center" />
+          </button>
           <h2 className="text-white text-lg font-nunito">Add Expense</h2>
-        </button>
+        </div>
       </div>
       <hr className='bg-white' />
 
