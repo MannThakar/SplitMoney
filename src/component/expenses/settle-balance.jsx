@@ -42,23 +42,26 @@ const SettleBalance = () => {
                     <h2 className='text-white text-lg font-nunito'>Select a balance to settle</h2>
                 </button>
             </div>
-            <div className="px-4">
-                {expenses && expenses.length > 0 ? expenses.map((expenseItem) => (
-                    <div
-                        key={expenseItem.user.id}
-                        className="flex justify-between my-1 items-center cursor-pointer hover:bg-secondaryColor p-2 rounded"
-                        onClick={() => navigate(`/group/${id}/expense/settlebalance/recordpayment`, { state: { user_id: expenseItem.user.id, total: expenseItem.expense.total } })}
-                    >
-                        <span className='text-white'>{expenseItem.user.name}</span>
-                        {expenseItem.expense.type === 'DEBT' ? (
-                            <span className="text-green-500">You are owed ₹ {expenseItem.expense.total}</span>
-                        ) : (
-                            <span className="text-red-500">You owe ₹ {expenseItem.expense.total}</span>
-                        )}
-                    </div>
-                )) : (
-                    <SplashScreen />
+            <div className="px-2">
+             {expenses && expenses.length > 0 ? expenses.map((expenseItem) => (
+            <div
+                key={expenseItem.user.id}
+                className="flex justify-between my-1 items-center cursor-pointer hover:bg-secondaryColor p-2 rounded"
+                onClick={() => navigate(`/group/${id}/expense/settlebalance/recordpayment`, { state: { user_id: expenseItem.user.id, total: expenseItem.expense.total } })}
+            >
+                <span className='text-white'>{expenseItem.user.name}</span>
+                {expenseItem.expense.type === 'DEBT' ? (
+                    <span className="text-green-500">You are owed ₹ {expenseItem.expense.total.toFixed(2)}</span>
+                ) : expenseItem.expense.type === 'BALANCED' ? (
+                    <span className="text-white">Balanced</span>
+                ) : (
+                    <span className="text-red-500 flex justify-end">You owe ₹ {expenseItem.expense.total.toFixed(2)}</span>
                 )}
+            </div>
+        )) : (
+            <SplashScreen />
+        )}
+
             </div>
         </div>
     );

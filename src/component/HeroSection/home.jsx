@@ -27,7 +27,6 @@ const Home = () => {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
-      console.log('groups::::::::',response);
       const groupsWithColors = response.data.map((group, index) => ({
         ...group,
         color: colors[index % colors.length],
@@ -77,13 +76,13 @@ const Home = () => {
         {res.length ? (
           res.map((e, index) => (
             <div key={index} className="w-11/12 mx-auto mt-3">
-              <Link to={`/group/${e.id}`} state={{ color: e.color, imageURL }}>
+              <Link to={`/group/${e.id}`} state={{ color: e.color, imageURL: e.image_url  }}>
                 <div className="flex gap-5 items-center">
                   <div
-                    className="flex w-14 h-14 rounded-xl items-center justify-center"
-                    style={{ backgroundColor: e.color }}>
+                    className="flex w-14 h-14 rounded-xl my-1 items-center justify-center"
+                    style={{ backgroundColor: e.color,img: e.image_url  }}>
                     {/* <span className='text-white text-5xl'>{icons[index % icons.length]}</span> */}
-                    {e.image_url == null ? <img src="https://www.w3schools.com/w3images/avatar2.png" className="rounded-xl" /> : <img src={e.image_url} className="rounded-xl" />}
+                    {e.image_url == null ? <img src="https://www.w3schools.com/w3images/avatar2.png" className="rounded-xl bg-cover" /> : <img src={e.image_url} className="rounded-xl" />}
                   </div>
                   <div className="flex-1">
                     <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
@@ -121,3 +120,5 @@ const Home = () => {
 };
 
 export default Home;
+
+

@@ -69,7 +69,7 @@ const GroupInfo = () => {
       if (res.status === 200) {
        
         // const sortedExpenses = res.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-        // setExpenses(sortedExpenses); 
+        // setExpenses(sortedExpenses);
         setExpenses(res.data)
       } else {
         toast.error('Failed to fetch expense details');
@@ -154,7 +154,7 @@ const GroupInfo = () => {
 
          <div className='px-9 pt-3'>
             <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white hover:bg-opacity-80 transition duration-75 ease-in-out hover:scale-105 hover:font-extrabold' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
-        </div> 
+        </div>
       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
         {expenses.map((expense) => {
           const date = new Date(expense.date);
@@ -233,6 +233,3 @@ const GroupInfo = () => {
 };
 
 export default GroupInfo;
-
-
-

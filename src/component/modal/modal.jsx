@@ -29,6 +29,7 @@ function Modal({ onClose }) {
 
             if (response.status === 200) {
                 toast.success(response.data.message);
+                
                 onClose(false);
             } else {
                 toast.error(response.data.message);
