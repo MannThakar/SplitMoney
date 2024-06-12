@@ -104,7 +104,7 @@ const RecordPayment = () => {
                         type="text"
                         id="description"
                         name="description"
-                        className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white"
+                        className="border-b md:w-full w-64 max-w-xs border-gray-400 focus:outline-none bg-transparent text-white"
                         placeholder="Enter the description"
                         maxLength={20}
                         onChange={formik.handleChange}
