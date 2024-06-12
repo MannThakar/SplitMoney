@@ -46,7 +46,6 @@ const Home = () => {
         },
       });
       setImageURL(res.data.image_url);
-      console.log('me:::::::',res``)
       if (res.status === 200) {
         toast.success(res.data.message);
       } else {
@@ -74,7 +73,7 @@ const Home = () => {
       </div>
       <div className='mt-2'></div>
 
-      <div>
+      <div className='overflow-y-scroll h-96'>
         {res.length ? (
           res.map((e, index) => (
             <div key={index} className="w-11/12 mx-auto mt-3">

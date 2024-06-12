@@ -93,7 +93,7 @@ const SignIn = () => {
                 />
                 <button
                   type="submit"
-                  className="font-nunito text-lg py-2 rounded-full w-2/4  text-black mt-8 bg-buttonColor font-bold mx-auto"
+                  className="font-nunito text-lg py-2 rounded-full w-2/4 md:w-1/3  text-black mt-8 bg-buttonColor font-bold mx-auto"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Sending OTP...' : 'Get OTP'}

@@ -94,7 +94,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
             <div className="bg-stone-800 w-11/12 h-80 py-4 md:w-2/5 rounded-xl mx-auto p-6">
                 <div className="flex justify-end">
                     <button onClick={onClose}>
-                        <X className="text-white" />
+                        <X className="text-white hover:text-textColor" />
                     </button>
                 </div>
                 <h1 className="text-center font-nunito text-xl text-white mb-4">Account Update</h1>
@@ -105,7 +105,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
                     </div>
                     <div className="flex items-center gap-2">
                         <Mail className="text-white" />
-                        <input type="email" placeholder="EMAIL" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white" value={email} required onChange={(e) => setEmail(e.target.value)} disabled />
+                        <input type="email" placeholder="EMAIL" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" className="flex-1 p-2 font-nunito border-b-2 bg-transparent text-white cursor-not-allowed" value={email} required onChange={(e) => setEmail(e.target.value)} disabled />
                     </div>
                     <div className='flex items-center gap-2'>
                         <Smartphone className='text-white' />
@@ -124,7 +124,7 @@ function AccountModal({ onClose, setGroup, isEdit, setIsEdit, id }) {
                         />
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className="w-2/4  p-2 text-black bg-buttonColor font-nunito font-bold rounded-2xl">Save Changes</button>
+                        <button type="submit" className="md:w-1/4 w-1/2 p-2 text-black bg-buttonColor font-nunito font-bold rounded-2xl">Save Changes</button>
                     </div>
                 </form>
             </div>

@@ -153,10 +153,12 @@ const Settings = ({ onClose }) => {
     return (
         <div className="bg-primaryColor h-svh">
             <div className='py-3 px-2'>
-                <button className='flex gap-2 items-center' onClick={() => navigate(-1)}>
-                    <ArrowLeft className='text-white' />
-                    <h2 className='text-white text-lg font-nunito'>Group settings</h2>
-                </button>
+                <div className='flex gap-2 items-center'> 
+                    <button  onClick={() => navigate(-1)}>
+                        <ArrowLeft className='text-white' />
+                    </button>
+                        <h2 className='text-white text-lg font-nunito'>Group settings</h2>
+                </div>
             </div>
             <div className='px-4'>
                 <div className='flex py-3 items-center justify-between'>
