@@ -101,7 +101,7 @@ const Account = () => {
         <div className="bg-primaryColor min-h-screen flex flex-col">
             <div className='flex justify-between px-3 py-3'>
                 <div className="flex items-center gap-2">
-                <button  onClick={() => navigate(-1)}>
+                <button  onClick={() => navigate('/')}>
                     <ArrowLeft className="text-white" />
                 </button>
                     <h2 className="text-white text-lg font-nunito">Account</h2>
