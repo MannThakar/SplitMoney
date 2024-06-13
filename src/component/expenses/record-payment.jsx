@@ -67,7 +67,7 @@ const RecordPayment = () => {
                 });
                 if (response.status === 200) {
                     toast.success(response.data.message);
-                    navigate('/');
+                    navigate(`/group/${id}`);
                 } else {
                     toast.error(response.data.message);
                 }
