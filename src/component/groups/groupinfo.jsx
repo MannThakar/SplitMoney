@@ -22,7 +22,7 @@ const GroupInfo = () => {
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
-  const imageURL = location.state?.imageURL || 'https://www.w3schools.com/w3images/avatar2.png';
+  const imageURL = location.state?.img || 'https://www.w3schools.com/w3images/avatar2.png';
 
   const getGroupApi = useCallback(async () => {
     try {
@@ -121,7 +121,7 @@ const GroupInfo = () => {
           className="w-14 h-14 rounded-2xl mr-4"
           style={{ backgroundColor: groupColor }}
         >
-            {/* <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/> */}
+            <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/>
         </div>
 
         <div>
