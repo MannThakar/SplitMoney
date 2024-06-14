@@ -82,11 +82,7 @@ const Paying = () => {
                             onClick={() => handleMemberClick(e.id, e.name)}
                         >
                             <div className="relative w-10 h-10">
-                            <img
-                                src={e.id === userId ? imageURL : fallbackImage} // Set the profile picture if ID matches
-                                alt="Profile"
-                                className="w-full h-full object-cover rounded-full"
-                            />
+                            <img src={e.image_url || fallbackImage} alt="Profile" className="w-10 h-10 object-cover rounded-full" />
                             </div>
                             <div>
                             <h3 className="font-nunito text-white text-base">{e.name}</h3>
