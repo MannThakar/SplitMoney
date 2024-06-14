@@ -1,4 +1,6 @@
 
+
+
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
@@ -8,6 +10,8 @@ import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText } from 'lucide-react';
 import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
+  import { CiViewList } from "react-icons/ci";
+
 
 const GroupInfo = () => {
   const navigate = useNavigate();
@@ -20,9 +24,22 @@ const GroupInfo = () => {
   const [userId, setUserId] = useState(null); // Add state for user ID
   const [groupState, setGroupState] = useState([]);
 
+
+
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
-  const imageURL = location.state?.img || 'https://www.w3schools.com/w3images/avatar2.png';
+  const imageURL = location.state?.img ;
+    const ImageOrIcon = ({ imageURL, icon: Icon, className }) => {
+  return (
+    <>
+      {imageURL ? (
+        <img src={imageURL} alt="Group" className={className} />
+      ) : (
+        <Icon className={className} />
+      )}
+    </>
+  );
+};
 
   const getGroupApi = useCallback(async () => {
     try {
@@ -59,9 +76,11 @@ const GroupInfo = () => {
     Statistics()
   },[])
 
+  //for calling the settlement in same api
+  //.user,settlements.payee 
   const fetchExpenseDetails = useCallback(async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API}/expenses/?includes=user,userExpenses&group_id=${id}`, {
+      const res = await axios.get(`${import.meta.env.VITE_API}/expenses/?includes=user,userExpenses.user,settlements.payee&group_id=${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
@@ -80,9 +99,30 @@ const GroupInfo = () => {
     }
   }, [id]);
 
+
+
+  //Settlement list 
+  const Settlement = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API}/settlements/?includes=group,payer,payee&group_id=${id}`, 
+        {
+          headers: {
+            Authorization:`Bearer ${localStorage.getItem('Token')}`  
+        }
+      }
+      )
+      console.log('settlement::::::',response.data)
+    }catch(error){
+      toast.error(error)
+    }
+  }
+  useEffect(() => {
+    Settlement();
+  fetchExpenseDetails();
+  },[])
+
   useEffect(() => {
     getGroupApi();
-    fetchExpenseDetails();
     const fetchUserId = async () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
@@ -96,7 +136,7 @@ const GroupInfo = () => {
       }
     };
     fetchUserId();
-  }, [getGroupApi, fetchExpenseDetails]);
+  }, [getGroupApi]);
 
   const getUserExpenses = (userId) => {
     return expenses.map(expense => {
@@ -116,12 +156,13 @@ const GroupInfo = () => {
         </Link>
       </div>
 
-      <div className="relative px-4 pt-3 flex items-center">
-        <div
-          className="w-14 h-14 rounded-2xl mr-4"
-          style={{ backgroundColor: groupColor }}
-        >
-            <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/>
+     <div className="relative px-4 pt-3 flex items-center">
+        <div className="w-14 h-14 rounded-2xl mr-4">
+          <ImageOrIcon
+            imageURL={imageURL}
+            icon={CiViewList}
+            className='w-full h-full object-cover rounded-2xl text-white'
+          />
         </div>
 
         <div>
@@ -233,3 +274,251 @@ const GroupInfo = () => {
 };
 
 export default GroupInfo;
+
+
+
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+// import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
+// import { useEffect, useState, useCallback } from "react";
+// import axios from "axios";
+// import { toast } from 'react-toastify';
+// import "react-toastify/dist/ReactToastify.css";
+// import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText } from 'lucide-react';
+// import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
+// import { CiViewList } from "react-icons/ci";
+
+// const GroupInfo = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const { id } = useParams();
+//   const [modals, setModals] = useState(false);
+//   const [expenses, setExpenses] = useState([]);
+//   const [group, setGroup] = useState(null);
+//   const [selectedExpense, setSelectedExpense] = useState(null);
+//   const [userId, setUserId] = useState(null);
+//   const [groupState, setGroupState] = useState([]);
+//   const [settlements, setSettlements] = useState([]);
+
+//   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
+//   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
+//   const imageURL = location.state?.img || 'https://www.w3schools.com/w3images/avatar2.png';
+
+//   const getGroupApi = useCallback(async () => {
+//     try {
+//       const res = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("Token")}`,
+//         },
+//       });
+//       setGroup(res.data);
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//     }
+//   }, [id]);
+
+//   const Statistics = async () => {
+//     try {
+//       const response = await axios.get(`${import.meta.env.VITE_API}/group-statistics/${id}`, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("Token")}`,
+//         },
+//       });
+//       if (response.status === 200) {
+//         toast.success(response.data.message);
+//         setGroupState(response.data);
+//       } else {
+//         toast.error(response.data.message);
+//       }
+//     } catch (error) {
+//       toast.error(error.response.data.message);
+//     }
+//   }
+
+//   useEffect(() => {
+//     Statistics();
+//   }, []);
+
+//   const fetchExpenseDetails = useCallback(async () => {
+//     try {
+//       const res = await axios.get(`${import.meta.env.VITE_API}/expenses/?includes=user,userExpenses&group_id=${id}`, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("Token")}`,
+//         },
+//       });
+//       if (res.status === 200) {
+//         setExpenses(res.data);
+//       } else {
+//         toast.error('Failed to fetch expense details');
+//       }
+//     } catch (error) {
+//       console.error("Fetch Expense Details Error:", error);
+//       toast.error("Error fetching expense details");
+//     }
+//   }, [id]);
+
+//   const Settlement = async () => {
+//     try {
+//       const response = await axios.get(`${import.meta.env.VITE_API}/settlements/?includes=group,payer,payee&group_id=${id}`, 
+//         {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem('Token')}`,
+//           }
+//         }
+//       );
+//       setSettlements(response.data);  // Store the settlements data
+//     } catch (error) {
+//       toast.error(error);
+//     }
+//   }
+
+//   useEffect(() => {
+//     getGroupApi();
+//     fetchExpenseDetails();
+//     Settlement();
+//     const fetchUserId = async () => {
+//       try {
+//         const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem("Token")}`,
+//           },
+//         });
+//         setUserId(res.data.id);
+//       } catch (error) {
+//         console.error("Error fetching user ID:", error);
+//       }
+//     };
+//     fetchUserId();
+//   }, [getGroupApi, fetchExpenseDetails]);
+
+//   const getUserExpenses = (userId) => {
+//     return expenses.map(expense => {
+//       const userExpense = expense.user_expenses.find(ue => ue.user_id === userId);
+//       return userExpense ? { expenseId: expense.id, ownedAmount: userExpense.owned_amount } : null;
+//     }).filter(item => item !== null);
+//   };
+
+//   return (
+//     <div className='h-screen bg-primaryColor flex flex-col'>
+//       <div className="flex w-full justify-between px-2 py-3">
+//         <button onClick={() => navigate('/')}>
+//           <ArrowLeft className='text-white' />
+//         </button>
+//         <Link to={`/group/${id}/settings`} state={{ color: groupColor, imageURL }}>
+//           <Settings className='text-white hover:text-textColor' />
+//         </Link>
+//       </div>
+
+//       <div className="relative px-4 pt-3 flex items-center">
+//         <div className="w-14 h-14 rounded-lg flex justify-center items-center mr-4" style={{ backgroundColor: groupColor }}>
+//           {imageURL ? (
+//             <img src={imageURL} alt='Group' className='w-full h-full object-cover rounded-2xl'/>
+//           ) : (
+//             <CiViewList className='text-white size-11' />
+//           )}
+//         </div>
+//         <div>
+//           <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
+//           <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
+//         </div>
+//       </div>
+      
+//       {groupState.map((item, index) => (
+//         <div key={index} className="mt-1">
+//           <p>Type:
+//             <span
+//               className='text-white font-nunito text-sm font-bold'
+//               style={{
+//                 color: item.expense.type === "DEBT"
+//                   ? (item.expense.total === 0 ? 'white' : '#09B83E')
+//                   : (item.expense.type === "Balanced" ? 'white' : 'red')
+//               }}
+//             >
+//               {item.expense.type === "CREDIT"
+//                 ? `You Owe ${item.user.name} ₹${item.expense.total.toFixed(2)}`
+//                 : item.expense.type === "Balanced"
+//                   ? `${item.user.name} and you are balanced`
+//                   : `${item.user.name} Owes you ₹${item.expense.total.toFixed(2)}`}
+//             </span>
+//           </p>
+//         </div>
+//       ))}
+
+//       <div className='px-9 pt-3'>
+//         <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white hover:bg-opacity-80 transition duration-75 ease-in-out hover:scale-105 hover:font-extrabold' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
+//       </div>
+
+//       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
+//         {expenses.map((expense) => {
+//           const date = new Date(expense.date);
+//           const month = date.toLocaleString('default', { month: 'short' });
+//           const year = date.getFullYear();
+//           const day = date.getDate();
+
+//           const createdAtDate = new Date(expense.created_at);
+//           const createdAtMonth = createdAtDate.toLocaleString('default', { month: 'short' });
+//           const createdAtYear = createdAtDate.getFullYear();
+//           const createdAtDay = createdAtDate.getDate();
+
+//           const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
+//           const ownedAmount = userExpense ? userExpense.owned_amount : 0;
+
+//           // Find the user who paid the amount
+//           const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
+
+//           return (
+//             <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
+//               <Link to={`/group/${id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
+//                 <div className="flex flex-col gap-4">
+//                   <div className="flex items-center justify-between">
+//                     <h2 className="font-bold font-nunito text-base text-white">
+//                       {day}-{month}-{year}
+//                     </h2>
+//                     <span className="font-bold font-nunito text-sm text-trashColor">
+//                       you borrow: ₹{ownedAmount.toFixed(2)}
+//                     </span>
+//                   </div>
+//                   <div className="flex flex-col">
+//                     <h3 className="text-white font-nunito text-base">{expense.description}</h3>
+//                     <h4 className="text-white font-nunito text-base">
+//                       {payer} paid ₹{expense.amount.toFixed(2)}
+//                     </h4>
+//                   </div>
+//                   <div>
+//                     <h4 className="text-white font-nunito text-sm">
+//                       Created At: {createdAtDay}-{createdAtMonth}-{createdAtYear}
+//                     </h4>
+//                   </div>
+//                 </div>
+//               </Link>
+//             </div>
+//           );
+//         })}
+
+//         {/* Displaying settlements */}
+//         {settlements.length > 0 && settlements.map((settlement) => (
+//           <div key={settlement.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
+//             <div className="flex flex-col gap-4">
+//               <div className="flex items-center justify-between">
+//                 <h2 className="font-bold font-nunito text-base text-white">
+//                   {new Date(settlement.created_at).toLocaleDateString()}
+//                 </h2>
+                
+//               </div>
+//               <div className="flex flex-col">
+//                 <h3 className="text-white font-nunito text-base">
+//                   {settlement.payer.name} paid {settlement.payee.name}
+//                 </h3>
+//                   <span className="font-bold font-nunito text-sm text-trashColor">
+//                   Amount: ₹{settlement.amount.toFixed(2)}
+//                   </span>
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default GroupInfo;

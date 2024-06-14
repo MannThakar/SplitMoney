@@ -45,7 +45,10 @@ const manifestForPlugIn = {
 };
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [react(), VitePWA(manifestForPlugIn), qrcode()],
+	plugins: [react(),
+		VitePWA(manifestForPlugIn),
+		qrcode()],
+	server:{ port: 1973 }
 });
 
 // import { defineConfig } from "vite";

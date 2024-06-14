@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
-import { Users, UserRound, CircleUserRound } from 'lucide-react';
+import { Users, UserRound, CircleUserRound,Banknote } from 'lucide-react';
 import { CiViewList } from "react-icons/ci";
 import SplashScreen from '../utils/splashscreen';
 
@@ -20,11 +20,11 @@ const Home = () => {
   const getOverallText = (overall, overall_type) => {
     switch (overall_type) {
       case 'Balanced':
-        return <p className='px-4' style={{ color: 'white' }}>Overall, you are balanced with ₹{overall}</p>;
+        return <p className='px-4' style={{ color: 'white' }}>Overall, you are balanced with ₹{overall.toFixed(2)}</p>;
       case 'lent':
-        return <p  className='px-4' style={{ color: 'green' }}>Overall, you are owed with ₹{overall}</p>;
+        return <p  className='px-4' style={{ color: 'green' }}>Overall, you are owed with ₹{overall.toFixed(2)}</p>;
       case 'borrowed':
-        return <p className='px-4' style={{ color: 'red' }}>Overall, you owe with ₹{overall}</p>;
+        return <p className='px-4' style={{ color: 'red' }}>Overall, you owe with ₹{overall.toFixed(2)}</p>;
       default:
         return null;
     }
@@ -72,7 +72,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-primaryColor h-svh">
+    <div className="bg-primaryColor h-screen">
       <div className="px-3 py-2 flex justify-between items-center flex-row-reverse bg-opacity-50 backdrop-blur-sm">
         <button>
           <Users className="text-white hover:text-textColor" onClick={() => navigate('/creategroup')} />
@@ -83,45 +83,47 @@ const Home = () => {
       </div>
       <div className='mt-2'></div>
 
-      <div className='overflow-y-scroll h-96'>
+      <div>
         {res ? (
           <>
             <div className="mb-4">
               {getOverallText(res.overall, res.overall_type)}
             </div>
-            {res.groups && res.groups.length ? (
-              res.groups.map((e, index) => (
-                <div key={index} className="w-11/12 mx-auto mt-3">
-                  <Link to={`/group/${e.id}`} state={{ color: e.color, img: e.image_url }}>
-                    <div className="flex gap-5 items-center">
-                      <div className="flex w-14 h-14 rounded-xl items-center justify-center">
-                        {e.image_url == null ? (
-                          <img src="https://www.w3schools.com/w3images/avatar2.png" className="rounded-xl" />
-                        ) : (
-                          <img src={e.image_url} className="rounded-xl" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
-                        <div className="flex items-center gap-2">
-                          <p className={`text-sm font-bold font-nunito ${
-                            e.groupStatistics.type === 'borrowed' ? 'text-red-500' :
-                            e.groupStatistics.type === 'lent' ? 'text-green-500' : 'text-white'
-                          }`}>
-                            {e.groupStatistics.type === 'borrowed' ? 'You owe' :
-                              e.groupStatistics.type === 'lent' ? 'You are owed' :
-                              'You are balanced'} ₹{e.groupStatistics.amount.toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              ))
-            ) : (
-              <p className="text-white">No groups available</p>
+        {res.groups && res.groups.length ? (
+        res.groups.map((e, index) => (
+      <div key={index} className="w-11/12 mx-auto mt-3">
+      <Link to={`/group/${e.id}`} state={{ color: e.color, img: e.image_url }}>
+        <div className="flex gap-5 items-center">
+          <div className="flex w-14 h-14 rounded-xl items-center justify-center">
+            {e.image_url == null ? (
+                <CiViewList className='text-white size-10 w-14 h-14'/>
+            ): (
+              <img src={e.image_url} className="rounded-xl max-h-full max-w-full" />
             )}
-          </>
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
+            <div className="flex items-center gap-2">
+              <p className={`text-sm font-bold font-nunito ${
+                e.groupStatistics.type === 'borrowed' ? 'text-red-500' :
+                e.groupStatistics.type === 'lent' ? 'text-green-500' :
+                e.groupStatistics.type === 'Balanced' ? 'text-white' : 'text-white'
+                      }`}>
+                      
+                {e.groupStatistics.type === 'borrowed' ? 'You owe' :
+                  e.groupStatistics.type === 'lent' ? 'You are owed' :
+                    e.groupStatistics.type === 'Balanced' ? 'You are all settled up' : 'No expenses here yet'} ₹{e.groupStatistics.amount.toFixed(2)}
+                </p>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </div>
+        ))
+        ) : (
+          <p className="text-white">No groups available</p>
+        )}
+        </>
         ) : (
           <SplashScreen />
         )}
