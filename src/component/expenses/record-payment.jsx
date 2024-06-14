@@ -40,7 +40,7 @@ const RecordPayment = () => {
     const formik = useFormik({
         initialValues: {
             description: '',
-            amount: total || '', // Set the amount from the state
+            amount: total.toFixed(2) || '', // Set the amount from the state
         },
         validationSchema: Yup.object({
             description: Yup.string()

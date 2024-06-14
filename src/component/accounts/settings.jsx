@@ -186,8 +186,7 @@ const Settings = ({ onClose }) => {
                         {member.map((e, index) => (
                             <button key={index} className="flex gap-5 items-center">
                                 <div className='relative w-10 h-10'>
-                                    <img src={imageURL || fallbackImage} alt="Profile" className="w-10 h-10 object-cover rounded-full" />
-                                </div>
+                                    <img src={e.image_url || fallbackImage} alt="Profile" className="w-10 h-10 object-cover rounded-full" />                                </div>
                                 <div>
                                     <h3 className="font-nunito text-white text-base">{e.name}</h3>
                                 </div>

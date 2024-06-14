@@ -56,3 +56,25 @@
   }
 }
 
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
+
+input[type="date"]::-moz-calendar-picker-indicator {
+  filter: invert(100%);
+}
+
+input[type="date"]::-ms-clear {
+  display: none;
+}
+
+input[type="date"] {
+  color: white; /* Text color */
+  border-bottom: 1px solid gray;
+  width: 100%;
+  max-width: 20rem;
+  background: red;
+  outline: none;
+  background-color: transparent;
+}

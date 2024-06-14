@@ -9,8 +9,8 @@ import { toast } from 'react-toastify';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import DeleteConfirmation from '../modal/delete-confirmation';
-
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import SplashScreen from '../utils/splashscreen';
 
 const ExpenseDetail = () => {
     const location = useLocation();
