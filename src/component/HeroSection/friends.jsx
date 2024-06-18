@@ -121,7 +121,7 @@ const Friends = () => {
                 {loading && renderSkeletons()}
             </div>
 
-            <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
+            <div className="flex justify-around w-full border-t-2 border-white fixed bottom-0 bg-primaryColor p-2">
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
                     <UsersRound className={`size-5 ${isActive('/')}`} />
                     <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>

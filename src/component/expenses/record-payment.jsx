@@ -136,15 +136,15 @@ const RecordPayment = () => {
                 <div className='flex mt-5 justify-center'>
                     <button
                         type='submit'
-                        className='text-black bg-white rounded-xl w-28 py-2 font-nunito'
+                        className='text-black font-bold bg-white rounded-lg w-1/5 py-2 font-nunito'
                         disabled={loading}
                     >
-                        {loading ? 'Loading...' : 'Settle'}
-                    </button>
+                        {loading ? 'Wait...' : 'Settle'}
+                    </button> 
                 </div>
             </form>
         </div>
-    );
+    ); 
 };
 
 export default RecordPayment;

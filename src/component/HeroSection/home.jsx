@@ -13,6 +13,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [res, setRes] = useState(null);
   const [imageURL, setImageURL] = useState('');
+  const [userid,setUserId] = useState(null);
   const colors = ["#7c3aed", "#0891b2", "#16a34a", "#ea580c"];
 
   const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
@@ -29,7 +30,6 @@ const Home = () => {
         return null;
     }
   };
-
   const viewGroup = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API}/groups`, {
@@ -56,6 +56,9 @@ const Home = () => {
         },
       });
       setImageURL(res.data.image_url);
+      setUserId(res.data.id);
+    
+
       if (res.status === 200) {
         toast.success(res.data.message);
       } else {
@@ -67,10 +70,15 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (userid != null) {
+      localStorage.setItem('USER-ID',userid);
+    }
+  },[userid]);
+  useEffect(() => {
     viewGroup();
     getAccountDetail();
   }, []);
-
+  // console.log('::::::',userid);
   return (
     <div className="bg-primaryColor h-screen">
       <div className="px-3 py-2 flex justify-between items-center flex-row-reverse bg-opacity-50 backdrop-blur-sm">
@@ -129,7 +137,7 @@ const Home = () => {
         )}
       </div>
 
-      <div className="flex justify-around w-full fixed bottom-0 bg-primaryColor p-2">
+      <div className="flex justify-around w-full border-t-2 border-white fixed bottom-0 bg-primaryColor p-2">
         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
           <Users className={`size-5 ${isActive('/')}`} />
           <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
