@@ -156,9 +156,9 @@ const ExpenseDetail = () => {
                 <div className='p-2 rounded-lg bg-stone-700 bg-opacity-30 border border-white border-opacity-20 flex-grow shadow-lg'>
                     <h1 className='text-white mb-1 font-nunito font-bold'>Description: {details.description}</h1>
                     <h2 className='text-white mb-1 font-nunito font-bold'>Paid by {details.user.name}: <span className='text-lentColor font-nunito text-lg ml-1'>{details.amount}</span></h2>
-                    <div>
-                        <h2 className='text-white font-nunito font-bold mb-1'>User Expenses</h2>
-                        <div className='space-y-2'>
+                    <div className='space-y-2'>
+                        <h2 className='text-white font-nunito font-bold'>User Expenses</h2>
+                        <div className='space-y-3'>
                             {details.user_expenses.map((userExpense, index) => {
                                 const isPayerUser = details.payer_user_id === userExpense.user.id;
                                 const textColor = isPayerUser ? '#09B83E' : '#FF0000';

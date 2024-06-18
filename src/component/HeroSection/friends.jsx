@@ -93,11 +93,11 @@ const Friends = () => {
                     </div>
             </div>
 
-            <div className='p-4 pt-24'> {/* Add some padding to the top */}
+            <div className='p-4 py-24'> {/* Add some padding to the top */}
                 {/* <div className='flex fixed w-full right-1 justify-end top-[5px] bg-white bg-opacity-10 backdrop-filter border border-white border-opacity-20 z-10 px-5'>
                     <h3 className='text-white text-sm  font-nunito bg-opacity-10 backdrop-filter backdrop-blur-lg border-opacity-20 z-10 px-2'>Total Friends: <span className='text-textColor'>{totalFriends}</span></h3>
                 </div> */}
-                <div className='pt-8'> {/* Ensure content is below the fixed elements */}
+                <div> {/* Ensure content is below the fixed elements */}
                     {group.length > 0 ? (
                         <div className='grid grid-cols-1 gap-4'>
                             {group.map((item, index) => (
@@ -121,7 +121,7 @@ const Friends = () => {
                 {loading && renderSkeletons()}
             </div>
 
-            <div className="flex justify-around w-full border-t-2 border-white fixed bottom-0 bg-primaryColor p-2">
+            <div className="flex justify-around w-full border-t-2  border-white fixed bottom-0 bg-primaryColor p-2">
                 <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
                     <UsersRound className={`size-5 ${isActive('/')}`} />
                     <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
