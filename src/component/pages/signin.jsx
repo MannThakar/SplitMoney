@@ -6,7 +6,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import LoginImg from '../../assets/Login.svg';
 import { Smartphone } from 'lucide-react';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
+import "../../App.css"
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -96,7 +97,7 @@ const SignIn = () => {
                   className="font-nunito text-lg py-2 rounded-full w-2/4 md:w-1/3  text-black mt-8 bg-buttonColor font-bold mx-auto"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Sending OTP...' : 'Get OTP'}
+                  {isSubmitting ? 'Wait...' : 'Get OTP'}
                 </button>
               </div>
             </Form>

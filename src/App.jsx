@@ -27,6 +27,8 @@ import GroupExpenseUpdate from "../src/component/modal/groupexpenseupdate";
 import UpdateAmount from "../src/component/expenses/update-amount";
 import SettleBalance from "../src/component/expenses/settle-balance";
 import RecordPayment from "../src/component/expenses/record-payment";
+import UpdatePaying from "../src/component/expenses/updatepaying";
+import Settlement from "../src/component/expenses/settlement";
   
 function App() {
   return (
@@ -72,7 +74,9 @@ function App() {
                 <Route path=":id/expense/settlebalance/recordpayment" element={<RecordPayment/> } />
                 <Route path=":id/expense/:expenseid/expensedetails" element={<ExpenseDetails />} /> {/* Updated route */}
                 <Route path=":id/expense/:expenseId/expensedetails/editexpense" element={<GroupExpenseUpdate />} />
-                <Route path=":id/expense/:expenseId/expensedetails/editexpense/updateamount" element={<UpdateAmount/>} />
+                <Route path=":id/expense/:expenseId/expensedetails/editexpense/updateamount" element={<UpdateAmount />} />
+                <Route path=":id/expense/:expenseId/expensedetails/updatepayer" element={ <UpdatePaying/>} />
+                <Route path=":id/settlement" element={<Settlement/> } />
 
                 {/* <Route path=":id/expense/" /> */}
                 <Route path=":id/settings" element={<Settings />} />

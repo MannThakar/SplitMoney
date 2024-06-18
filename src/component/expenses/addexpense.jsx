@@ -47,10 +47,11 @@ const AddExpense = () => {
       toast.error(error);
     }
   }
+
   useEffect(() => {
     User();
   },[])
-  console.log('id of user:::::;',authId);
+;
 
   const getCurrentDate = () => {
     const date = new Date();
