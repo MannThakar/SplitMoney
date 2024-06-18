@@ -72,7 +72,11 @@ const RecordPayment = () => {
                     toast.error(response.data.message);
                 }
             } catch (error) {
-                toast.error(error.response?.data?.message || 'Failed to record payment');
+                if(error.response && error.response.status == 400 ){
+                    toast.error(error.response.data.message)
+                }else{
+                    toast.error(error.response?.data?.message || 'Failed to record payment');
+                }
             } finally {
                 setLoading(false);
             }
@@ -136,7 +140,7 @@ const RecordPayment = () => {
                 <div className='flex mt-5 justify-center'>
                     <button
                         type='submit'
-                        className='text-black font-bold bg-white rounded-lg w-1/5 py-2 font-nunito'
+                        className='text-black font-bold bg-white rounded-lg w-1/4 py-2 font-nunito'
                         disabled={loading}
                     >
                         {loading ? 'Wait...' : 'Settle'}
