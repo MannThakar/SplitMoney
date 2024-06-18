@@ -17,7 +17,7 @@ const CreateGroup = () => {
             .required('Group Name is required')
             .max(20,'Group name cannot exceed 20 characters'),
         description: Yup.string()
-            .matches(/^[a-zA-Z\s]+$/, 'Description can only contain letters and spaces')
+            .matches(/^[a-zA-Z\s!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]*$/, 'Description can only contain letters, spaces, and special characters')
             .required('Description is required')
             .max(35,'Group Description cannot exceed 35 characters'),
     });
