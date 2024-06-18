@@ -150,7 +150,7 @@ const UpdateAmount = () => {
       <div className="mt-6 flex justify-center">
         <button
           onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`, { state: { selectedMemberIDs, amounts, tab } })}
-          className="p-2 bg-buttonColor text-black rounded-2xl"
+          className="py-2 w-1/4 md:w-1/12  bg-buttonColor text-black rounded-md"
         >
           Continue
         </button>
