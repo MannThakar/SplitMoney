@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 // import { useState, useEffect } from 'react';
 // import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -188,15 +189,19 @@ function GroupExpenseUpdate() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
+  const [members, setMembers] = useState([]);
+  const [loading,setLoading] = useState(false);
 
   
   const { selectedMemberIDs = {}, amounts = {}, tab = 'equally' } = location.state || {};
   const { user_id = {}, selectedMemberName = 'you' } = state || { user_id: {}, tab: 'equally', selectedMemberName: 'you' };
   const payerUserData = JSON.parse(localStorage.getItem('payer_user_id'));
-  const user_name = payerUserData ? payerUserData.selectedMemberName || selectedMemberName : selectedMemberName;
+  // const user_name = payerUserData ? payerUserData.selectedMemberName || selectedMemberName : selectedMemberName;
   const payerUserId = payerUserData ? payerUserData.user_id || user_id : user_id;
   const uid = localStorage.getItem('USER-ID');
-  console.log('payerid',payerUserId);
+  console.log('payerid', payerUserId);
+  const [selectedCar, setSelectedCar] = useState('you');
+
 
 
   console.log('memberid:::::',user_id,selectedMemberName);
@@ -217,8 +222,8 @@ function GroupExpenseUpdate() {
   const id = location.pathname.split("/")[2];
 
   const validationSchema = Yup.object().shape({
-    description: Yup.string().required('Description is required'),
-    amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
+    description: Yup.string().required('Description is required').max(20,'Description cannot exceed 20 characters'),
+    amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer').test('len', 'Amount must be at most 7 digits', val => val && val.toString().length <= 7),
     date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
   });
 
@@ -239,9 +244,34 @@ function GroupExpenseUpdate() {
       console.log(error);
     }
   };
+  const fetchMembers = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API}/groups/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+      setMembers(response.data.members);
+      if (response.data.members.length > 0) {
+        const defaultMember = response.data.members[0];
+        handleSelectChange({ target: { value: defaultMember.id, options: [{ text: defaultMember.name }] } }); // Set first member as default
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleSelectClick = () => {
+    if (members.length === 0) {
+      fetchMembers();
+    }
+  };
 
   useEffect(() => {
     fetchExpenseDetail();
+      handleSelectClick();
   }, []);
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -262,6 +292,7 @@ function GroupExpenseUpdate() {
         : [];
     }
 
+    console.log("user_expenses::::::::::",userExpenses)
     try {
       const response = await axios.put(`${import.meta.env.VITE_API}/expenses/${expenseId}`,
         {
@@ -300,6 +331,13 @@ function GroupExpenseUpdate() {
     setSubmitting(false);
   };
 
+
+    const handleSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    const selectedText = event.target.options[0].text; // Get text of the first option
+    setSelectedCar(selectedValue);
+    localStorage.setItem('payer_user_id', JSON.stringify({ user_id: selectedValue, selectedMemberName: selectedText }));
+  };
   return (
     <div className='bg-primaryColor h-screen px-3 flex flex-col items-center'>
       <div className='py-3 items-center w-full'>
@@ -315,12 +353,12 @@ function GroupExpenseUpdate() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, handleChange }) => (
           <Form className="w-full max-w-md">
             <div className="flex gap-3 my-3 justify-center items-center">
               <FilePenLine className='text-white' />
               <Field type="text" id="description" name="description" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white"
-                placeholder="Enter the description" />
+                placeholder="Enter the description" onChange={handleChange} maxLength={20} />
             </div>
             <div className='flex justify-start pl-8 md:pl-20'>
               <ErrorMessage name="description" component="div" className="text-sm text-red-500" />
@@ -329,7 +367,7 @@ function GroupExpenseUpdate() {
             <div className="flex gap-3 justify-center items-center my-3">
               <IndianRupee className='text-white' />
               <Field type="number" id="amount" name="amount" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white"
-                placeholder="0.00" />
+                placeholder="0.00" onChange={(e) => handleAmountChange(e,handleChange)} maxLength={5} />
             </div>
             <div className="flex justify-start pl-8 md:pl-20">
               <ErrorMessage name="amount" component="div" className="text-sm text-red-500" />
@@ -337,7 +375,7 @@ function GroupExpenseUpdate() {
 
             <div className="flex gap-3 justify-center items-center my-3">
               <Calendar className='text-white' />
-              <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" />
+              <Field type="date" id="date" name="date" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white" onChange={handleChange} />
             </div>
             <div className='flex justify-start pl-8 md:pl-20'>
               <ErrorMessage name="date" component="div" className="text-sm text-red-500" />
@@ -351,10 +389,35 @@ function GroupExpenseUpdate() {
           </Form>
         )}
       </Formik>
+      
       <div className="mt-6 md:flex md:justify-center flex justify-center mx-2">
-        <span className='text-base text-white font-nunito'>
+        <div className="mt-6">
+            <span className='text-base font-nunito text-white'>Paid by
+              <select
+                id="mySelect"
+                /* onClick={handleSelectClick} */
+                onChange={handleSelectChange}
+                value={selectedCar}
+                disabled={loading} // Disable dropdown while loading
+                className='text-black min-w-24  max-w-24 rounded m-1'
+              >
+
+                {loading ? (
+                  <option>Loading...</option>
+                ) : (
+                  members.map((member) => (
+                    <option key={member.id} value={member.id}>
+                      {member.name}
+                    </option>
+                  ))
+                )}
+              </select>
+              <span> and split </span><Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">{tab ? tab.toLowerCase() : 'equally'}</Link>
+            </span>
+          </div>
+        {/* <span className='text-base text-white font-nunito'>
           Paid by <Link className="bg-white text-black rounded px-2" to={`/group/${id}/expense/${expenseId}/expensedetails/updatepayer`}>{user_name}</Link> and split <Link to={`/group/${id}/expense/${expenseId}/expensedetails/editexpense/updateamount`} className="bg-white text-black rounded px-2">{tab === 'equally' ? 'equally' : 'unequally'}</Link>
-        </span>
+        </span> */}
       </div>
     </div>
   );
