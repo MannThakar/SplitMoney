@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptText,Banknote } from 'lucide-react';
 import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 import { CiViewList } from "react-icons/ci";
-
+import SplashScreen from '../utils/splashscreen';
 
 const GroupInfo = () => {
   const navigate = useNavigate();
@@ -141,16 +141,15 @@ const GroupInfo = () => {
           className='w-full h-full object-cover rounded-2xl text-white'
         />
       </div>
-
       <div>
         <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
         <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
       </div>
     </div>
-
-    <div className='px-5 pt-3'>
+    {/* <div className='px-5 pt-3'>
       <button className='font-nunito py-1 w-1/3 md:w-1/12  font-bold rounded-md text-black bg-white' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
-    </div>
+    </div> */}
+    {expenses.length == '' ? '' : <div className='px-5 pt-3'> <button className='font-nunito py-2 w-1/3 md:w-1/12  font-bold rounded-md text-black bg-white' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button></div>}
 
     {Array.isArray(groupState) && groupState.length > 0 ? (
       groupState.map((item, index) => (
@@ -178,7 +177,6 @@ const GroupInfo = () => {
         {groupState.message || 'No transactions yet'}
       </div>
     )}
-
     <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
       {expenses.map((expense) => {
         const date = new Date(expense.date);
@@ -193,16 +191,13 @@ const GroupInfo = () => {
 
         const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
         const ownedAmount = userExpense ? userExpense.owned_amount : 0;
-
         const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
 
         if (expense.type === "SETTLEMENT") {
           const settlement = expense.settlements[0];
           const payerName = settlement.payer_user_id === expense.user.id ? expense.user.name : "Unknown";
           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
-         
-          
-            return (
+          return (
               <div key={expense.id} className="my-4 p-2 text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg ">
                 <Link to={`/group/${id}/settlement`}>
 
@@ -257,41 +252,8 @@ return (
         </div>
       </div>
     </Link>
-  </div>
-);
-
-
-//         const isPayerAndUser = expense.payer_user_id === expense.user.id;
-//         const amountToShow = isPayerAndUser ? expense.you_lent : expense.user_expenses.find(ue => ue.user_id === expense.user.id)?.owned_amount;
-
-// return (
-//   <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
-//     <Link to={`/group/${expense.group_id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
-//       <div className="flex flex-col lg:flex-row gap-4">
-//         <div className="flex lg:flex-row w-full gap-5 lg:items-center">
-//           <div className="flex flex-col items-center justify-center lg:order-1">
-//             <span className="text-white">{day}</span>
-//             <span className="text-white">{month}</span>
-//             <span className="text-white">{year}</span>
-//           </div>
-
-//           <div className="flex flex-col justify-center items-center lg:order-2 lg:flex-grow lg:items-center">
-//             <h3 className="text-white line-clamp-1 break-all text-center">{expense.description}</h3>
-//             <h4 className="text-white text-center">{expense.user.name} paid ₹{expense.amount.toFixed(2)}</h4>
-//           </div>
-
-//           <div className="flex flex-col justify-center items-center lg:order-3 lg:self-center text-center">
-//             {isPayerAndUser ? (
-//               <span className="text-green-500">you lent ₹{amountToShow.toFixed(2)}</span>
-//             ) : (
-//               <span className="text-red-500">you borrow ₹{amountToShow.toFixed(2)}</span>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-//     </Link>
-//   </div>
-// );
+      </div>
+      );
       })}
     </div>
 
@@ -325,5 +287,5 @@ return (
   </div>
   );
 };
-
 export default GroupInfo;
+//sd
