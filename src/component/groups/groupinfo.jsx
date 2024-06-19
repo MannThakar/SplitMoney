@@ -11,7 +11,6 @@ import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 import { CiViewList } from "react-icons/ci";
 import SplashScreen from '../utils/splashscreen';
 
-
 const GroupInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -192,16 +191,13 @@ const GroupInfo = () => {
 
         const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
         const ownedAmount = userExpense ? userExpense.owned_amount : 0;
-
         const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
 
         if (expense.type === "SETTLEMENT") {
           const settlement = expense.settlements[0];
           const payerName = settlement.payer_user_id === expense.user.id ? expense.user.name : "Unknown";
           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
-         
-          
-            return (
+          return (
               <div key={expense.id} className="my-4 p-2 text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg ">
                 <Link to={`/group/${id}/settlement`}>
 
