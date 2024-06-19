@@ -142,13 +142,11 @@ const GroupInfo = () => {
           className='w-full h-full object-cover rounded-2xl text-white'
         />
       </div>
-
       <div>
         <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
         <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
       </div>
     </div>
-
     {/* <div className='px-5 pt-3'>
       <button className='font-nunito py-1 w-1/3 md:w-1/12  font-bold rounded-md text-black bg-white' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
     </div> */}
@@ -180,7 +178,6 @@ const GroupInfo = () => {
         {groupState.message || 'No transactions yet'}
       </div>
     )}
-
     <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
       {expenses.map((expense) => {
         const date = new Date(expense.date);
