@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <AuthProvider>
     <GroupProvider>
       <BrowserRouter>
-        <App />
+        <App className='font-nunito'/>
       </BrowserRouter>
   </GroupProvider>
     </AuthProvider>

@@ -33,7 +33,8 @@ export default {
 				buttonColor: "#ffffff",
 				highlightColor: "#FFD700",
 				boxColor: "#857f95",
-				trashColor: "#D50000",
+				trashColor: "#FF0000",
+				// trashColor: "#D50000",
 				lentColor: "#09B83E"
 			},
 		},

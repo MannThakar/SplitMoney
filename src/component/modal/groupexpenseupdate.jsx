@@ -390,8 +390,8 @@ function GroupExpenseUpdate() {
         )}
       </Formik>
       
-      <div className="mt-6 md:flex md:justify-center flex justify-center mx-2">
-        <div className="mt-6">
+      <div className="mt-6 md:flex md:justify-center flex justify-center">
+        <div>
             <span className='text-base font-nunito text-white'>Paid by
               <select
                 id="mySelect"

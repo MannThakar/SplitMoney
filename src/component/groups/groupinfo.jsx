@@ -149,7 +149,7 @@ const GroupInfo = () => {
     </div>
 
     <div className='px-5 pt-3'>
-      <button className='font-nunito py-2 w-1/3 md:w-1/12  font-bold rounded-md text-black bg-white' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
+      <button className='font-nunito py-1 w-1/3 md:w-1/12  font-bold rounded-md text-black bg-white' onClick={() => navigate(`/group/${id}/expense/settlebalance`)}>Settle up</button>
     </div>
 
     {Array.isArray(groupState) && groupState.length > 0 ? (
@@ -157,7 +157,7 @@ const GroupInfo = () => {
         <div key={index} className="mb-2 h-5">
           <span>Type:
             <span
-              className='text-white flex justify-start px-5 items-center font-nunito text-sm font-bold'
+              className='text-white flex justify-start px-5 items-center font-nunito text-sm font-semibold'
               style={{
                 color: item.expense.type === "DEBT"
                   ? (item.expense.total === 0 ? 'white' : '#09B83E')
@@ -168,7 +168,7 @@ const GroupInfo = () => {
                 ? `${item.user.name} Lent ₹${item.expense.total.toFixed(2)}`
                 : item.expense.type === "BALANCED"
                   ? `${item.user.name} and you are balanced`
-                  : `${item.user.name} Borrowed ₹${item.expense.total.toFixed(2)}`}
+                  : `${item.user.name} Borrow ₹${item.expense.total.toFixed(2)}`}
             </span>
           </span>
         </div>
@@ -200,58 +200,98 @@ const GroupInfo = () => {
           const settlement = expense.settlements[0];
           const payerName = settlement.payer_user_id === expense.user.id ? expense.user.name : "Unknown";
           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
+         
+          
+            return (
+              <div key={expense.id} className="my-4 p-2 text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg ">
+                <Link to={`/group/${id}/settlement`}>
 
-          return (
-            <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-              <Link to={`/group/${id}/settlement`}>
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-bold font-nunito text-base text-white">
-                      {day}-{month}-{year}
-                    </h2>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1">
-                      <Banknote className="text-green-500" />
-                      <span className="text-white font-nunito text-base">
-                        {payerName} paid to {payeeName} ₹{settlement.amount.toFixed(2)}
-                      </span>
+                  <div className="flex items-center justify-between lg:flex lg:justify-between lg:items-center gap-4">
+                    <div id="date">
+                      <h2 className="text-white flex flex-col">
+                        <h2>{day}</h2>
+                        <h2>{month}</h2>
+                        <h2>{year}</h2>
+                      </h2>
                     </div>
+                    <div id="data" className="flex flex-col">
+                      <div className="flex  gap-1 flex-col">
+                        {/* <Banknote className="text-green-500 h-12 w-12" /> */}
+                        <span className="text-white flex lg:justify-center lg:items-center gap-2">
+                          <Banknote className='text-green-500 h-10 w-10 flex items-center'/>{payerName} paid to {payeeName} ₹{settlement.amount.toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                    {/* <div id="amount" className="text-base text-white">
+                      <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
+                    </div> */}
                   </div>
-                  <div>
-                    <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          );
-        }
-
-        return (
-          <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-            <Link to={`/group/${id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-bold font-nunito text-base text-white">
-                    {day}-{month}-{year}
-                  </h2>
-                  <span className="font-bold font-nunito text-sm text-trashColor">
-                    you borrow: ₹{ownedAmount.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-white font-nunito text-base">{expense.description}</h3>
-                  <h4 className="text-white font-nunito text-base">
-                    {payer} paid ₹{expense.amount.toFixed(2)}
-                  </h4>
-                </div>
-                <div>
-                  <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
-                </div>
+                </Link>
               </div>
-            </Link>
+            );
+        }
+        const isPayerAndUser = userId === expense.user.id && userId === expense.payer_user_id;
+        const amountToShow = isPayerAndUser ? expense.you_lent : expense.user_expenses.find(ue => ue.user_id === userId)?.owned_amount || 0;
+        const textColor = isPayerAndUser ? 'text-green-500' : 'text-red-500';
+
+     
+return (
+  <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
+    <Link to={`/group/${expense.group_id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex lg:flex-row w-full gap-5 lg:items-center">
+          <div className="flex flex-col items-center justify-center lg:order-1">
+            <span className="text-white">{day}</span>
+            <span className="text-white">{month}</span>
+            <span className="text-white">{year}</span>
           </div>
-        );
+
+          <div className="flex flex-col justify-center items-center lg:order-2 lg:flex-grow lg:items-center">
+            <h3 className="text-white line-clamp-1 break-all text-center">{expense.description}</h3>
+            <h4 className="text-white text-center">{expense.user.name} paid ₹{expense.amount.toFixed(2)}</h4>
+          </div>
+
+          <div className="flex flex-col justify-center items-center lg:order-3 lg:self-center text-center">
+            <span className={textColor}>{isPayerAndUser ? `you lent ₹${amountToShow.toFixed(2)}` : `you borrow ₹${amountToShow.toFixed(2)}`}</span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  </div>
+);
+
+
+//         const isPayerAndUser = expense.payer_user_id === expense.user.id;
+//         const amountToShow = isPayerAndUser ? expense.you_lent : expense.user_expenses.find(ue => ue.user_id === expense.user.id)?.owned_amount;
+
+// return (
+//   <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
+//     <Link to={`/group/${expense.group_id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
+//       <div className="flex flex-col lg:flex-row gap-4">
+//         <div className="flex lg:flex-row w-full gap-5 lg:items-center">
+//           <div className="flex flex-col items-center justify-center lg:order-1">
+//             <span className="text-white">{day}</span>
+//             <span className="text-white">{month}</span>
+//             <span className="text-white">{year}</span>
+//           </div>
+
+//           <div className="flex flex-col justify-center items-center lg:order-2 lg:flex-grow lg:items-center">
+//             <h3 className="text-white line-clamp-1 break-all text-center">{expense.description}</h3>
+//             <h4 className="text-white text-center">{expense.user.name} paid ₹{expense.amount.toFixed(2)}</h4>
+//           </div>
+
+//           <div className="flex flex-col justify-center items-center lg:order-3 lg:self-center text-center">
+//             {isPayerAndUser ? (
+//               <span className="text-green-500">you lent ₹{amountToShow.toFixed(2)}</span>
+//             ) : (
+//               <span className="text-red-500">you borrow ₹{amountToShow.toFixed(2)}</span>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </Link>
+//   </div>
+// );
       })}
     </div>
 
@@ -287,210 +327,3 @@ const GroupInfo = () => {
 };
 
 export default GroupInfo;
-
-//   return (
-//     <div className='h-screen bg-primaryColor flex flex-col'>
-//       <div className="flex w-full justify-between px-2 py-3">
-//         <button onClick={() => navigate('/')}>
-//           <ArrowLeft className='text-white' />
-//         </button>
-//         <Link to={`/group/${id}/settings`} state={{ color: groupColor,imageURL }}>
-//           <Settings className='text-white hover:text-textColor' />
-//         </Link>
-//       </div>
-
-//      <div className="relative px-4 pt-3 flex items-center">
-//         <div className="w-14 h-14 rounded-2xl mr-4">
-//           <ImageOrIcon
-//             imageURL={imageURL}
-//             icon={CiViewList}
-//             className='w-full h-full object-cover rounded-2xl text-white'
-//           />
-//         </div>
-
-//         <div>
-//           <h1 className="text-lg text-white font-nunito">{group?.name}</h1>
-//           <h2 className="text-sm text-white font-nunito">{group?.description}</h2>
-//         </div>
-//       </div>
-      
-      
-//       {groupState?.map((item, index) => (
-//     <div key={index} className="mt-1">
-//         <p>Type:
-//             <span
-//                 className='text-white font-nunito text-sm font-bold'
-//                 style={{
-//                     color: item.expense.type === "DEBT"
-//                         ? (item.expense.total === 0 ? 'white' : '#09B83E')
-//                         : (item.expense.type === "BALANCED" ? 'white' : 'red')
-//                 }}
-//             >
-//                 {item.expense.type === "DEBT"
-//                     ? `${item.user.name}Lent ₹${item.expense.total.toFixed(2)}`
-//                     : item.expense.type === "BALANCED"
-//                         ? `${item.user.name} and you are balanced`
-//                         : `${item.user.name} Borrowed ₹${item.expense.total.toFixed(2)}`}
-//             </span>
-//         </p>
-//     </div>
-// ))}
-//          <div className='px-9 pt-3'>
-//             <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white' onClick={() => navigate(`/group/${id}/expense/settlebalance`) }>Settle up</button>
-//         </div>
-//       <div className="flex-1 overflow-y-auto px-3 py-4 mb-20">
-//         {expenses.map((expense) => {  
-//         const date = new Date(expense.date);
-//         const month = date.toLocaleString('default', { month: 'short' });
-//         const year = date.getFullYear();
-//         const day = date.getDate();
-
-//         const createdAtDate = new Date(expense.created_at);
-//         const createdAtMonth = createdAtDate.toLocaleString('default', { month: 'short' });
-//         const createdAtYear = createdAtDate.getFullYear();
-//         const createdAtDay = createdAtDate.getDate();
-
-//         const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
-//         const ownedAmount = userExpense ? userExpense.owned_amount : 0;
-
-//         // Find the user who paid the amount
-//         const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
-
-//         // Handling settlements
-//         if (expense.type === "SETTLEMENT") {
-//           const settlement = expense.settlements[0]; // Assuming there's only one settlement per expense
-//           const payerName = settlement.payer_user_id === expense.user.id ? expense.user.name : "Unknown";
-//           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
-
-//           return (
-            
-//             <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-//               <Link to={`/group/${id}/settlement`}>
-//                   <div className="flex flex-col gap-4">
-//                     <div className="flex items-center justify-between">
-//                       <h2 className="font-bold font-nunito text-base text-white">
-//                         {day}-{month}-{year}
-//                       </h2>
-//                     </div>
-//                     <div className="flex flex-col">
-//                       {/* <h3 className="text-white font-nunito text-base">{payerName} paid to {payeeName} ₹{settlement.amount.toFixed(2)}</h3> */}
-//                       <div className="flex items-center gap-1">
-//                         <Banknote className="text-green-500" />
-//                         <span className="text-white font-nunito text-base">
-//                           {payerName} paid to {payeeName} ₹{settlement.amount.toFixed(2)}
-//                         </span>
-//                       </div>
-//                     </div>
-//                     <div>
-//                       <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
-//                     </div>
-//                     </div>
-//                 </Link>
-//             </div>
-//           );
-//         }
-
-//   return (
-//     <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-//       <Link to={`/group/${id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
-//         <div className="flex flex-col gap-4">
-//           <div className="flex items-center justify-between">
-//             <h2 className="font-bold font-nunito text-base text-white">
-//               {day}-{month}-{year}
-//             </h2>
-//             <span className="font-bold font-nunito text-sm text-trashColor">
-//               you borrow: ₹{ownedAmount.toFixed(2)}
-//             </span>
-//           </div>
-//           <div className="flex flex-col">
-//             <h3 className="text-white font-nunito text-base">{expense.description}</h3>
-//             <h4 className="text-white font-nunito text-base">
-//               {payer} paid ₹{expense.amount.toFixed(2)}
-//             </h4>
-//           </div>
-//           <div>
-//             <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
-//           </div>
-//         </div>
-//       </Link>
-//     </div>
-//   );
-// })}
-
-//       </div>
-
-//       <Link to={`/group/${id}/addexpense`}>
-//         <button className='fixed bottom-20 right-5 text-black w-40 bg-buttonColor font-bold gap-1 py-2 flex justify-center items-center rounded-full'>
-//           <ReceiptText className='text-black'/>Add expense
-//         </button>
-//       </Link>
-      
-//       <div className="flex justify-around w-full border-t-2 border-white  fixed bottom-0 bg-primaryColor p-2">
-//         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
-//           <UsersRound className={`size-5 ${isActive('/')}`} />
-//           <span className={`flex justify-start text-base ${isActive('/')}`}>Groups</span>
-//         </button>
-//         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
-//           <UserRound className={`size-5 ${isActive('/friends')}`} />
-//           <span className={`flex justify-start text-base ${isActive('/friends')}`}>Friends</span>
-//         </button>
-//         <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-//           <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-//           <span className={`flex justify-start text-base ${isActive('/accounts')}`}>Account</span>
-//         </button>
-//       </div>
-//       {modals && selectedExpense && (
-//         <GroupExpenseUpdate
-//           modals={modals}
-//           setModals={setModals}
-//           expense={selectedExpense}
-//         />
-//       )}
-//     </div>
-//   );
-
-
-
-        {/* {expenses.map((expense) => {
-          const date = new Date(expense.date);
-          const month = date.toLocaleString('default', { month: 'short' });
-          const year = date.getFullYear();
-          const day = date.getDate();
-
-          const createdAtDate = new Date(expense.created_at);
-          const createdAtMonth = createdAtDate.toLocaleString('default', { month: 'short' });
-          const createdAtYear = createdAtDate.getFullYear();
-          const createdAtDay = createdAtDate.getDate();
-
-          const userExpense = userId ? expense.user_expenses.find(ue => ue.user_id === userId) : null;
-          const ownedAmount = userExpense ? userExpense.owned_amount : 0;
-
-          // Find the user who paid the amount
-          const payer = expense.user.id === expense.payer_user_id ? expense.user.name : "Unknown";
-
-          return (
-            <div key={expense.id} className="my-4 p-2 bg-stone-700 bg-opacity-30 border border-white border-opacity-20 backdrop-blur-lg shadow-lg rounded-lg">
-              <Link to={`/group/${id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-bold font-nunito text-base text-white">
-                      {day}-{month}-{year}
-                    </h2>
-                    <span className="font-bold font-nunito text-sm text-trashColor">
-                      you borrow: ₹{ownedAmount.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-white font-nunito text-base">{expense.description}</h3>
-                    <h4 className="text-white font-nunito text-base">
-                      {payer} paid ₹{expense.amount.toFixed(2)}
-                    </h4>
-                  </div>
-                  <div>
-                    <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          );
-        })} */}
