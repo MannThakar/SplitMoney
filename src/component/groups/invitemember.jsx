@@ -100,10 +100,7 @@ const GroupInvite = () => {
             navigate('/signin');
 
         }
-
-
     }, [accessToken]);
-
     async function checkInvitation() {
         try {
             const response = await axios.post(
@@ -116,7 +113,6 @@ const GroupInvite = () => {
                     }
                 }
             );
-
             if (response.status == 200) {
                 if (accessToken) {
                     toast.success(response.data.message);
