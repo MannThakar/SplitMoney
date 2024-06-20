@@ -197,6 +197,7 @@ const GroupInfo = () => {
           const settlement = expense.settlements[0];
           const payerName = settlement.payer_user_id === expense.user.id ? expense.user.name : "Unknown";
           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
+
       
           return (
             <div key={expense.id} className="my-4 p-2  text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
@@ -283,4 +284,6 @@ const GroupInfo = () => {
   </div>
   );
 };
+
 export default GroupInfo;
+
