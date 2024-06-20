@@ -197,40 +197,36 @@ const GroupInfo = () => {
           const settlement = expense.settlements[0];
           const payerName = settlement.payer_user_id === expense.user.id ? expense.user.name : "Unknown";
           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
+      
           return (
-              <div key={expense.id} className="my-4 p-2 text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg ">
-                <Link to={`/group/${id}/settlement`}>
-
-                  <div className="flex items-center justify-between lg:flex lg:justify-between lg:items-center gap-4">
-                    <div id="date">
-                      <h2 className="text-white flex flex-col">
-                        <h2>{day}</h2>
-                        <h2>{month}</h2>
-                        <h2>{year}</h2>
-                      </h2>
+            <div key={expense.id} className="my-4 p-2  text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
+              <Link to={`/group/${id}/settlement`}>
+                <div className="flex justify-center items-center lg:flex-row lg:items-center lg:justify-between gap-4">
+                  <div id="date" className="text-center lg:text-left">
+                    <div className="flex flex-col items-center justify-center lg:order-1">
+                      <span className="text-white">{day}</span>
+                      <span className="text-white">{month}</span>
+                      <span className="text-white">{year}</span>
                     </div>
-                    <div id="data" className="flex flex-col">
-                      <div className="flex  gap-1 flex-col">
-                        {/* <Banknote className="text-green-500 h-12 w-12" /> */}
-                        <span className="text-white flex lg:justify-center lg:items-center gap-2">
-                          <Banknote className='text-green-500 h-10 w-10 flex items-center'/>{payerName} paid to {payeeName} ₹{settlement.amount.toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                    {/* <div id="amount" className="text-base text-white">
-                      <h2 className='font-nunito text-white text-sm'>Created at: {createdAtDay}-{createdAtMonth}-{createdAtYear}</h2>
-                    </div> */}
                   </div>
-                </Link>
-              </div>
-            );
+                  <div id="data" className="flex flex-col items-center lg:items-center lg:flex-grow lg:justify-center">
+                    <div className="flex gap-1 flex-col">
+                      <span className="text-white flex justify-center items-center lg:justify-center gap-2">
+                        <Banknote className='text-green-500 h-7 w-7' /> {payerName} paid to {payeeName} ₹{settlement.amount.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          );
         }
         const isPayerAndUser = userId === expense.user.id && userId === expense.payer_user_id;
         const amountToShow = isPayerAndUser ? expense.you_lent : expense.user_expenses.find(ue => ue.user_id === userId)?.owned_amount || 0;
         const textColor = isPayerAndUser ? 'text-green-500' : 'text-red-500';
 
      
-return (
+  return (
   <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
     <Link to={`/group/${expense.group_id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
       <div className="flex flex-col lg:flex-row gap-4">
@@ -288,4 +284,3 @@ return (
   );
 };
 export default GroupInfo;
-//sd
