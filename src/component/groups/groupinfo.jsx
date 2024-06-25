@@ -10,6 +10,7 @@ import { ArrowLeft, Settings, UsersRound, UserRound, CircleUserRound, ReceiptTex
 import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 import { CiViewList } from "react-icons/ci";
 import SplashScreen from '../utils/splashscreen';
+import Footer from '../ui/footer'
 
 const GroupInfo = () => {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ const GroupInfo = () => {
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [userId, setUserId] = useState(null); // Add state for user ID
   const [groupState, setGroupState] = useState([]);
-  const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
   const groupColor = location.state?.color || '#7c3aed'; // Default color if none is passed
   const imageURL = location.state?.img ;
     const ImageOrIcon = ({ imageURL, icon: Icon, className }) => {
@@ -199,7 +199,7 @@ const GroupInfo = () => {
           const payeeName = settlement.payee_id === settlement.payee.id ? settlement.payee.name : "Unknown";
       
           return (
-            <div key={expense.id} className="my-4 p-2  text-sm font-nunito font-medium bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
+            <div key={expense.id} className="my-4 p-2  text-sm font-nunito font-medium bg-stone-600 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
               <Link to={`/group/${id}/settlement`}>
                 <div className="flex justify-center items-center lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div id="date" className="text-center lg:text-left">
@@ -223,11 +223,11 @@ const GroupInfo = () => {
         }
         const isPayerAndUser = userId === expense.user.id && userId === expense.payer_user_id;
         const amountToShow = isPayerAndUser ? expense.you_lent : expense.user_expenses.find(ue => ue.user_id === userId)?.owned_amount || 0;
-        const textColor = isPayerAndUser ? 'text-green-500' : 'text-red-500';
+        const textColor = isPayerAndUser ? 'text-lentColor' : 'text-borrowColor';
 
      
   return (
-  <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-700 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
+  <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-600 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
     <Link to={`/group/${expense.group_id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex lg:flex-row w-full gap-5 lg:items-center">
@@ -238,7 +238,7 @@ const GroupInfo = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center lg:order-2 lg:flex-grow lg:items-center">
-            <h3 className="text-white line-clamp-1 break-all text-center">{expense.description}</h3>
+            <span className="text-white flex justify-start items-start line-clamp-1 break-all text-center">{expense.description}</span>
             <h4 className="text-white text-center">{expense.user.name} paid ₹{expense.amount.toFixed(2)}</h4>
           </div>
 
@@ -259,20 +259,7 @@ const GroupInfo = () => {
       </button>
     </Link>
 
-    <div className="flex justify-around w-full border-t-2 border-white fixed bottom-0 bg-primaryColor p-2">
-      <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
-        <UsersRound className={`size-5 ${isActive('/')}`} />
-        <span className={`flex justify-start text-base ${isActive('/')}`}>Groups</span>
-      </button>
-      <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
-        <UserRound className={`size-5 ${isActive('/friends')}`} />
-        <span className={`flex justify-start text-base ${isActive('/friends')}`}>Friends</span>
-      </button>
-      <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-        <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-        <span className={`flex justify-start text-base ${isActive('/accounts')}`}>Account</span>
-      </button>
-    </div>
+    <Footer/>
     {modals && selectedExpense && (
       <GroupExpenseUpdate
         modals={modals}

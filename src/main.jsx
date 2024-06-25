@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './component/utils/auth.jsx';
 import { GroupProvider } from './component/auth/groupcontext.jsx';
 
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <AuthProvider>
@@ -16,6 +15,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </BrowserRouter>
   </GroupProvider>
     </AuthProvider>
-    //  </React.StrictMode>  
+    //   </React.StrictMode> 
     
 )

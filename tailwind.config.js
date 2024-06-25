@@ -34,8 +34,8 @@ export default {
 				highlightColor: "#FFD700",
 				boxColor: "#857f95",
 				trashColor: "#FF0000",
-				// trashColor: "#D50000",
-				lentColor: "#09B83E"
+				lentColor: "#09B83E",
+				borrowColor: "#FF0000"
 			},
 		},
 

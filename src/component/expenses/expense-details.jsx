@@ -8,9 +8,9 @@ import GroupExpenseUpdate from "../../component/modal/groupexpenseupdate";
 import { toast } from 'react-toastify';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import SplashScreen from '../utils/splashscreen';
 import DeleteConfirmation from '../modal/delete-confirmation';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-import SplashScreen from '../utils/splashscreen';
 
 const ExpenseDetail = () => {
     const location = useLocation();
@@ -23,6 +23,7 @@ const ExpenseDetail = () => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [expenseToDelete, setExpenseToDelete] = useState(null);
     const expenseId = location.pathname.split("/")[4];
+    const [loading,setLoading] = useState(true);
 
     const fetchExpenseDetailgroup = useCallback(async () => {
         try {
@@ -105,6 +106,13 @@ const ExpenseDetail = () => {
         fetchExpenseDetailgroup();
     }, [isUpdate]);
 
+      function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
     const generateChartData = (userExpenses) => {
         const labels = userExpenses.map(ue => ue.user.name);
         const data = userExpenses.map(ue => ue.owned_amount);
@@ -138,6 +146,7 @@ const ExpenseDetail = () => {
 
     return (
         <div className='bg-primaryColor h-svh px-2 flex flex-col'>
+         
             <div className='py-3 flex items-center'>
                 <div className='flex items-center gap-2'>
                     <button  onClick={() => navigate(`/group/${id}`)}>
@@ -147,17 +156,15 @@ const ExpenseDetail = () => {
                 </div>
 
             </div>
-            {/* <div className="py-2">
-              <button className='font-nunito w-20 font-bold rounded-lg py-2 text-black bg-white hover:bg-opacity-80 transition duration-75 ease-in-out hover:scale-105 hover:font-extrabold' onClick={() => navigate(`/group/${id}/expense/${expenseId}/settlebalance`)}>Settle up</button>
-            </div> */}
-
-             
+        
             {details && (
+                 
                 <div className='p-2 rounded-lg bg-stone-700 bg-opacity-30 border border-white border-opacity-20 flex-grow shadow-lg'>
                     <h1 className='text-white mb-1 font-nunito font-bold'>Description: {details.description}</h1>
-                    <h2 className='text-white mb-1 font-nunito font-bold'>Paid by {details.user.name}: <span className='text-lentColor font-nunito text-lg ml-1'>{details.amount}</span></h2>
+                    <h2 className='text-white mb-1 font-nunito font-bold'>Paid by {details.user.name}: <span className='text-lentColor font-nunito font-normal text-lg'>{details.amount}</span></h2>
                     <div className='space-y-2'>
                         <h2 className='text-white font-nunito font-bold'>User Expenses</h2>
+                        <h3 className='text-white font-nunito font-bold'>Created At:<span className='ml-1'>{formatDate(details.user.created_at)}</span></h3>
                         <div className='space-y-3'>
                             {details.user_expenses.map((userExpense, index) => {
                                 const isPayerUser = details.payer_user_id === userExpense.user.id;
@@ -166,12 +173,12 @@ const ExpenseDetail = () => {
                                     <div key={index} className='p-1 rounded-md mb-2 bg-stone-600 bg-opacity-50'>
                                         <p className='text-white font-bold'>
                                             {isPayerUser ? `${userExpense.user.name} paid: ` : `${userExpense.user.name} borrowed: `}
-                                            <span className={`font-medium text-lg`} style={{ color: textColor }}>
+                                            <span className={`font-normal text-lg`} style={{ color: textColor }}>
                                                 {userExpense.owned_amount.toFixed(2)}
                                             </span>
                                         </p>
                                     </div>
-                                );
+                            );
                             })}
                         </div>
                          <div className='overflow-x-auto overflow-y-hidden'>
@@ -256,6 +263,8 @@ const ExpenseDetail = () => {
                     )}
                 </div>
             )}
+          
+         
             {details && (
                 <div className='flex justify-center items-center gap-5 my-1 md:my-2 '>
                     <button className="flex justify-center font-nunito items-center gap-2 text-white h-8 w-16 rounded-md bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform" onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`)} >
