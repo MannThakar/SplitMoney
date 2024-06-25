@@ -12,7 +12,7 @@
 //   const [isLoading, setIsLoading] = useState(false);
 //   const navigate = useNavigate();
 //   const location = useLocation();
-  
+
 //   const { selectedMemberIDs, amounts, tab } = location.state || { selectedMemberIDs: {}, amounts: {}, tab: 'equally' };
 //   const [initialValues, setInitialValues] = useState({
 //     description: '',
@@ -21,7 +21,7 @@
 //     type:'',
 //   });
 //   const [type, setType] = useState(tab.toUpperCase());
- 
+
 //   useEffect(() => {
 //     const expenseId = location.pathname.split("/")[4];
 //     localStorage.setItem('expenseId',expenseId);
@@ -190,9 +190,9 @@ function GroupExpenseUpdate() {
   const location = useLocation();
   const { state } = location;
   const [members, setMembers] = useState([]);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  
+
   const { selectedMemberIDs = {}, amounts = {}, tab = 'equally' } = location.state || {};
   const { user_id = {}, selectedMemberName = 'you' } = state || { user_id: {}, tab: 'equally', selectedMemberName: 'you' };
   const payerUserData = JSON.parse(localStorage.getItem('payer_user_id'));
@@ -204,7 +204,7 @@ function GroupExpenseUpdate() {
 
 
 
-  console.log('memberid:::::',user_id,selectedMemberName);
+  console.log('memberid:::::', user_id, selectedMemberName);
   const [initialValues, setInitialValues] = useState({
     description: '',
     amount: '',
@@ -212,7 +212,7 @@ function GroupExpenseUpdate() {
     type: '',
   });
   const [type, setType] = useState(tab.toUpperCase());
- 
+
   useEffect(() => {
     const expenseId = location.pathname.split("/")[4];
     localStorage.setItem('expenseId', expenseId);
@@ -222,7 +222,7 @@ function GroupExpenseUpdate() {
   const id = location.pathname.split("/")[2];
 
   const validationSchema = Yup.object().shape({
-    description: Yup.string().required('Description is required').max(20,'Description cannot exceed 20 characters'),
+    description: Yup.string().required('Description is required').max(20, 'Description cannot exceed 20 characters'),
     amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer').test('len', 'Amount must be at most 7 digits', val => val && val.toString().length <= 7),
     date: Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
   });
@@ -271,8 +271,15 @@ function GroupExpenseUpdate() {
 
   useEffect(() => {
     fetchExpenseDetail();
-      handleSelectClick();
+    handleSelectClick();
   }, []);
+  //Handle inputed number
+  const handleAmountChange = (e, handleChange) => {
+    const { value } = e.target;
+    if (value.length <= 7) {
+      handleChange(e);
+    }
+  }
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setIsLoading(true);
@@ -292,7 +299,7 @@ function GroupExpenseUpdate() {
         : [];
     }
 
-    console.log("user_expenses::::::::::",userExpenses)
+    console.log("user_expenses::::::::::", userExpenses)
     try {
       const response = await axios.put(`${import.meta.env.VITE_API}/expenses/${expenseId}`,
         {
@@ -302,7 +309,7 @@ function GroupExpenseUpdate() {
           description: values.description,
           date: values.date,
           user_expenses: userExpenses,
-          payer_user_id:uid || payerUserId
+          payer_user_id: uid || payerUserId
         },
         {
           headers: {
@@ -321,7 +328,7 @@ function GroupExpenseUpdate() {
         toast.error(error.response.data.message);
       } else if (error.response && error.response.status === 500) {
         toast.error(error.response.data.message);
-      } else if (error.response && error.response.status === 422) { 
+      } else if (error.response && error.response.status === 422) {
         toast.error(error.response.data.message);
       } else {
         toast.error(error);
@@ -332,7 +339,7 @@ function GroupExpenseUpdate() {
   };
 
 
-    const handleSelectChange = (event) => {
+  const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
     const selectedText = event.target.options[0].text; // Get text of the first option
     setSelectedCar(selectedValue);
@@ -367,7 +374,7 @@ function GroupExpenseUpdate() {
             <div className="flex gap-3 justify-center items-center my-3">
               <IndianRupee className='text-white' />
               <Field type="number" id="amount" name="amount" className="border-b w-full max-w-xs border-gray-400 focus:outline-none bg-transparent text-white"
-                placeholder="0.00" onChange={(e) => handleAmountChange(e,handleChange)} maxLength={5} />
+                placeholder="0.00" onChange={(e) => handleAmountChange(e, handleChange)} maxLength={5} />
             </div>
             <div className="flex justify-start pl-8 md:pl-20">
               <ErrorMessage name="amount" component="div" className="text-sm text-red-500" />
@@ -389,32 +396,32 @@ function GroupExpenseUpdate() {
           </Form>
         )}
       </Formik>
-      
+
       <div className="mt-6 md:flex md:justify-center flex justify-center">
         <div>
-            <span className='text-base font-nunito text-white'>Paid by
-              <select
-                id="mySelect"
-                /* onClick={handleSelectClick} */
-                onChange={handleSelectChange}
-                value={selectedCar}
-                disabled={loading} // Disable dropdown while loading
-                className='text-black min-w-24  max-w-24 rounded m-1'
-              >
+          <span className='text-base font-nunito text-white'>Paid by
+            <select
+              id="mySelect"
+              /* onClick={handleSelectClick} */
+              onChange={handleSelectChange}
+              value={selectedCar}
+              disabled={loading} // Disable dropdown while loading
+              className='text-black min-w-24  max-w-24 rounded m-1'
+            >
 
-                {loading ? (
-                  <option>Loading...</option>
-                ) : (
-                  members.map((member) => (
-                    <option key={member.id} value={member.id}>
-                      {member.name}
-                    </option>
-                  ))
-                )}
-              </select>
-              <span> and split </span><Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">{tab ? tab.toLowerCase() : 'equally'}</Link>
-            </span>
-          </div>
+              {loading ? (
+                <option>Loading...</option>
+              ) : (
+                members.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.name}
+                  </option>
+                ))
+              )}
+            </select>
+            <span> and split </span><Link to={`/group/${id}/addexpense/adjustamount`} className="bg-white text-black rounded px-2">{tab ? tab.toLowerCase() : 'equally'}</Link>
+          </span>
+        </div>
         {/* <span className='text-base text-white font-nunito'>
           Paid by <Link className="bg-white text-black rounded px-2" to={`/group/${id}/expense/${expenseId}/expensedetails/updatepayer`}>{user_name}</Link> and split <Link to={`/group/${id}/expense/${expenseId}/expensedetails/editexpense/updateamount`} className="bg-white text-black rounded px-2">{tab === 'equally' ? 'equally' : 'unequally'}</Link>
         </span> */}

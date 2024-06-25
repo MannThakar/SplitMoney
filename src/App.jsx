@@ -29,7 +29,7 @@ import SettleBalance from "../src/component/expenses/settle-balance";
 import RecordPayment from "../src/component/expenses/record-payment";
 import UpdatePaying from "../src/component/expenses/updatepaying";
 import Settlement from "../src/component/expenses/settlement";
-  
+
 function App() {
   return (
     <>
