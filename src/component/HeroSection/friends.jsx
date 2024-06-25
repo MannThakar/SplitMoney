@@ -6,6 +6,7 @@ import { ArrowLeft, User, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UsersRound, UserRound, CircleUserRound } from 'lucide-react';
 import axios from 'axios';
+import Footer from '../ui/footer';
 
 const Friends = () => {
     const [group, setGroup] = useState([]);
@@ -14,11 +15,8 @@ const Friends = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [perPage, setPerPage] = useState(5);
     const [totalFriends, setTotalFriends] = useState(null);
-
     const navigate = useNavigate();
     const observer = useRef();
-
-    const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
 
     const getGroupApi = async (page, limit) => {
         setLoading(true); // Set loading to true before making the API call
@@ -121,22 +119,7 @@ const Friends = () => {
                 {loading && renderSkeletons()}
             </div>
 
-            <div className="flex justify-around w-full border-t-2  border-white fixed bottom-0 bg-primaryColor p-2">
-                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
-                    <UsersRound className={`size-5 ${isActive('/')}`} />
-                    <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
-                </button>
-
-                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
-                    <UserRound className={`size-5 ${isActive('/friends')}`} />
-                    <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
-                </button>
-
-                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-                    <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-                    <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
-                </button>
-            </div>
+        <Footer/>
         </div>
     );
 }

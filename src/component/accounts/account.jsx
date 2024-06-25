@@ -7,11 +7,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import LogoutModal from '../modal/logoutmodal';
 import SplashScreen from '../utils/splashscreen';
+import Footer from '../ui/footer';
 
 const Account = () => {
-    // function to check if the path is active
-    const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
-
     // get the id from the url
     const { id } = useParams();
     const [modal, setModal] = useState(false);
@@ -173,20 +171,7 @@ const Account = () => {
                     setIsEdit={setIsEdit}
                 />
             )}
-            <div className="flex justify-around w-full border-t-2 border-white fixed bottom-0 bg-primaryColor p-2">
-                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
-                    <UsersRound className={`size-5 ${isActive('/')}`} />
-                    <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
-                </button>
-                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
-                    <User className={`size-5 ${isActive('/friends')}`} />
-                    <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
-                </button>
-                <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-                    <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-                    <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
-                </button>
-            </div>
+           <Footer/>
         </div>
     );
 };
