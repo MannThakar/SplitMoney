@@ -126,7 +126,12 @@ const Settings = ({ onClose }) => {
             res.status === 200 ? toast.success(res.data.message) : toast.error(res.data.message);
             navigate('/');
         } catch (error) {
-            toast.error("An error occurred. Please try again later.");
+            
+            if(error.res && error.res.status === 400 ){
+                toast.error(error.res.data.message);
+            }else{
+                toast.error("An error occurred. Please try again later.");
+            }
         }
         setShowDeleteConfirmation(false);
     };

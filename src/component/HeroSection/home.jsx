@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { Users, UserRound, CircleUserRound } from 'lucide-react';
 import { CiViewList } from "react-icons/ci";
 import SplashScreen from '../utils/splashscreen';
+import Footer from '../ui/footer';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,16 +17,14 @@ const Home = () => {
   const [userid,setUserId] = useState(null);
   const colors = ["#7c3aed", "#0891b2", "#16a34a", "#ea580c"];
 
-  const isActive = (path) => location.pathname === path ? 'text-highlightColor' : 'text-white';
-
   const getOverallText = (overall, overall_type) => {
     switch (overall_type) {
       case 'Balanced':
         return <p className='px-4' style={{ color: 'white' }}>Overall, you are balanced with ₹{overall.toFixed(2)}</p>;
       case 'lent':
-        return <p  className='px-4 font-medium' style={{ color: '#22C55E' }}>Overall, you are owed with ₹{overall.toFixed(2)}</p>;
+        return <p  className='px-4 font-normal' style={{ color: '#09B83E' }}>Overall, you are owed with ₹{overall.toFixed(2)}</p>;
       case 'borrowed':
-        return <p className='px-4' style={{ color: 'red' }}>Overall, you owe with ₹{overall.toFixed(2)}</p>;
+        return <p className='px-4' style={{ color: '#FF0000' }}>Overall, you owe with ₹{overall.toFixed(2)}</p>;
       case 'No Expenses':
         return <p className='px-4' style={{color:'gray'}}>no expenses</p>
       default:
@@ -107,15 +106,15 @@ const Home = () => {
                 {e.image_url == null ? (
                     <CiViewList className='text-white size-10 w-14 h-14'/>
                 ): (
-                  <img src={e.image_url} className="rounded-xl max-h-full max-w-full" />
+                  <img src={e.image_url} className="size-8 w-12 h-12 rounded-md object-cover" />
                 )}
               </div>  
           <div className="flex-1">
             <h2 className="text-lg font-semibold font-nunito text-white">{e.name}</h2>
             <div className="flex items-center gap-2">
-              <p className={`text-sm font-medium font-nunito ${
-                e.groupStatistics.type === 'borrowed' ? 'text-red-500' :
-                e.groupStatistics.type === 'lent' ? 'text-green-500' :
+              <p className={`text-sm font-normal font-nunito ${
+                e.groupStatistics.type === 'borrowed' ? 'text-borrowColor' :
+                e.groupStatistics.type === 'lent' ? 'text-lentColor' :
                 e.groupStatistics.typw === 'No Expenses'?'text-gray-500':
                 e.groupStatistics.type === 'Balanced' ? 'text-white' : 'text-white'
                 }`}>
@@ -141,20 +140,7 @@ const Home = () => {
         )}
       </div>
 
-      <div className="flex justify-around w-full border-t-2 border-white fixed bottom-0 bg-primaryColor p-2">
-        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/")}>
-          <Users className={`size-5 ${isActive('/')}`} />
-          <span className={`flex justify-start text-base font-nunito ${isActive('/')}`}>Groups</span>
-        </button>
-        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/friends")}>
-          <UserRound className={`size-5 ${isActive('/friends')}`} />
-          <span className={`flex justify-start text-base font-nunito ${isActive('/friends')}`}>Friends</span>
-        </button>
-        <button className="flex flex-col justify-center items-center" onClick={() => navigate("/accounts")}>
-          <CircleUserRound className={`size-5 ${isActive('/accounts')}`} />
-          <span className={`flex justify-start text-base font-nunito ${isActive('/accounts')}`}>Account</span>
-        </button>
-      </div>
+    <Footer/>
     </div>
   );
 };

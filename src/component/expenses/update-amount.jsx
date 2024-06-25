@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import { useNavigate, useParams,useLocation } from 'react-router-dom';
 import { ArrowLeft, User, IndianRupee } from 'lucide-react';
@@ -14,6 +15,10 @@ const UpdateAmount = () => {
   const [amounts, setAmounts] = useState({});
   const location = useLocation();
   const expenseId = location.pathname.split("/")[4];
+   const expenseFormData = JSON.parse(localStorage.getItem('expenseFormData'));
+   const { amount } = expenseFormData || {}; 
+  var price = 0, finalAmount = 0;
+  const [continues, setContinue] = useState(true);
 
   const viewMember = useCallback(async () => {
     try {
@@ -32,6 +37,36 @@ const UpdateAmount = () => {
   useEffect(() => {
     viewMember();
   }, [viewMember]);
+
+  const calculateTotalAmount = () => {
+    const total = Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
+
+    if (total > amount) {
+      console.error('Total exceeds the specified amount');
+      finalAmount = amount - total;
+      return finalAmount;
+    }
+
+    return total;
+  };
+
+   useEffect(() => {
+    if (tab === 'unequally') {
+      const total = calculateTotalAmount();
+      setContinue(total === amount);
+    }
+  }, [amounts, amount, tab]);
+  useEffect(() => {
+  // Retrieve the saved amounts from localStorage
+  const savedAmounts = {};
+  members.forEach((member) => {
+    const savedAmount = localStorage.getItem(`unequallyAmount_${member.id}`);
+    if (savedAmount) {
+      savedAmounts[member.id] = savedAmount;
+    }
+  });
+  setAmounts(savedAmounts);
+}, [members]);
 
   const handleCheckboxChange = (memberId) => {
     setSelectedMemberIDs((prevSelectedMemberIDs) => ({
@@ -64,9 +99,9 @@ const UpdateAmount = () => {
     }
   };
 
-  const calculateTotalAmount = () => {
-    return Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
-  };
+  // const calculateTotalAmount = () => {
+  //   return Object.values(amounts).reduce((total, amount) => total + parseFloat(amount || 0), 0);
+  // };
 
   return (
     <div className="bg-primaryColor h-svh">
@@ -141,20 +176,36 @@ const UpdateAmount = () => {
               </div>
             </div>
           ))}
-          <div className="mt-4 text-white text-lg flex justify-end">
-            Total Amount: <span className='font-bold text-xl font-nunito'>{calculateTotalAmount()}</span>
+         <div className="mt-4 text-white flex justify-end">
+            <span className='pr-1'>{price = calculateTotalAmount()}</span> of {Math.abs(amount)}
+
           </div>
+          <div className='text-red-400 fixed float-right'>{
+            price < 0 ? `Amount exceeds the total amount by ${Math.abs(price)}` : ''}
+            </div>
         </div>
       )}
 
-      <div className="mt-6 flex justify-center">
-        <button
-          onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`, { state: { selectedMemberIDs, amounts, tab } })}
-          className="py-2 w-1/4 md:w-1/12  bg-buttonColor text-black rounded-md"
-        >
-          Continue
-        </button>
+       <div className="mt-8 flex justify-center">
+        {tab === 'equally' ? (
+          <button
+            onClick={() => navigate(`/group/${id}/addexpense, { state: { selectedMemberIDs, amounts, tab }}`)}
+            className="py-2 w-1/4 md:w-1/12 bg-buttonColor text-black rounded-md"
+          >
+            Continue
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts, tab } })}
+            className={`py-2 w-1/4 md:w-1/12 rounded-md ${continues ? 'bg-buttonColor text-black' : 'bg-gray-400 text-gray-700 cursor-not-allowed opacity-50'}`}
+            disabled={!continues}
+          >
+            Continue
+          </button>
+        )}
       </div>
+
+
     </div>
   );
 };
