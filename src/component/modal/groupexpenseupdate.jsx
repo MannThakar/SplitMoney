@@ -305,11 +305,14 @@ function GroupExpenseUpdate() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
   const { selectedMemberIDs = {}, amounts = {}, tab = 'equally' } = location.state || {};
   const { user_id = {}, selectedMemberName = 'you' } = state || { user_id: {}, tab: 'equally', selectedMemberName: 'you' };
   const payerUserData = JSON.parse(localStorage.getItem('payer_user_id'));
   const payerUserId = payerUserData ? payerUserData.user_id || user_id : user_id;
   const [selectedCar, setSelectedCar] = useState('you');
+  const [payerUser, setPayerUserId] = useState(user_id);
+
 
   const [initialValues, setInitialValues] = useState({
     description: '',
@@ -340,12 +343,13 @@ function GroupExpenseUpdate() {
           Authorization: `Bearer ${localStorage.getItem("Token")}`,
         },
       });
-      setInitialValues({
-        description: response.data.description,
-        amount: response.data.amount,
-        date: response.data.date,
-        type: response.data.type,
-      });
+      const savedData = JSON.parse(localStorage.getItem('formData'));
+      setInitialValues(prevValues => ({
+        description:savedData?.description || response.data.description,
+        amount:savedData?.amount || response.data.amount,
+        date: savedData?.date || response.data.date,
+        type:savedData?.type || response.data.type
+      }))
     } catch (error) {
       console.log(error);
     }
@@ -468,11 +472,12 @@ function GroupExpenseUpdate() {
 
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
-    const selectedText = event.target.options[event.target.selectedIndex].text;
+    const selectedText = event.target.options[event.target.selectedIndex];
     setSelectedCar(selectedValue);
-    localStorage.setItem('payer_user_id', JSON.stringify({ user_id: selectedValue, selectedMemberName: selectedText }));
-  };
+    setPayerUserId(selectedValue);
+    localStorage.getItem('payer_user_id', JSON.stringify({ user_id: selectedValue, selectedMemberName: selectedText }));
 
+  };
   const formData = localStorage.getItem('formData');
   return (
     <div className='bg-primaryColor h-screen px-3 flex flex-col items-center'>
@@ -552,10 +557,11 @@ function GroupExpenseUpdate() {
               <select
                 id="mySelect"
                 onChange={handleSelectChange}
-                value={selectedCar}
+                value={selectedCar || ""}
                 disabled={loading}
                 className='text-black min-w-24  max-w-24 rounded m-1'
               >
+                <option value="" disabled>Select a member</option>
                 {loading ? (
                   <option>Loading...</option>
                 ) : (
@@ -564,7 +570,7 @@ function GroupExpenseUpdate() {
                       {member.name}
                     </option>
                   ))
-                )}
+                )}  
               </select>
               <span> and split </span><Link to={`/group/${id}/expense/${expenseId}/edit/type`} className="bg-white text-black rounded px-2">{tab ? tab.toLowerCase() : 'equally'}</Link>
             </span>
