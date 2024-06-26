@@ -106,7 +106,7 @@ const UpdateAmount = () => {
   return (
     <div className="bg-primaryColor h-svh">
       <div className='py-3 px-2 flex justify-between'>
-        <button className='flex gap-2' onClick={() => navigate(-1)}>
+        <button className='flex gap-2' onClick={() => navigate(-1,localStorage.getItem('updateForm'))}>
           <ArrowLeft className='text-white' />
           <h2 className='text-white text-lg font-nunito'>Adjust split</h2>
         </button>
@@ -189,14 +189,14 @@ const UpdateAmount = () => {
        <div className="mt-8 flex justify-center">
         {tab === 'equally' ? (
           <button
-            onClick={() => navigate(`/group/${id}/addexpense, { state: { selectedMemberIDs, amounts, tab }}`)}
+            onClick={() => navigate(`/group/${id}/expense/${expenseId}/edit`, { state: { selectedMemberIDs, amounts, tab }})}
             className="py-2 w-1/4 md:w-1/12 bg-buttonColor text-black rounded-md"
           >
             Continue
           </button>
         ) : (
           <button
-            onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts, tab } })}
+            onClick={() => navigate(`/group/${id}/expense/${expenseId}/edit`, { state: { selectedMemberIDs, amounts, tab } })}
             className={`py-2 w-1/4 md:w-1/12 rounded-md ${continues ? 'bg-buttonColor text-black' : 'bg-gray-400 text-gray-700 cursor-not-allowed opacity-50'}`}
             disabled={!continues}
           >

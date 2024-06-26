@@ -442,6 +442,7 @@
 
 // export default AddExpense;
 
+/* eslint-disable no-unused-vars */
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, FilePenLine, IndianRupee, Calendar } from 'lucide-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -449,7 +450,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
-import UseLocalStorage from './uselocalstorage'; // Make sure to import the custom hook
+import UseLocalStorage from './uselocalstorage'; 
 import '../../App.css';
 
 const AddExpense = () => {
@@ -484,6 +485,16 @@ const AddExpense = () => {
     handleSelectClick();
     getAccountDetail();
   }, []);
+
+  useEffect(() => {
+    const storedPayerUserId = JSON.parse(localStorage.getItem('payer_user_id'));
+    if (storedPayerUserId) {
+      setSelectedCar(storedPayerUserId.user_id);
+      setPayerUserId(storedPayerUserId.user_id);
+    }
+    handleSelectClick();
+  }, []);
+
 
   const currentDate = getCurrentDate();
 
@@ -523,7 +534,7 @@ const AddExpense = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate(`/group/${id}`);
-        // localStorage.removeItem('expenseFormData');
+        localStorage.removeItem('expenseFormData');
         localStorage.removeItem('payer_user_id');
       } else {
         toast.error(response.data.message);
@@ -560,10 +571,6 @@ const AddExpense = () => {
         },
       });
       setMembers(response.data.members);
-      if (response.data.members.length > 0) {
-        const defaultMember = response.data.members[0];
-        handleSelectChange({ target: { value: defaultMember.id, options: [{ text: defaultMember.name }] } });
-      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -574,6 +581,7 @@ const AddExpense = () => {
   const handleSelectClick = () => {
     if (members.length === 0) {
       fetchMembers();
+      getAccountDetail();
     }
   };
 
@@ -585,17 +593,21 @@ const AddExpense = () => {
     localStorage.setItem('payer_user_id', JSON.stringify({ user_id: selectedValue, selectedMemberName: selectedText }));
   };
 
+
   const getAccountDetail = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("Token")}`,
-        },
-      });
-      if (res.data && res.data.id) {
-        setSelectedCar(res.data.id);
-        setPayerUserId(res.data.id);
-        localStorage.setItem('payer_user_id', JSON.stringify({ user_id: res.data.id, selectedMemberName: res.data.name }));
+      const storedPayerUserId = JSON.parse(localStorage.getItem('payer_user_id'));
+      if (!storedPayerUserId) {
+        const res = await axios.get(`${import.meta.env.VITE_API}/me`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("Token")}`,
+          },
+        });
+        if (res.data && res.data.id) {
+          setSelectedCar(res.data.id);
+          setPayerUserId(res.data.id);
+          localStorage.setItem('payer_user_id', JSON.stringify({ user_id: res.data.id, selectedMemberName: res.data.name }));
+        }
       }
     } catch (error) {
       console.log('Error fetching data:', error);
@@ -664,10 +676,11 @@ const AddExpense = () => {
           <select
             id="mySelect"
             onChange={handleSelectChange}
-            value={selectedCar}
-            disabled={loading} // Disable dropdown while loading
-            className='text-black min-w-24  max-w-24 rounded m-1'
+            value={selectedCar || ''}
+            disabled={loading}
+            className='text-black min-w-24 max-w-24 rounded m-1'
           >
+            <option value="" disabled>Select a member</option>
             {loading ? (
               <option>Loading...</option>
             ) : (
@@ -686,7 +699,3 @@ const AddExpense = () => {
 };
 
 export default AddExpense;
-
-
-
-
