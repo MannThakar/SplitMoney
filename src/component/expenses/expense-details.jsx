@@ -267,7 +267,7 @@ const ExpenseDetail = () => {
          
             {details && (
                 <div className='flex justify-center items-center gap-5 my-1 md:my-2 '>
-                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-8 w-16 rounded-md bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform" onClick={() => navigate(`/group/${id}/expense/${expenseId}/expensedetails/editexpense`)} >
+                    <button className="flex justify-center font-nunito items-center gap-2 text-white h-8 w-16 rounded-md bg-blue-600 hover:bg-blue-800 transition duration-200 ease-in-out transform" onClick={() => navigate(`/group/${id}/expense/${expenseId}/edit`)} >
                         Edit
                     </button>
                     <button className="flex justify-center font-nunito items-center gap-2 text-white h-8 w-16 rounded-md bg-red-600 hover:bg-red-800 transition duration-200 ease-in-out transform" onClick={() => handleDeleteExpense(details.id)}>

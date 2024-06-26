@@ -229,7 +229,7 @@ const GroupInfo = () => {
      
   return (
   <div key={expense.id} className="my-4 p-2 font-medium text-sm bg-stone-600 bg-opacity-30 backdrop-blur-lg shadow-lg rounded-lg">
-    <Link to={`/group/${expense.group_id}/expense/${expense.id}/expensedetails`} state={{ color: groupColor }}>
+    <Link to={`/group/${expense.group_id}/expense/${expense.id}`} state={{ color: groupColor }}>
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex lg:flex-row w-full gap-5 lg:items-center">
           <div className="flex flex-col items-center justify-center lg:order-1">
