@@ -192,7 +192,7 @@ const AdjustAmount = () => {
       <div className="mt-8 flex justify-center">
         {tab === 'equally' ? (
           <button
-            onClick={() => navigate(`/group/${id}/addexpense, { state: { selectedMemberIDs, amounts, tab }}`)}
+            onClick={() => navigate(`/group/${id}/addexpense`, { state: { selectedMemberIDs, amounts, tab }})}
             className="py-2 w-1/4 md:w-1/12 bg-buttonColor text-black rounded-md"
           >
             Continue

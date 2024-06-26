@@ -72,9 +72,9 @@ function App() {
                 <Route path=":id/expense/" element={<GroupExpense />} />
                 <Route path=":id/expense/settlebalance" element={<SettleBalance />} />
                 <Route path=":id/expense/settlebalance/recordpayment" element={<RecordPayment/> } />
-                <Route path=":id/expense/:expenseid/expensedetails" element={<ExpenseDetails />} /> {/* Updated route */}
-                <Route path=":id/expense/:expenseId/expensedetails/editexpense" element={<GroupExpenseUpdate />} />
-                <Route path=":id/expense/:expenseId/expensedetails/editexpense/updateamount" element={<UpdateAmount />} />
+                <Route path=":id/expense/:expenseid/" element={<ExpenseDetails />} /> {/* Updated route */}
+                <Route path=":id/expense/:expenseId/edit" element={<GroupExpenseUpdate />} />
+                <Route path=":id/expense/:expenseId/edit/type" element={<UpdateAmount />} />
                 <Route path=":id/expense/:expenseId/expensedetails/updatepayer" element={ <UpdatePaying/>} />
                 <Route path=":id/settlement" element={<Settlement/> } />
 
