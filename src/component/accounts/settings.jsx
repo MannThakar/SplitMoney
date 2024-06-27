@@ -11,6 +11,7 @@ import { ArrowLeft, Pencil, Users, Trash, Upload } from 'lucide-react';
 import Modal from "../modal/modal";
 import UpdateModal from "../modal/updatemodal";
 import DeleteConfirmation from '../modal/delete-confirmation';
+import SplashScreen from "../utils/splashscreen";
 
 const Settings = ({ onClose }) => {
     const navigate = useNavigate();
@@ -142,7 +143,10 @@ const Settings = ({ onClose }) => {
 
     return (
         <div className="bg-primaryColor h-svh">
-            <div className='py-3 px-2'>
+        <div>
+        {userId ? (
+            <>
+                <div className='py-3 px-2'>
                 <div className='flex gap-2 items-center'>
                     <button onClick={() => navigate(-1)}>
                         <ArrowLeft className='text-white' />
@@ -211,6 +215,12 @@ const Settings = ({ onClose }) => {
                     </button>
                 </div>
             </div>
+            </> 
+        ) : (
+            <SplashScreen/>          
+        )} 
+        </div>   
+            
             {showDeleteConfirmation && (
                 <DeleteConfirmation
                     onLogout={confirmDelete}
