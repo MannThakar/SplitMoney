@@ -113,7 +113,7 @@ const ExpenseDetail = () => {
             const year = date.getFullYear();
             return `${day}-${month}-${year}`;
         }
-    const generateChartData = (userExpenses) => {
+        const generateChartData = (userExpenses) => {
         const labels = userExpenses.map(ue => ue.user.name);
         const data = userExpenses.map(ue => ue.owned_amount);
 
@@ -147,7 +147,11 @@ const ExpenseDetail = () => {
     return (
         <div className='bg-primaryColor h-svh px-2 flex flex-col'>
          
-            <div className='py-3 flex items-center'>
+        <div>
+        {details ? 
+        (
+            <>
+                    <div className='py-3 flex items-center'>
                 <div className='flex items-center gap-2'>
                     <button  onClick={() => navigate(`/group/${id}`)}>
                         <ArrowLeft className='text-white' />
@@ -274,7 +278,14 @@ const ExpenseDetail = () => {
                         Delete
                     </button>
                 </div>
-            )}
+            )}         
+            </>
+                
+        ): (
+           <SplashScreen/>     
+        )}
+        </div>
+            
             {showDeleteConfirmation && (
                 <DeleteConfirmation
                     onLogout={handleDeleteConfirmation}
